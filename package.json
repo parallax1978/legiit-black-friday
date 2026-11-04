@@ -17,7 +17,8 @@
     "dev:blog": "node scripts/build-blog-preview.mjs && vite --config vite.blog.config.mjs",
     "preview:blog": "vite preview --config vite.blog.config.mjs",
     "build:promo": "vite build --config vite.promo.config.ts",
-    "qa:promo": "node qa/check-promo.mjs"
+    "qa:promo": "node qa/check-promo.mjs",
+    "deploy:promo": "npm run build:promo && npx wrangler@4 pages deploy dist-promo --project-name legiit-landing-pages --branch main --commit-dirty=true"
   },
   "dependencies": {
     "react": "^18.3.1",

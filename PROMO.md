@@ -99,3 +99,13 @@ Whether the 7-day trial can convert to the first-year price (the pages say to co
 3. **Deposit bonus mechanics.** Confirm whether the $25 is automatic, when it posts, whether it expires, and whether a $200 deposit earns $50 (the pages say so, from the deck's "$100 increments").
 4. **Hosting paths.** `npm run build:promo` writes `/black-friday/business/`, `/black-friday/agency/`, `/legiit-bucks/` with assets under `/promo-assets/`. Set `PROMO_BASE` if the pages will live elsewhere. The pages carry `noindex` until they are approved for search.
 5. **GTM.** If the pages are hosted on legiit.com, add a GTM trigger on the custom events `promo_view` and `promo_cta_click`; otherwise register a handler with `setAnalyticsHandler`.
+
+## Deploying to legiitlandingpages.com (Cloudflare Pages)
+
+`npm run build:promo` produces `dist-promo/`: the three pages as folders, assets under `/promo-assets/`, and the Cloudflare Pages `_redirects` and `_headers` files from `promo-public/` (the root `/` redirects to the Business page; `/business`, `/agency` and `/bucks` are short links).
+
+`npm run deploy:promo` builds and uploads it to the Pages project `legiit-landing-pages` with wrangler. It needs `CLOUDFLARE_API_TOKEN` (a token with "Cloudflare Pages: Edit" on the account) and `CLOUDFLARE_ACCOUNT_ID` in the environment. The custom domain `legiitlandingpages.com` is attached to the project once in the Cloudflare dashboard (Pages, the project, Custom domains), which also creates the DNS record, provided the domain's nameservers point at Cloudflare.
+
+Alternatively, connect this GitHub repository to a Pages project in the Cloudflare dashboard with build command `npm run build:promo` and output directory `dist-promo`; every push to the chosen branch then deploys.
+
+The pages carry `<meta name="robots" content="noindex">`. Remove it from the three HTML files when the pages should appear in search.

@@ -39,6 +39,8 @@ const path = (folder: string) => `${base}${folder}/`
 
 export default defineConfig({
   base,
+  // promo-public/ holds the Cloudflare Pages _redirects and _headers files (and the favicon from public/ is copied too).
+  publicDir: 'promo-public',
   plugins: [react(), pagesAsFolders],
   define: {
     'import.meta.env.VITE_PROMO_BUSINESS_PATH': JSON.stringify(path('black-friday/business')),

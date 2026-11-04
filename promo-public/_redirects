@@ -1,0 +1,7 @@
+# Cloudflare Pages redirects for legiitlandingpages.com
+/                         /black-friday/business/   302
+/black-friday             /black-friday/business/   302
+/black-friday/            /black-friday/business/   302
+/business                 /black-friday/business/   301
+/agency                   /black-friday/agency/     301
+/bucks                    /legiit-bucks/            301
