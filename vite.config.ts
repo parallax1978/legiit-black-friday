@@ -13,6 +13,10 @@ export default defineConfig({
         // Paths resolve from the project root, where every npm script runs.
         main: 'index.html',
         pricing: 'pricing.html',
+        // The November 2026 promotion pages (see PROMO.md).
+        'black-friday-business': 'black-friday-business.html',
+        'black-friday-agency': 'black-friday-agency.html',
+        'legiit-bucks': 'legiit-bucks.html',
       },
     },
   },

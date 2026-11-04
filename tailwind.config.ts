@@ -2,7 +2,7 @@ import type { Config } from 'tailwindcss'
 import plugin from 'tailwindcss/plugin'
 
 export default {
-  content: ['./index.html', './pricing.html', './src/**/*.{ts,tsx}', './blog/templates/**/*.hbs'],
+  content: ['./index.html', './pricing.html', './black-friday-business.html', './black-friday-agency.html', './legiit-bucks.html', './src/**/*.{ts,tsx}', './blog/templates/**/*.hbs'],
   theme: {
     extend: {
       colors: {

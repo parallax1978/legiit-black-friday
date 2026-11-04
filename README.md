@@ -8,6 +8,8 @@ The build has a second page, the Command Center pricing page (`pricing.html`, co
 
 The blog redesign (Handlebars templates in `blog/`, styles and script in `src/blog`) has its own build and QA. See [BLOG.md](BLOG.md).
 
+The November 2026 promotion pages (`black-friday-business.html`, `black-friday-agency.html`, `legiit-bucks.html`, code in `src/promo`) share this build. See [PROMO.md](PROMO.md).
+
 ## Run it
 
 ```bash

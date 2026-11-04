@@ -22,7 +22,14 @@ export interface EventMap {
   plan_cta_click: { plan: 'business_dashboard' | 'agency_dashboard' | 'marketplace'; billing?: 'monthly' | 'yearly'; placement: string }
   /** Pricing page: the visitor switched the billing period. */
   billing_change: { billing: 'monthly' | 'yearly' }
+  /** Promotion pages: a page rendered, with the offer state it showed and the visit's attribution. */
+  promo_view: { page: PromoPage; status: PromoStatus; campaign: string; utm_source?: string; utm_medium?: string; utm_campaign?: string; utm_content?: string; utm_term?: string }
+  /** Promotion pages: a button or plan link was clicked. A click is not a purchase or a deposit. */
+  promo_cta_click: { page: PromoPage; placement: string; plan: 'business_dashboard' | 'agency_dashboard' | 'legiit_bucks' | 'marketplace'; billing?: 'monthly' | 'yearly'; status: PromoStatus; campaign: string; destination: string }
 }
+
+export type PromoPage = 'business' | 'agency' | 'legiit-bucks'
+export type PromoStatus = 'upcoming' | 'pending' | 'live' | 'expired'
 
 export type EventName = keyof EventMap
 export type AnalyticsEvent<K extends EventName = EventName> = { name: K } & EventMap[K]
