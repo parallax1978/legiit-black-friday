@@ -13,7 +13,8 @@ const MILESTONES: Milestone[] = [25, 50, 75]
  * autoplays. If the media fails to load, the poster stays visible with an
  * honest message and the walkthrough becomes the fallback.
  */
-export function ProductOverviewVideo({ className = '' }: { className?: string }) {
+/** `caption` replaces the visible line under the player; `null` leaves only the walkthrough link. */
+export function ProductOverviewVideo({ className = '', caption = PRODUCT_OVERVIEW.caption }: { className?: string; caption?: string | null }) {
   const [failed, setFailed] = useState(false)
   const played = useRef(false)
   const reached = useRef<Set<Milestone>>(new Set())
@@ -74,8 +75,8 @@ export function ProductOverviewVideo({ className = '' }: { className?: string })
           </video>
         )}
       </div>
-      <figcaption className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-sm text-ink-muted">
-        <span className="max-w-[36rem] py-1.5">{PRODUCT_OVERVIEW.caption}</span>
+      <figcaption className={`mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-ink-muted ${caption ? 'justify-between' : 'justify-end'}`}>
+        {caption && <span className="max-w-[36rem] py-1.5">{caption}</span>}
         <Walkthrough label={HERO.walkthroughAction} placement={failed ? 'video-fallback' : 'hero'} />
       </figcaption>
     </figure>

@@ -68,8 +68,13 @@ export function PromoHero({ copy, status, route, attribution }: PromoHeroProps) 
           </p>
         </div>
 
-        <div className="mx-auto mt-10 max-w-5xl sm:mt-14">
-          <ProductOverviewVideo />
+        <div className="mx-auto mt-12 max-w-5xl sm:mt-16">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="eyebrow">{copy.demo.eyebrow}</p>
+            <h2 className="h2 mt-3">{copy.demo.title}</h2>
+            <p className="lead mt-3">{copy.demo.body}</p>
+          </div>
+          <ProductOverviewVideo className="mt-8" caption={null} />
         </div>
 
         <p className="mx-auto mt-10 max-w-5xl border-t border-line pt-5 text-center text-sm text-ink-muted sm:mt-12">{COMPANY_LINE}</p>
