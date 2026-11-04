@@ -8,6 +8,16 @@ Three landing pages for Legiit's November promotion, built on the Command Center
 | Command Center for agencies | `/black-friday-agency.html` | `/black-friday/agency/` | `src/promo/agency.tsx`, `PromoApp.tsx`, copy in `content.ts` (`agencyPage`) |
 | Legiit Bucks deposit bonus | `/legiit-bucks.html` | `/legiit-bucks/` | `src/promo/bucks.tsx`, `BucksApp.tsx`, copy in `content.ts` (`BUCKS_PAGE`) |
 
+## Cloud previews
+
+Published from this project with `scripts/publish-cloud.sh` (a relative-path build with the offer-state override enabled on any host):
+
+- Business: https://claude.ai/artifact/GE3ptC8it9GS8uV5hMCDEu
+- Agency: https://claude.ai/artifact/KwWShS2ZbULPrEtNNuCQPg
+- Legiit Bucks: https://claude.ai/artifact/7E4D6c49LpCSqaffc7Lj84
+
+Add `?offer_preview=live` (or `upcoming`, `pending`, `expired`) to a preview URL to force a state. Without it the pages show today's real state.
+
 ## Run and check
 
 ```bash

@@ -57,6 +57,8 @@ describe('offer status', () => {
     expect(previewOverride('?offer_preview=expired', 'localhost')).toBe('expired')
     expect(previewOverride('?offer_preview=live', '127.0.0.1')).toBe('live')
     expect(previewOverride('?offer_preview=live', 'legiit.com')).toBeNull()
+    expect(previewOverride('', 'localhost', '#offer_preview=expired')).toBe('expired')
+    expect(previewOverride('?offer_preview=live', 'legiit.com', '', true)).toBe('live')
     expect(previewOverride('?offer_preview=bogus', 'localhost')).toBeNull()
   })
 })

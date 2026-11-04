@@ -24,18 +24,21 @@ export function showsOfferTerms(status: OfferStatus): boolean {
   return status !== 'expired'
 }
 
-/** Hosts where `?offer_preview=<status>` may force a state, for reviewing and QA. Never a public host. */
+/** Hosts where `?offer_preview=<status>` (or `#offer_preview=<status>`) may force a state, for reviewing and QA. Never a public host. */
 const PREVIEW_HOSTS = new Set(['localhost', '127.0.0.1', '[::1]', ''])
 
-export function previewOverride(search: string, hostname: string): OfferStatus | null {
-  if (!PREVIEW_HOSTS.has(hostname)) return null
-  const value = new URLSearchParams(search).get('offer_preview')
+/** Review builds (`VITE_PROMO_PREVIEW=1`, used for the shared cloud previews) honour the override on any host. */
+const PREVIEW_BUILD = import.meta.env.VITE_PROMO_PREVIEW === '1'
+
+export function previewOverride(search: string, hostname: string, hash = '', anyHost = PREVIEW_BUILD): OfferStatus | null {
+  if (!anyHost && !PREVIEW_HOSTS.has(hostname)) return null
+  const value = new URLSearchParams(search).get('offer_preview') ?? new URLSearchParams(hash.replace(/^#/, '')).get('offer_preview')
   return OFFER_STATUSES.includes(value as OfferStatus) ? (value as OfferStatus) : null
 }
 
 /** Current status, re-evaluated every minute and whenever the tab regains focus. */
 export function useOfferStatus(checkoutReady: boolean): OfferStatus {
-  const override = useMemo(() => (typeof window === 'undefined' ? null : previewOverride(window.location.search, window.location.hostname)), [])
+  const override = useMemo(() => (typeof window === 'undefined' ? null : previewOverride(window.location.search, window.location.hostname, window.location.hash)), [])
   const [status, setStatus] = useState<OfferStatus>(() => override ?? offerStatus(new Date(), checkoutReady))
 
   useEffect(() => {
