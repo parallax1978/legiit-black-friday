@@ -13,8 +13,8 @@ const MILESTONES: Milestone[] = [25, 50, 75]
  * autoplays. If the media fails to load, the poster stays visible with an
  * honest message and the walkthrough becomes the fallback.
  */
-/** `caption` replaces the visible line under the player; `null` leaves only the walkthrough link. `flat` is the promotion pages' 12px-radius frame without a shadow. */
-export function ProductOverviewVideo({ className = '', caption = PRODUCT_OVERVIEW.caption, flat = false }: { className?: string; caption?: string | null; flat?: boolean }) {
+/** `caption` replaces the visible line under the player; `null` leaves only the walkthrough link. */
+export function ProductOverviewVideo({ className = '', caption = PRODUCT_OVERVIEW.caption }: { className?: string; caption?: string | null }) {
   const [failed, setFailed] = useState(false)
   const played = useRef(false)
   const reached = useRef<Set<Milestone>>(new Set())
@@ -39,7 +39,7 @@ export function ProductOverviewVideo({ className = '', caption = PRODUCT_OVERVIE
 
   return (
     <figure className={className} id="product-overview">
-      <div className={`overflow-hidden bg-ink focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 ${flat ? 'rounded-xl border border-legiit-border focus-within:outline-legiit-purple' : 'rounded-2xl border border-line shadow-frame focus-within:outline-brand-purple'}`}>
+      <div className="overflow-hidden rounded-2xl border border-line bg-ink shadow-frame focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-brand-purple">
         {failed ? (
           <div className="relative" style={{ aspectRatio: `${PRODUCT_OVERVIEW.width} / ${PRODUCT_OVERVIEW.height}` }}>
             <img src={PRODUCT_OVERVIEW.poster} alt={PRODUCT_OVERVIEW.posterAlt} width={PRODUCT_OVERVIEW.width} height={PRODUCT_OVERVIEW.height} className="absolute inset-0 h-full w-full object-cover" />

@@ -93,7 +93,14 @@
   .h2 {
     @apply text-[1.875rem] font-semibold leading-[1.1] tracking-[-0.02em] text-ink sm:text-[2.25rem] lg:text-[2.5rem];
   }
-
+  /* The promotion pages carry heavier headlines than the landing page: bold, with slightly tighter tracking. */
+  .promo h1,
+  .promo h2 {
+    font-weight: 700;
+  }
+  .promo h1 {
+    letter-spacing: -0.03em;
+  }
   .lead {
     @apply text-[17px] leading-relaxed text-ink-soft sm:text-lg;
   }

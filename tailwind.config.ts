@@ -25,17 +25,6 @@ export default {
           DEFAULT: '#FFFFFF',
           sunken: '#F7F7F9',
         },
-        // Legiit Brand Guideline 2026 palette and neutrals, used by the promotion pages (src/promo).
-        legiit: {
-          purple: '#8A12DC',
-          pink: '#EB47AC',
-          navy: '#101828',
-          charcoal: '#1D1D1F',
-          secondary: '#6E6E73',
-          gray: '#86868B',
-          offwhite: '#F5F5F7',
-          border: '#D2D2D7',
-        },
       },
       fontFamily: {
         sans: [

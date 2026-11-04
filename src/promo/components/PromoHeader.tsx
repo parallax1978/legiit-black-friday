@@ -1,75 +1,29 @@
-import type { ComponentProps } from 'react'
+import { Container } from '../../components/ui/Container'
 import { Logo } from '../../components/brand/Logo'
-import type { Attribution } from '../attribution'
-import { withAttribution } from '../attribution'
-import { PROMO_PAGES, PROMO_ROUTES } from '../offer'
+import { PRODUCT_NAME } from '../../config/site'
+import { PROMO_ROUTES } from '../offer'
 import { PromoCta } from './PromoCta'
+import type { ComponentProps } from 'react'
 
-type CtaProps = Omit<ComponentProps<typeof PromoCta>, 'placement' | 'variant' | 'className'>
+type CtaProps = Omit<ComponentProps<typeof PromoCta>, 'placement' | 'size' | 'variant' | 'className'>
 
-/** Legiit's main navigation, as the blog header lists it. */
-const MAIN_NAV = [
-  { label: 'Command Center', href: 'https://legiit.com/pricing' },
-  { label: 'Marketplace', href: 'https://legiit.com/marketplace' },
-  { label: 'Courses', href: 'https://legiit.com/courses' },
-  { label: 'Support', href: PROMO_ROUTES.support },
-] as const
-
-export type PromoTab = 'business' | 'agency' | 'legiitBucks'
-
-const TABS: { id: PromoTab; label: string; href: string }[] = [
-  { id: 'business', label: 'Business', href: PROMO_PAGES.business },
-  { id: 'agency', label: 'Agency', href: PROMO_PAGES.agency },
-  { id: 'legiitBucks', label: 'Legiit Bucks', href: PROMO_PAGES.legiitBucks },
-]
-
-/**
- * Two-level header. Level 1 is Legiit's main navigation with Log in and the
- * page's button as a pill. Level 2 is the section title and the three offer
- * tabs; the current tab carries a 2px purple underline. Tab links keep the
- * visit's attribution.
- */
-export function PromoHeader({ current, cta, attribution }: { current: PromoTab; cta: CtaProps; attribution: Attribution }) {
+/** The pricing page's header: lockup, Log In from 640px up, and the page's button in its header size. */
+export function PromoHeader({ productName = PRODUCT_NAME, cta }: { productName?: string; cta: CtaProps }) {
   return (
-    <header>
-      <div className="border-b border-legiit-border bg-white">
-        <nav aria-label="Legiit" className="p-wrap flex min-h-[52px] items-center gap-6">
-          <a href="https://legiit.com" className="inline-flex min-h-[44px] items-center rounded-md" aria-label="Legiit home">
-            <Logo height={22} />
+    <header className="border-b border-line bg-canvas">
+      <Container className="flex min-h-[64px] items-center justify-between gap-3 py-3">
+        <a href="#top" className="-ml-2 inline-flex min-h-[44px] min-w-0 items-center gap-2 rounded-md px-2 btn-focus sm:gap-3" aria-label={`Legiit ${productName}, back to top`}>
+          <Logo height={26} className="sm:!h-7" />
+          <span aria-hidden="true" className="h-5 w-px shrink-0 bg-line-strong max-[359px]:hidden" />
+          <span className="min-w-0 truncate text-[13px] font-medium text-ink max-[359px]:hidden sm:text-[15px]">{productName}</span>
+        </a>
+        <div className="flex items-center gap-1 sm:gap-3">
+          <a href={PROMO_ROUTES.signIn} className="hidden min-h-[44px] items-center rounded-md px-3 text-[15px] font-medium text-ink-soft hover:text-ink btn-focus sm:inline-flex">
+            Log In
           </a>
-          <ul className="hidden items-center gap-5 min-[734px]:flex">
-            {MAIN_NAV.map((item) => (
-              <li key={item.label}>
-                <a href={item.href} className="p-nav-link inline-flex">
-                  {item.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-          <div className="ml-auto flex items-center gap-4">
-            <a href={PROMO_ROUTES.signIn} className="p-nav-link hidden min-[734px]:inline-flex">
-              Log in
-            </a>
-            <PromoCta {...cta} placement="header" variant="pill" />
-          </div>
-        </nav>
-      </div>
-      <div className="border-b border-legiit-border bg-white">
-        <div className="p-wrap flex min-h-[52px] flex-wrap items-center justify-between gap-x-6 gap-y-0">
-          <p className="text-[21px] font-semibold leading-[1.2] text-legiit-charcoal">Black Friday offers</p>
-          <nav aria-label="Offers">
-            <ul className="flex items-center gap-6">
-              {TABS.map((tab) => (
-                <li key={tab.id}>
-                  <a href={withAttribution(tab.href, attribution)} className="p-tab" aria-current={tab.id === current ? 'page' : undefined} data-offer-tab={tab.id}>
-                    {tab.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
+          <PromoCta {...cta} placement="header" size="md" className="shrink-0 !px-3 sm:!px-4" />
         </div>
-      </div>
+      </Container>
     </header>
   )
 }

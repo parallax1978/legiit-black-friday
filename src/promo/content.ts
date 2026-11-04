@@ -2,13 +2,14 @@
  * Customer-facing copy for the three promotion pages. Every price, date, and
  * credit figure is interpolated from ./offer and the verified plan data, so the
  * words can never disagree with the terms. Writing rules match the rest of the
- * site: no em dashes or emoji, at most two sentences per paragraph, sentence
- * case everywhere, including the H1, button labels and FAQ questions (proper
- * names such as Business, Agency and Legiit keep their capitals). The offer is never described as a percentage off, and nothing
+ * site: no em dashes or emoji, at most two sentences per paragraph, Initial
+ * Caps on the H1, every button label and every FAQ question, sentence case
+ * elsewhere. The offer is never described as a percentage off, and nothing
  * suggests the first-year price or the doubled credits continue past year one.
  */
 import type { FaqItem } from '../config/faq'
 import type { ProductSectionCopy } from '../config/copy'
+import { PRIMARY_CTA_LABEL } from '../config/site'
 import { formatCount, formatUsd } from '../pricing/price'
 import { AGENCY_PLAN, BUSINESS_PLAN, LEGIIT_BUCKS_PERCENT } from '../pricing/plans'
 import { BUCKS_DEPOSIT, CREDITS, FIRST_YEAR, OFFER_WINDOW, PROMO_PAGES, PROMO_ROUTES, bucksTotal, extraCreditsFirstYear, firstYearSaving, type FirstYearOffer } from './offer'
@@ -39,12 +40,10 @@ export interface PromoPageCopy {
   /** The one-line route to the other plan's page. */
   switchPlan: { before: string; linkLabel: string; after: string; href: string }
   problem: { eyebrow: string; title: string; lead: string; items: ProblemItem[] }
-  /** One H2 over the three feature blocks, which render as H3 sections. */
-  featuresSection: { title: string; lead: string }
   features: ProductSectionCopy[]
   demo: { eyebrow: string; title: string; body: string }
-  pricing: { eyebrow: string; title: string; expiredTitle: string; lead: string; included: string[]; afterYearOne: string; creditsNote: string }
-  faq: { eyebrow: string; title: string; lead: string; items: FaqItem[] }
+  pricing: { eyebrow: string; title: string; expiredTitle: string; included: string[]; afterYearOne: string; creditsNote: string }
+  faq: { eyebrow: string; title: string; items: FaqItem[] }
   final: { title: string; body: string }
 }
 
@@ -91,7 +90,7 @@ export function regularTermsLine(offer: FirstYearOffer): string {
 
 const CONTACT_FAQ: FaqItem = {
   id: 'contact',
-  question: 'Who can I ask before I buy?',
+  question: 'Who Can I Ask Before I Buy?',
   answer: ['Email help@legiit.com or visit the Legiit support center.'],
   links: [
     { text: 'help@legiit.com', href: PROMO_ROUTES.contactEmail },
@@ -102,28 +101,28 @@ const CONTACT_FAQ: FaqItem = {
 const sharedFaq = (offer: FirstYearOffer): FaqItem[] => [
   {
     id: 'credits-monthly',
-    question: 'Are the credits delivered all at once?',
+    question: 'Are The Credits Delivered All At Once?',
     answer: [`No. You receive ${count(CREDITS.offerMonthly)} AI credits each month for your first ${CREDITS.offerMonths} months, the plan's usual monthly allocation doubled.`],
   },
   {
     id: 'after-year-one',
-    question: 'What happens after the first year?',
+    question: 'What Happens After The First Year?',
     answer: [afterYearOne(offer), 'You can review or stop renewal from Active Subscriptions in your Legiit account.'],
     links: [{ text: 'Active Subscriptions', href: PROMO_ROUTES.activeSubscriptions }],
   },
   {
     id: 'monthly',
-    question: 'Can I pay monthly instead?',
+    question: 'Can I Pay Monthly Instead?',
     answer: [`The offer applies to annual billing only. ${offer.planName} is still available at ${money(offer.regularMonthlyPrice)}/month billed monthly, without the first-year price or the doubled credits.`],
   },
   {
     id: 'services',
-    question: 'Are freelance services included?',
+    question: 'Are Freelance Services Included?',
     answer: [`No. Services from Legiit freelancers are purchased separately, and both paid plans give you ${LEGIIT_BUCKS_PERCENT}% back in Legiit Bucks on completed orders.`],
   },
   {
     id: 'ends',
-    question: 'When does the offer end?',
+    question: 'When Does The Offer End?',
     answer: [`${ENDS}. After that, ${regularTermsLine(offer).charAt(0).toLowerCase()}${regularTermsLine(offer).slice(1)}`],
   },
   CONTACT_FAQ,
@@ -133,36 +132,36 @@ const sharedFaq = (offer: FirstYearOffer): FaqItem[] => [
 const regularFaq = (offer: FirstYearOffer, page: 'business' | 'agency'): FaqItem[] => [
   {
     id: 'cost',
-    question: `What does ${offer.planName} cost?`,
+    question: `What Does ${offer.planName} Cost?`,
     answer: [regularTermsLine(offer), `Each additional business is ${money(BUSINESS_PLAN.additionalBusinessMonthly)}/month on either plan.`],
   },
   page === 'business'
     ? {
         id: 'trial',
-        question: 'Is there a free trial?',
-        answer: [`Yes. Business has a ${BUSINESS_PLAN.trialDays}-day free trial; select the trial button on this page to start it.`],
+        question: 'Is There A Free Trial?',
+        answer: [`Yes. Business has a ${BUSINESS_PLAN.trialDays}-day free trial; select ${PRIMARY_CTA_LABEL} to start it.`],
       }
     : {
         id: 'agency-trial',
-        question: 'Is there a free trial for Agency?',
+        question: 'Is There A Free Trial For Agency?',
         answer: [`No, the ${BUSINESS_PLAN.trialDays}-day free trial is for the Business plan. Business can upgrade to Agency when you need more businesses.`],
         links: [{ text: 'Business plan', href: PROMO_PAGES.business }],
       },
   {
     id: 'businesses',
-    question: page === 'business' ? 'How many businesses does Business include?' : 'How many businesses does Agency include?',
+    question: page === 'business' ? 'How Many Businesses Does Business Include?' : 'How Many Businesses Does Agency Include?',
     answer: [page === 'business' ? `One business is included, and the Agency plan includes up to ${AGENCY_PLAN.businessesIncluded}.` : `Up to ${AGENCY_PLAN.businessesIncluded} businesses are included, and businesses beyond that are ${money(AGENCY_PLAN.additionalBusinessMonthly)}/month each.`],
     links: page === 'business' ? [{ text: 'Agency plan', href: PROMO_PAGES.agency }] : undefined,
   },
   {
     id: 'renewal',
-    question: 'How do I manage my subscription?',
+    question: 'How Do I Manage My Subscription?',
     answer: ['You can review or stop renewal from Active Subscriptions in your Legiit account.'],
     links: [{ text: 'Active Subscriptions', href: PROMO_ROUTES.activeSubscriptions }],
   },
   {
     id: 'services',
-    question: 'Are freelance services included?',
+    question: 'Are Freelance Services Included?',
     answer: [`No. Services from Legiit freelancers are purchased separately, and both paid plans give you ${LEGIIT_BUCKS_PERCENT}% back in Legiit Bucks on completed orders.`],
   },
   CONTACT_FAQ,
@@ -183,10 +182,10 @@ export function businessPage(showOffer: boolean): PromoPageCopy {
       : 'Command Center shows business owners the next move, helps create the work with AI, and connects them to Legiit specialists. Business plan from $49/month.',
   },
   eyebrow: showOffer ? 'Black Friday offer for business owners' : 'Command Center for business owners',
-  h1Line1: 'Stop guessing what to work on.',
-  h1Line2: showOffer ? `${money(businessOffer.firstYearPrice)} for your first year.` : 'The Business plan.',
+  h1Line1: 'Stop Guessing What To Work On.',
+  h1Line2: showOffer ? `${money(businessOffer.firstYearPrice)} For Your First Year.` : 'Business Plan.',
   subhead: `Command Center shows you the next move for your business, helps you create the work with AI, and connects you to a Legiit specialist when you want it done for you.${showOffer ? ` Business plan, billed annually, with ${count(CREDITS.offerMonthly)} AI credits every month for your first ${CREDITS.offerMonths} months.` : ''}`,
-  cta: { live: `Get Business for ${money(businessOffer.firstYearPrice)}`, liveHeader: 'Claim the offer', fallback: 'Start my 7-day free trial', fallbackHeader: 'Start free trial' },
+  cta: { live: `Get Business For ${money(businessOffer.firstYearPrice)}`, liveHeader: 'Claim The Offer', fallback: 'Start My 7-Day Free Trial', fallbackHeader: 'Start Free Trial' },
   heroNote: {
     upcoming: `The ${money(businessOffer.firstYearPrice)} first-year price opens ${OPENS}. Until then, start with the ${BUSINESS_PLAN.trialDays}-day free trial.`,
     pending: `The ${money(businessOffer.firstYearPrice)} first-year price is not yet available at checkout. Start with the ${BUSINESS_PLAN.trialDays}-day free trial and check back soon.`,
@@ -202,7 +201,7 @@ export function businessPage(showOffer: boolean): PromoPageCopy {
   problem: {
     eyebrow: 'The problem, and what changes',
     title: 'You know something needs doing. You just don’t know what first.',
-    lead: 'Most owners are not short of ideas; they are short of a clear next step, the time to produce it, and someone to hand it to.',
+    lead: 'Most owners are not short of ideas. They are short of a clear next step, the time to produce it, and someone to hand it to.',
     items: [
       {
         problem: 'Monday brings a dozen things you could do for the business and no way to tell which one matters.',
@@ -218,7 +217,6 @@ export function businessPage(showOffer: boolean): PromoPageCopy {
       },
     ],
   },
-  featuresSection: { title: 'What Command Center does for you', lead: 'Three parts of the product, shown on the actual screens.' },
   features: [
     {
       id: 'next-move',
@@ -275,7 +273,6 @@ export function businessPage(showOffer: boolean): PromoPageCopy {
     eyebrow: 'The Black Friday offer',
     title: `Business for ${money(businessOffer.firstYearPrice)} for your first year.`,
     expiredTitle: 'Business plan pricing.',
-    lead: showOffer ? 'One price for the first year, one monthly credit allocation, and the regular price after that.' : 'The regular Business plan prices, billed monthly or annually.',
     included: [`${BUSINESS_PLAN.businessesIncluded} business included`, 'Full business dashboard access', `${BUSINESS_PLAN.allowances.audits} Audits, ${BUSINESS_PLAN.allowances.keywords} Keywords, ${BUSINESS_PLAN.allowances.backlinkData} Backlink Data`, `Additional businesses at ${money(BUSINESS_PLAN.additionalBusinessMonthly)}/month each`, 'Support included'],
     afterYearOne: afterYearOne(businessOffer),
     creditsNote: creditsNote(),
@@ -283,12 +280,11 @@ export function businessPage(showOffer: boolean): PromoPageCopy {
   faq: {
     eyebrow: 'Before you buy',
     title: showOffer ? 'Offer questions, answered.' : 'Questions, answered.',
-    lead: 'Every answer comes from the offer terms and Legiit’s published plan data.',
     items: showOffer
       ? [
           {
             id: 'what-is-it',
-            question: 'What exactly is the Black Friday offer?',
+            question: 'What Exactly Is The Black Friday Offer?',
             answer: [
               `${money(businessOffer.firstYearPrice)} for your first year of the Business plan, billed annually at purchase, instead of the regular annual price of ${money(businessOffer.regularAnnualPrice)}. It also includes ${count(CREDITS.offerMonthly)} AI credits a month for your first ${CREDITS.offerMonths} months instead of the standard ${count(CREDITS.standardMonthly)}.`,
             ],
@@ -296,12 +292,12 @@ export function businessPage(showOffer: boolean): PromoPageCopy {
           ...sharedFaq(businessOffer).slice(0, 3),
           {
             id: 'trial',
-            question: 'Is there still a free trial?',
+            question: 'Is There Still A Free Trial?',
             answer: [`Yes. You can start the ${BUSINESS_PLAN.trialDays}-day Business trial first; to get the first-year price, complete the annual purchase before the offer ends on ${ENDS}.`],
           },
           {
             id: 'businesses',
-            question: 'How many businesses does Business include?',
+            question: 'How Many Businesses Does Business Include?',
             answer: [`One business is included, and additional businesses are ${money(BUSINESS_PLAN.additionalBusinessMonthly)}/month each. The Agency plan includes up to ${AGENCY_PLAN.businessesIncluded} businesses and has its own first-year offer.`],
             links: [{ text: 'its own first-year offer', href: PROMO_PAGES.agency }],
           },
@@ -331,10 +327,10 @@ export function agencyPage(showOffer: boolean): PromoPageCopy {
       : `Run up to ${agencyOffer.businessesIncluded} client businesses in one Command Center, with a recommended next step for each and Legiit specialists to fulfil the work. Agency plan from $169/month.`,
   },
   eyebrow: showOffer ? 'Black Friday offer for agencies' : 'Command Center for agencies',
-  h1Line1: 'Every client’s next move, every week.',
-  h1Line2: showOffer ? `${money(agencyOffer.firstYearPrice)} for your first year.` : 'The Agency plan.',
+  h1Line1: `Every Client’s Next Move, Every Week.`,
+  h1Line2: showOffer ? `${money(agencyOffer.firstYearPrice)} For Your First Year.` : 'Agency Plan.',
   subhead: `Run up to ${agencyOffer.businessesIncluded} client businesses in one Command Center: a recommended next step for each, AI tools to produce the work, and Legiit specialists to fulfil it.${showOffer ? ` Agency plan, billed annually, with ${count(CREDITS.offerMonthly)} AI credits every month for your first ${CREDITS.offerMonths} months.` : ''}`,
-  cta: { live: `Get Agency for ${money(agencyOffer.firstYearPrice)}`, liveHeader: 'Claim the offer', fallback: 'Choose Agency', fallbackHeader: 'Choose Agency' },
+  cta: { live: `Get Agency For ${money(agencyOffer.firstYearPrice)}`, liveHeader: 'Claim The Offer', fallback: 'Choose Agency', fallbackHeader: 'Choose Agency' },
   heroNote: {
     upcoming: `The ${money(agencyOffer.firstYearPrice)} first-year price opens ${OPENS}. Agency is ${money(agencyOffer.regularMonthlyPrice)}/month until then.`,
     pending: `The ${money(agencyOffer.firstYearPrice)} first-year price is not yet available at checkout. Check back soon.`,
@@ -350,7 +346,7 @@ export function agencyPage(showOffer: boolean): PromoPageCopy {
   problem: {
     eyebrow: 'The problem, and what changes',
     title: 'Twenty clients. One question every Monday: what do we do for each of them?',
-    lead: 'An agency’s week disappears into working out priorities, producing deliverables, and finding fulfilment, and Command Center takes the first two off the account manager’s plate and makes the third one click away.',
+    lead: 'An agency’s week disappears into working out priorities, producing deliverables, and finding fulfilment. Command Center takes the first two off the account manager’s plate and makes the third one click away.',
     items: [
       {
         problem: 'Each client needs a reason to stay, and a recommendation takes an hour of digging per account.',
@@ -366,7 +362,6 @@ export function agencyPage(showOffer: boolean): PromoPageCopy {
       },
     ],
   },
-  featuresSection: { title: 'What Command Center does for an agency', lead: 'Three parts of the product, shown on the actual screens.' },
   features: [
     {
       id: 'every-client',
@@ -423,7 +418,6 @@ export function agencyPage(showOffer: boolean): PromoPageCopy {
     eyebrow: 'The Black Friday offer',
     title: `Agency for ${money(agencyOffer.firstYearPrice)} for your first year.`,
     expiredTitle: 'Agency plan pricing.',
-    lead: showOffer ? 'One price for the first year, one monthly credit allocation, and the regular price after that.' : 'The regular Agency plan prices, billed monthly or annually.',
     included: [`Up to ${AGENCY_PLAN.businessesIncluded} businesses included`, 'Full business dashboard access', `${AGENCY_PLAN.allowances.audits} Audits, ${AGENCY_PLAN.allowances.keywords} Keywords, ${AGENCY_PLAN.allowances.backlinkData} Backlink Data`, `Businesses beyond ${AGENCY_PLAN.businessesIncluded} at ${money(AGENCY_PLAN.additionalBusinessMonthly)}/month each`, 'Support included'],
     afterYearOne: afterYearOne(agencyOffer),
     creditsNote: creditsNote(),
@@ -431,30 +425,29 @@ export function agencyPage(showOffer: boolean): PromoPageCopy {
   faq: {
     eyebrow: 'Before you buy',
     title: showOffer ? 'Offer questions, answered.' : 'Questions, answered.',
-    lead: 'Every answer comes from the offer terms and Legiit’s published plan data.',
     items: showOffer
       ? [
           {
             id: 'what-is-it',
-            question: 'What exactly is the Black Friday offer?',
+            question: 'What Exactly Is The Black Friday Offer?',
             answer: [
               `${money(agencyOffer.firstYearPrice)} for your first year of the Agency plan, billed annually at purchase, instead of the regular annual price of ${money(agencyOffer.regularAnnualPrice)}. It also includes ${count(CREDITS.offerMonthly)} AI credits a month for your first ${CREDITS.offerMonths} months instead of the standard ${count(CREDITS.standardMonthly)}.`,
             ],
           },
           {
             id: 'per-business',
-            question: 'What does that cost per client?',
+            question: 'What Does That Cost Per Client?',
             answer: [`With all ${agencyOffer.businessesIncluded} businesses in use, ${money(agencyOffer.firstYearPrice)} for the first year is ${money(perBusinessYear)} per business for the year, or ${money(perBusinessMonth)} a month. Businesses beyond ${agencyOffer.businessesIncluded} are ${money(AGENCY_PLAN.additionalBusinessMonthly)}/month each.`],
           },
           ...sharedFaq(agencyOffer).slice(0, 3),
           {
             id: 'upgrade',
-            question: 'Can I start on Business and upgrade later?',
+            question: 'Can I Start On Business And Upgrade Later?',
             answer: [`Business can upgrade to Agency at any time. To get the Agency first-year price, buy Agency on annual billing before the offer ends on ${ENDS}.`],
           },
           {
             id: 'agency-trial',
-            question: 'Is there a free trial for Agency?',
+            question: 'Is There A Free Trial For Agency?',
             answer: [`No, the ${BUSINESS_PLAN.trialDays}-day free trial is for the Business plan. If you want to try Command Center first, start there and upgrade before the offer ends.`],
             links: [{ text: 'start there', href: PROMO_PAGES.business }],
           },
@@ -497,7 +490,7 @@ export const BUCKS_PAGE = {
   h1Line1: `Deposit ${deposit}.`,
   h1Line2: `Spend ${total}.`,
   subhead: `Add ${deposit} to your Legiit Bucks wallet during the offer and Legiit adds a ${bonus} bonus. You get ${total} to spend on freelance services: your ${deposit}, plus ${bonus} from Legiit.`,
-  cta: { live: `Deposit ${deposit} now`, liveHeader: 'Deposit now', upcoming: 'Create a free Legiit account', upcomingHeader: 'Create account', expired: 'Browse services', expiredHeader: 'Browse services' },
+  cta: { live: `Deposit ${deposit} Now`, liveHeader: 'Deposit Now', upcoming: 'Create A Free Legiit Account', upcomingHeader: 'Create Account', expired: 'Browse Services', expiredHeader: 'Browse Services' },
   heroNote: {
     upcoming: `The deposit bonus opens ${OPENS}. Create your free Legiit account now and you are ready on the day.`,
     pending: `The ${bonus} bonus is not yet applied to deposits. Check back soon.`,
@@ -513,7 +506,6 @@ export const BUCKS_PAGE = {
   how: {
     eyebrow: 'How it works',
     title: 'Four steps, no code to enter.',
-    lead: 'Everything happens in your Legiit account, from the deposit to the checkout.',
     steps: [
       { title: 'Sign in to Legiit', body: 'Or create a free marketplace account. There is no subscription to buy.' },
       { title: `Deposit ${deposit} to your wallet`, body: `Open Deposit Funds in your account and add ${deposit}. Deposits count in ${money(BUCKS_DEPOSIT.increment)} steps.` },
@@ -524,7 +516,6 @@ export const BUCKS_PAGE = {
   rules: {
     eyebrow: 'The rules',
     title: 'What the bonus can and cannot do.',
-    lead: 'The terms as announced, plus how Legiit Bucks already work at checkout.',
     items: [
       `Legiit Bucks pay for services from Legiit freelancers. The ${bonus} bonus cannot be withdrawn as cash.`,
       `Deposits count in ${money(BUCKS_DEPOSIT.increment)} steps: ${deposit} earns ${bonus}, ${money(BUCKS_DEPOSIT.deposit * 2)} earns ${money(BUCKS_DEPOSIT.bonus * 2)}.`,
@@ -534,7 +525,6 @@ export const BUCKS_PAGE = {
     ],
     historyLink: { text: 'Legiit Bucks history', href: PROMO_ROUTES.bucksHistory },
   },
-  expiredHero: { h1Line1: 'Legiit Bucks.', h1Line2: 'Spend them at checkout.' },
   final: {
     title: `Fund the next job. Legiit adds ${bonus}.`,
     body: `Deposit ${deposit}, spend ${total} on the freelance work your business needs. ${DEADLINE_SENTENCE}`,
