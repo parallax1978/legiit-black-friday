@@ -37,7 +37,7 @@ export default function BucksApp() {
   const cta = { page: 'legiit-bucks' as const, plan: route.plan, status, campaign: attribution.campaign, href: route.href }
 
   return (
-    <div id="top" className="min-h-dvh bg-canvas text-ink">
+    <div id="top" className="promo min-h-dvh bg-canvas text-ink">
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-canvas focus:px-4 focus:py-3 focus:text-ink focus:shadow-frame btn-focus">
         Skip To Content
       </a>
