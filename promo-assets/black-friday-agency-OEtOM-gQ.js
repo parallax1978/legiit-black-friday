@@ -1,0 +1,1 @@
+import{c as e,j as a,R as o,a as t,b as r}from"./index-D2FL1SpO.js";import{P as c}from"./PromoApp-6cLTiYAb.js";r();e.createRoot(document.getElementById("root")).render(a.jsx(o.StrictMode,{children:a.jsx(c,{copyFor:t,planId:"agency_dashboard"})}));

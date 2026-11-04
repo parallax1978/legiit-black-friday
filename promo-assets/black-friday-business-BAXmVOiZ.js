@@ -1,0 +1,1 @@
+import{b as o,c as s,j as e,R as t,d as a}from"./index-D2FL1SpO.js";import{P as r}from"./PromoApp-6cLTiYAb.js";o();s.createRoot(document.getElementById("root")).render(e.jsx(t.StrictMode,{children:e.jsx(r,{copyFor:a,planId:"business_dashboard"})}));
