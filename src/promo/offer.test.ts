@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { BUCKS_DEPOSIT, CAMPAIGN_NAME, CHECKOUT_READY, CREDITS, FIRST_YEAR, OFFER_WINDOW, PROMO_ROUTES, bucksTotal, extraCreditsFirstYear, firstYearSaving } from './offer'
+import { BUCKS_DEPOSIT, CAMPAIGN_NAME, CREDITS, FIRST_YEAR, OFFER_WINDOW, PROMO_ROUTES, bucksTotal, extraCreditsFirstYear, firstYearSaving } from './offer'
 import { offerStatus, previewOverride, showsOfferTerms } from './status'
 import { DEFAULT_ATTRIBUTION, attributionParams, checkoutPath, depositUrl, parseAttribution, planCheckoutUrl, resolveAttribution, signInThen, trialStartUrl, withAttribution } from './attribution'
 import { promoRoute } from './routes'
@@ -27,10 +27,6 @@ describe('offer terms', () => {
     expect(new Intl.DateTimeFormat('en-US', { timeZone: OFFER_WINDOW.timeZone, dateStyle: 'long' }).format(new Date(OFFER_WINDOW.startsAt))).toBe(OFFER_WINDOW.opensLabel)
   })
 
-  it('ships with every checkout flag off until a real purchase proves the offer price', () => {
-    expect(Object.values(CHECKOUT_READY).every((v) => v === false)).toBe(true)
-  })
-
   it('uses only routes verified on the live site', () => {
     expect(PROMO_ROUTES.depositFunds).toBe('https://legiit.com/earning-history?deposite_wallet=true')
     expect(PROMO_ROUTES.bucksHistory).toBe('https://legiit.com/legiit-bucks/history')
@@ -41,16 +37,14 @@ describe('offer terms', () => {
 
 describe('offer status', () => {
   const at = (iso: string) => new Date(iso)
-  it('is upcoming before the window, pending or live inside it, and expired after it', () => {
-    expect(offerStatus(at('2026-11-04T12:00:00-05:00'), true)).toBe('upcoming')
-    expect(offerStatus(at('2026-11-05T00:00:00-05:00'), true)).toBe('live')
-    expect(offerStatus(at('2026-11-05T00:00:00-05:00'), false)).toBe('pending')
-    expect(offerStatus(at('2026-11-30T23:59:59-05:00'), true)).toBe('live')
-    expect(offerStatus(at('2026-12-01T00:00:00-05:00'), true)).toBe('expired')
-    expect(offerStatus(at('2026-11-30T21:00:00-08:00'), true)).toBe('expired') // 9 p.m. Pacific is past midnight Eastern
+  it('is live until the end instant and expired after it', () => {
+    expect(offerStatus(at('2026-11-05T00:00:00-05:00'))).toBe('live')
+    expect(offerStatus(at('2026-11-30T23:59:59-05:00'))).toBe('live')
+    expect(offerStatus(at('2026-12-01T00:00:00-05:00'))).toBe('expired')
+    expect(offerStatus(at('2026-11-30T21:00:00-08:00'))).toBe('expired') // 9 p.m. Pacific is past midnight Eastern
   })
-  it('shows offer terms in every state but expired', () => {
-    expect(['upcoming', 'pending', 'live'].map((s) => showsOfferTerms(s as never))).toEqual([true, true, true])
+  it('shows offer terms while live only', () => {
+    expect(showsOfferTerms('live')).toBe(true)
     expect(showsOfferTerms('expired')).toBe(false)
   })
   it('honours a preview override only on local hosts', () => {
@@ -120,10 +114,8 @@ describe('promotion routes', () => {
     const live = promoRoute(business, 'live', DEFAULT_ATTRIBUTION)
     expect(live).toMatchObject({ plan: 'business_dashboard', billing: 'yearly', kind: 'offer', label: 'Get Business For $399' })
     expect(live.href).toContain('plan%3Dbusiness_dashboard%26billing%3Dyearly')
-    for (const status of ['upcoming', 'pending', 'expired'] as const) {
-      expect(promoRoute(business, status, DEFAULT_ATTRIBUTION)).toMatchObject({ kind: 'regular', label: 'Start My 7-Day Free Trial', href: trialStartUrl(DEFAULT_ATTRIBUTION) })
-      expect(promoRoute(agency, status, DEFAULT_ATTRIBUTION)).toMatchObject({ kind: 'regular', billing: 'monthly', label: 'Choose Agency' })
-    }
+    expect(promoRoute(business, 'expired', DEFAULT_ATTRIBUTION)).toMatchObject({ kind: 'regular', label: 'Start My 7-Day Free Trial', href: trialStartUrl(DEFAULT_ATTRIBUTION) })
+    expect(promoRoute(agency, 'expired', DEFAULT_ATTRIBUTION)).toMatchObject({ kind: 'regular', billing: 'monthly', label: 'Choose Agency' })
     expect(promoRoute(agency, 'live', DEFAULT_ATTRIBUTION)).toMatchObject({ plan: 'agency_dashboard', billing: 'yearly', label: 'Get Agency For $1,399' })
   })
 })

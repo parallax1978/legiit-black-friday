@@ -18,14 +18,19 @@ const expiredCopy = JSON.stringify([businessPage(false), agencyPage(false)])
 
 describe('offer wording', () => {
   it('states the terms the way the offer was announced', () => {
-    expect(businessPage(true).h1Line2).toBe('$399 For Your First Year.')
-    expect(agencyPage(true).h1Line2).toBe('$1,399 For Your First Year.')
+    expect(businessPage(true).h1Line1).toBe('Black Friday Special: $399 First Year.')
+    expect(businessPage(true).h1Line2).toBe('Normally $470.40.')
+    expect(agencyPage(true).h1Line1).toBe('Black Friday Special: $1,399 First Year.')
+    expect(agencyPage(true).h1Line2).toBe('Normally $1,622.40.')
     expect(DEADLINE_SENTENCE).toBe('Offer ends November 30, 2026, at 11:59 p.m. Eastern.')
     expect(creditsNote()).toBe('100,000 AI credits are allocated at the start of each of your first 12 months, instead of the standard 50,000. They arrive month by month, not all at once.')
     expect(afterYearOne(FIRST_YEAR.business)).toBe('After the first 12 months the plan renews at the regular annual price, currently $470.40, with the standard 50,000 AI credits a month.')
     expect(afterYearOne(FIRST_YEAR.agency)).toContain('currently $1,622.40')
     for (const page of [businessPage(true), agencyPage(true)]) {
       expect(page.heroNote.live).toContain('billed annually')
+      expect(page.heroNote.live).toContain('instead of the regular')
+      expect(page.subhead).toContain('For Black Friday')
+      expect(page.pricing.title).toContain('normally')
       expect(page.heroNote.live).toContain(DEADLINE_SENTENCE)
       expect(page.pricing.afterYearOne).toContain('renews at the regular annual price')
     }

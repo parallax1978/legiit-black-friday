@@ -6,7 +6,6 @@ import { ProductSection } from '../components/sections/ProductSection'
 import { track } from '../lib/analytics'
 import { loadAttribution } from './attribution'
 import { PROMO_FOOTER_LINKS, statusBanner, type PromoPageCopy } from './content'
-import { CHECKOUT_READY } from './offer'
 import { promoRoute } from './routes'
 import { showsOfferTerms, useOfferStatus } from './status'
 import { CreditsSchedule } from './components/CreditsSchedule'
@@ -22,8 +21,8 @@ import { StatusStrip } from './components/StatusStrip'
  * component with their own copy; everything that depends on the offer state
  * (buttons, prices, notes) resolves here once and flows down.
  */
-export default function PromoApp({ copyFor, planId }: { copyFor: (showOffer: boolean) => PromoPageCopy; planId: 'business_dashboard' | 'agency_dashboard' }) {
-  const status = useOfferStatus(CHECKOUT_READY[planId])
+export default function PromoApp({ copyFor }: { copyFor: (showOffer: boolean) => PromoPageCopy }) {
+  const status = useOfferStatus()
   const showOffer = showsOfferTerms(status)
   const copy = useMemo(() => copyFor(showOffer), [copyFor, showOffer])
   const attribution = useMemo(loadAttribution, [])

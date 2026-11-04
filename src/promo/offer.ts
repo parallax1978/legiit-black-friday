@@ -20,10 +20,11 @@ import { CTA_URL } from '../config/site'
 export const CAMPAIGN_NAME = 'legiit_60d_2026' as const
 
 /**
- * When the offer runs. November 2026 is entirely on Eastern Standard Time
- * (UTC-5), so the fixed offsets below are exact. `endsAtLabel` is the only
- * wording of the deadline on the pages; the unit test checks it against the
- * instant.
+ * When the offer runs. The pages are published on the opening day and treat
+ * the offer as live until `endsAt`, after which they show regular prices.
+ * November 2026 is entirely on Eastern Standard Time (UTC-5), so the fixed
+ * offsets below are exact. `endsAtLabel` is the only wording of the deadline
+ * on the pages; the unit test checks it against the instant.
  */
 export const OFFER_WINDOW = {
   startsAt: '2026-11-05T00:00:00-05:00',
@@ -32,19 +33,6 @@ export const OFFER_WINDOW = {
   opensLabel: 'November 5, 2026',
   endsAtLabel: 'November 30, 2026, at 11:59 p.m. Eastern',
   endsShortLabel: 'November 30',
-} as const
-
-/**
- * Whether Legiit's checkout actually applies each part of the offer today.
- * While a flag is false the page never says the offer is live and its button
- * goes to the existing regular route instead (see ./status). Flip a flag only
- * after a real end-to-end purchase shows the offer price (or the $25 bonus) on
- * the live site. Shak owns this check (deck, "Fix and prove it").
- */
-export const CHECKOUT_READY = {
-  business_dashboard: false,
-  agency_dashboard: false,
-  legiitBucksDeposit: false,
 } as const
 
 /**

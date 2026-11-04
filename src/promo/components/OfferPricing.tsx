@@ -2,7 +2,8 @@ import { Container } from '../../components/ui/Container'
 import { Check } from '../../components/ui/Icons'
 import { formatCount, formatUsd } from '../../pricing/price'
 import type { Attribution } from '../attribution'
-import { DEADLINE_SENTENCE, firstYearLine, regularPriceLine, regularTermsLine, type PromoPageCopy } from '../content'
+import { DEADLINE_SENTENCE, blackFridayLine, regularTermsLine, type PromoPageCopy } from '../content'
+import { firstYearSaving } from '../offer'
 import { CREDITS, OFFER_WINDOW } from '../offer'
 import type { PromoRoute } from '../routes'
 import { showsOfferTerms, type OfferStatus } from '../status'
@@ -49,12 +50,17 @@ export function OfferPricing({ copy, status, route, attribution }: OfferPricingP
           <div className="lg:border-l lg:border-white/[0.26] lg:pl-14" data-offer-pricing={showOffer ? 'offer' : 'regular'}>
             {showOffer ? (
               <>
-                <p className="inline-flex items-center rounded-full border border-white/[0.45] px-3.5 py-1.5 text-sm font-medium text-white">{status === 'live' ? `Ends ${OFFER_WINDOW.endsShortLabel}` : status === 'upcoming' ? `Opens ${OFFER_WINDOW.opensLabel}` : 'Not yet available at checkout'}</p>
-                <p className="mt-5 flex flex-wrap items-baseline gap-x-2">
+                <p className="inline-flex items-center rounded-full border border-white/[0.45] px-3.5 py-1.5 text-sm font-medium text-white">Black Friday special, ends {OFFER_WINDOW.endsShortLabel}</p>
+                <p className="mt-5 text-lg text-white/95">
+                  <span className="sr-only">Regular annual price </span>
+                  <s className="decoration-white/80 decoration-2">{formatUsd(offer.regularAnnualPrice)}</s>
+                  <span aria-hidden="true"> regular annual price</span>
+                </p>
+                <p className="mt-1 flex flex-wrap items-baseline gap-x-2">
                   <span className="text-5xl font-semibold tracking-[-0.03em] text-white">{formatUsd(offer.firstYearPrice)}</span>{' '}
                   <span className="text-lg text-white/95">for your first year</span>
                 </p>
-                <p className="mt-1 text-[15px] text-white/95">Billed annually at purchase. {regularPriceLine(offer)}</p>
+                <p className="mt-1 text-[15px] text-white/95">Billed annually at purchase. You keep {formatUsd(firstYearSaving(offer))} against the regular price.</p>
               </>
             ) : (
               <>
@@ -67,11 +73,64 @@ export function OfferPricing({ copy, status, route, attribution }: OfferPricingP
               </>
             )}
             <PromoCta page={copy.page} placement="offer" plan={route.plan} billing={route.billing} status={status} campaign={attribution.campaign} href={route.href} label={route.label} size="lg" variant="inverse" className="mt-6 w-full sm:w-auto" />
-            <p className="mt-4 text-sm leading-relaxed text-white/95">{status === 'live' ? `${firstYearLine(offer)} ${DEADLINE_SENTENCE}` : copy.heroNote[status]}</p>
+            <p className="mt-4 text-sm leading-relaxed text-white/95">{status === 'live' ? `${blackFridayLine(offer)} ${DEADLINE_SENTENCE}` : copy.heroNote[status]}</p>
             {showOffer && <p className="mt-4 text-sm leading-relaxed text-white/95">{copy.pricing.afterYearOne}</p>}
             <p className="mt-4 text-sm leading-relaxed text-white/95">Freelance services purchased separately.</p>
           </div>
         </div>
+
+        {showOffer && (
+          <div className="mt-8 overflow-hidden rounded-2xl border border-line">
+            <table className="w-full table-fixed border-collapse text-left text-[15px]" data-offer-compare>
+              <caption className="sr-only">Regular price against the Black Friday special</caption>
+              <colgroup>
+                <col className="w-[34%] sm:w-[40%]" />
+                <col className="w-[33%] sm:w-[30%]" />
+                <col className="w-[33%] sm:w-[30%]" />
+              </colgroup>
+              <thead>
+                <tr className="border-b border-line-strong bg-canvas-sunken">
+                  <td className="px-4 py-3" />
+                  <th scope="col" className="px-4 py-3 text-base font-semibold text-ink-soft">
+                    Regular
+                  </th>
+                  <th scope="col" className="px-4 py-3 text-base font-semibold text-brand-purple">
+                    Black Friday
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b border-line align-top">
+                  <th scope="row" className="px-4 py-3 font-normal text-ink-soft">
+                    First year
+                  </th>
+                  <td className="px-4 py-3 text-ink">{formatUsd(offer.regularAnnualPrice)}</td>
+                  <td className="px-4 py-3 font-semibold text-ink">{formatUsd(offer.firstYearPrice)}</td>
+                </tr>
+                <tr className="border-b border-line align-top">
+                  <th scope="row" className="px-4 py-3 font-normal text-ink-soft">
+                    AI credits each month
+                  </th>
+                  <td className="px-4 py-3 text-ink">{formatCount(CREDITS.standardMonthly)}</td>
+                  <td className="px-4 py-3 font-semibold text-ink">
+                    {formatCount(CREDITS.offerMonthly)} <span className="block text-sm font-normal text-ink-muted">for {CREDITS.offerMonths} months</span>
+                  </td>
+                </tr>
+                <tr className="align-top">
+                  <th scope="row" className="px-4 py-3 font-normal text-ink-soft">
+                    After year one
+                  </th>
+                  <td className="px-4 py-3 text-ink">
+                    {formatUsd(offer.regularAnnualPrice)} a year <span className="block text-sm text-ink-muted">{formatCount(CREDITS.standardMonthly)} credits a month</span>
+                  </td>
+                  <td className="px-4 py-3 text-ink">
+                    {formatUsd(offer.regularAnnualPrice)} a year <span className="block text-sm text-ink-muted">{formatCount(CREDITS.standardMonthly)} credits a month</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        )}
       </Container>
     </section>
   )

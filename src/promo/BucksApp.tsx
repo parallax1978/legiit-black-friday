@@ -5,7 +5,7 @@ import { Check } from '../components/ui/Icons'
 import { track } from '../lib/analytics'
 import { depositUrl, loadAttribution, withAttribution } from './attribution'
 import { BUCKS_PAGE, statusBanner } from './content'
-import { CHECKOUT_READY, PROMO_ROUTES } from './offer'
+import { PROMO_ROUTES } from './offer'
 import { useOfferStatus, type OfferStatus } from './status'
 import { PromoCta } from './components/PromoCta'
 import { PromoHeader } from './components/PromoHeader'
@@ -17,13 +17,12 @@ const BOX_GRADIENT = 'linear-gradient(115deg, #6A13CF 0%, #C71E92 100%)'
 function bucksRoute(status: OfferStatus, attribution: ReturnType<typeof loadAttribution>) {
   const { cta } = BUCKS_PAGE
   if (status === 'live') return { href: depositUrl(attribution), label: cta.live, headerLabel: cta.liveHeader, plan: 'legiit_bucks' as const }
-  if (status === 'expired') return { href: withAttribution(PROMO_ROUTES.browseServices, attribution), label: cta.expired, headerLabel: cta.expiredHeader, plan: 'marketplace' as const }
-  return { href: withAttribution(PROMO_ROUTES.register, attribution), label: cta.upcoming, headerLabel: cta.upcomingHeader, plan: 'marketplace' as const }
+  return { href: withAttribution(PROMO_ROUTES.browseServices, attribution), label: cta.expired, headerLabel: cta.expiredHeader, plan: 'marketplace' as const }
 }
 
 /** The Legiit Bucks deposit page: shorter than the plan pages and kept apart from Command Center pricing. */
 export default function BucksApp() {
-  const status = useOfferStatus(CHECKOUT_READY.legiitBucksDeposit)
+  const status = useOfferStatus()
   const attribution = useMemo(loadAttribution, [])
   const route = bucksRoute(status, attribution)
   const copy = BUCKS_PAGE

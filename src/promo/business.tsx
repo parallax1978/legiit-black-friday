@@ -10,6 +10,6 @@ connectDataLayer()
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <PromoApp copyFor={businessPage} planId="business_dashboard" />
+    <PromoApp copyFor={businessPage} />
   </React.StrictMode>,
 )

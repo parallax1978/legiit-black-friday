@@ -1,25 +1,22 @@
 /**
- * The offer's state at a moment in time. 'live' needs both the window and a
- * confirmed checkout; inside the window without that confirmation the state is
- * 'pending', and the page keeps the regular routes and never claims the offer
- * is available. There is no countdown: the pages state the end date and
- * re-check the clock once a minute so an open page flips to 'expired' on time.
+ * The offer's state at a moment in time. The pages only exist while the
+ * promotion runs, so there is no pre-launch state: the offer is 'live' until
+ * the end instant and 'expired' after it. There is no countdown: the pages
+ * state the end date and re-check the clock once a minute so an open page
+ * flips to 'expired' on time.
  */
 import { useEffect, useMemo, useState } from 'react'
 import { OFFER_WINDOW } from './offer'
 
-export type OfferStatus = 'upcoming' | 'pending' | 'live' | 'expired'
+export type OfferStatus = 'live' | 'expired'
 
-export const OFFER_STATUSES: readonly OfferStatus[] = ['upcoming', 'pending', 'live', 'expired']
+export const OFFER_STATUSES: readonly OfferStatus[] = ['live', 'expired']
 
-export function offerStatus(now: Date, checkoutReady: boolean, window: { startsAt: string; endsAt: string } = OFFER_WINDOW): OfferStatus {
-  const t = now.getTime()
-  if (t > Date.parse(window.endsAt)) return 'expired'
-  if (t < Date.parse(window.startsAt)) return 'upcoming'
-  return checkoutReady ? 'live' : 'pending'
+export function offerStatus(now: Date, window: { endsAt: string } = OFFER_WINDOW): OfferStatus {
+  return now.getTime() > Date.parse(window.endsAt) ? 'expired' : 'live'
 }
 
-/** The offer's terms are shown (not necessarily available) in every state but 'expired'. */
+/** The offer's terms are shown in every state but 'expired'. */
 export function showsOfferTerms(status: OfferStatus): boolean {
   return status !== 'expired'
 }
@@ -37,13 +34,13 @@ export function previewOverride(search: string, hostname: string, hash = '', any
 }
 
 /** Current status, re-evaluated every minute and whenever the tab regains focus. */
-export function useOfferStatus(checkoutReady: boolean): OfferStatus {
+export function useOfferStatus(): OfferStatus {
   const override = useMemo(() => (typeof window === 'undefined' ? null : previewOverride(window.location.search, window.location.hostname, window.location.hash)), [])
-  const [status, setStatus] = useState<OfferStatus>(() => override ?? offerStatus(new Date(), checkoutReady))
+  const [status, setStatus] = useState<OfferStatus>(() => override ?? offerStatus(new Date()))
 
   useEffect(() => {
     if (override) return
-    const tick = () => setStatus(offerStatus(new Date(), checkoutReady))
+    const tick = () => setStatus(offerStatus(new Date()))
     tick()
     const id = window.setInterval(tick, 60_000)
     window.addEventListener('focus', tick)
@@ -51,7 +48,7 @@ export function useOfferStatus(checkoutReady: boolean): OfferStatus {
       window.clearInterval(id)
       window.removeEventListener('focus', tick)
     }
-  }, [checkoutReady, override])
+  }, [override])
 
   return status
 }

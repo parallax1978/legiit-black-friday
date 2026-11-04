@@ -3,8 +3,8 @@ import type { OfferStatus } from '../status'
 
 /**
  * One line above the header stating the offer's state: when it opens, when it
- * ends, or that it has ended. A real date, never a countdown. Expired and
- * pending states use the neutral canvas so nothing reads as a live promotion.
+ * ends, or that it has ended. A real date, never a countdown. The expired
+ * state uses the neutral canvas so nothing reads as a live promotion.
  */
 export function StatusStrip({ status, text }: { status: OfferStatus; text: string }) {
   const live = status === 'live'

@@ -49,12 +49,8 @@ export interface PromoPageCopy {
 
 /** The status strip at the top of every promotion page. */
 export function statusBanner(status: OfferStatus, kind: 'command-center' | 'legiit-bucks'): string {
-  const name = kind === 'command-center' ? 'Black Friday offer' : 'Legiit Bucks deposit bonus'
+  const name = kind === 'command-center' ? 'Black Friday special' : 'Black Friday Legiit Bucks bonus'
   switch (status) {
-    case 'upcoming':
-      return `${name}: opens ${OPENS}.`
-    case 'pending':
-      return `${name}: not yet available at checkout.`
     case 'live':
       return `${name}: ends ${ENDS}.`
     case 'expired':
@@ -77,6 +73,11 @@ export function creditsNote(): string {
 /** The first-year price line, e.g. "$399 for your first year, billed annually." */
 export function firstYearLine(offer: FirstYearOffer): string {
   return `${money(offer.firstYearPrice)} for your first year, billed annually.`
+}
+
+/** The Black Friday line with the regular price beside it, e.g. "Black Friday price $399 for your first year, instead of the regular $470.40." */
+export function blackFridayLine(offer: FirstYearOffer): string {
+  return `Black Friday price ${money(offer.firstYearPrice)} for your first year, billed annually, instead of the regular ${money(offer.regularAnnualPrice)}.`
 }
 
 export function regularPriceLine(offer: FirstYearOffer): string {
@@ -176,26 +177,26 @@ export function businessPage(showOffer: boolean): PromoPageCopy {
   page: 'business',
   offer: businessOffer,
   meta: {
-    title: showOffer ? `Command Center Black Friday Offer | ${money(businessOffer.firstYearPrice)} First Year For Business Owners | Legiit` : 'Command Center For Business Owners | Legiit',
+    title: showOffer ? `Black Friday Special | Command Center Business ${money(businessOffer.firstYearPrice)} First Year, Normally ${money(businessOffer.regularAnnualPrice)} | Legiit` : 'Command Center For Business Owners | Legiit',
     description: showOffer
-      ? `Get the Command Center Business plan for ${money(businessOffer.firstYearPrice)} for your first year, billed annually, with ${count(CREDITS.offerMonthly)} AI credits a month for 12 months. ${DEADLINE_SENTENCE}`
+      ? `Black Friday special: the Command Center Business plan for ${money(businessOffer.firstYearPrice)} for your first year instead of the regular ${money(businessOffer.regularAnnualPrice)}, with double the AI credits for 12 months. ${DEADLINE_SENTENCE}`
       : 'Command Center shows business owners the next move, helps create the work with AI, and connects them to Legiit specialists. Business plan from $49/month.',
   },
-  eyebrow: showOffer ? 'Black Friday offer for business owners' : 'Command Center for business owners',
-  h1Line1: 'Stop Guessing What To Work On.',
-  h1Line2: showOffer ? `${money(businessOffer.firstYearPrice)} For Your First Year.` : 'Business Plan.',
-  subhead: `Command Center shows you the next move for your business, helps you create the work with AI, and connects you to a Legiit specialist when you want it done for you.${showOffer ? ` Business plan, billed annually, with ${count(CREDITS.offerMonthly)} AI credits every month for your first ${CREDITS.offerMonths} months.` : ''}`,
-  cta: { live: `Get Business For ${money(businessOffer.firstYearPrice)}`, liveHeader: 'Claim The Offer', fallback: 'Start My 7-Day Free Trial', fallbackHeader: 'Start Free Trial' },
+  eyebrow: showOffer ? 'Black Friday special for business owners' : 'Command Center for business owners',
+  h1Line1: showOffer ? `Black Friday Special: ${money(businessOffer.firstYearPrice)} First Year.` : 'Stop Guessing What To Work On.',
+  h1Line2: showOffer ? `Normally ${money(businessOffer.regularAnnualPrice)}.` : 'The Business Plan.',
+  subhead: showOffer
+    ? `Know your next move, create the work with AI, and hand it to a Legiit specialist when you want it done for you. For Black Friday, the Business plan is ${money(businessOffer.firstYearPrice)} for your first year instead of ${money(businessOffer.regularAnnualPrice)}, with ${count(CREDITS.offerMonthly)} AI credits a month for ${CREDITS.offerMonths} months instead of the usual ${count(CREDITS.standardMonthly)}.`
+    : 'Command Center shows you the next move for your business, helps you create the work with AI, and connects you to a Legiit specialist when you want it done for you.',
+  cta: { live: `Get Business For ${money(businessOffer.firstYearPrice)}`, liveHeader: 'Get Black Friday Price', fallback: 'Start My 7-Day Free Trial', fallbackHeader: 'Start Free Trial' },
   heroNote: {
-    upcoming: `The ${money(businessOffer.firstYearPrice)} first-year price opens ${OPENS}. Until then, start with the ${BUSINESS_PLAN.trialDays}-day free trial.`,
-    pending: `The ${money(businessOffer.firstYearPrice)} first-year price is not yet available at checkout. Start with the ${BUSINESS_PLAN.trialDays}-day free trial and check back soon.`,
-    live: `${firstYearLine(businessOffer)} ${DEADLINE_SENTENCE}`,
+    live: `${blackFridayLine(businessOffer)} ${DEADLINE_SENTENCE}`,
     expired: `This offer ended ${OFFER_WINDOW.endsShortLabel}, 2026. ${regularTermsLine(businessOffer)}`,
   },
   switchPlan: {
     before: 'Running several businesses or client accounts? ',
     linkLabel: showOffer ? 'See the Agency offer' : 'See the Agency plan',
-    after: showOffer ? `: ${money(agencyOffer.firstYearPrice)} for the first year, up to ${agencyOffer.businessesIncluded} businesses.` : `: up to ${agencyOffer.businessesIncluded} businesses in one workspace.`,
+    after: showOffer ? `: ${money(agencyOffer.firstYearPrice)} for the first year instead of ${money(agencyOffer.regularAnnualPrice)}, up to ${agencyOffer.businessesIncluded} businesses.` : `: up to ${agencyOffer.businessesIncluded} businesses in one workspace.`,
     href: PROMO_PAGES.agency,
   },
   problem: {
@@ -270,8 +271,8 @@ export function businessPage(showOffer: boolean): PromoPageCopy {
     body: 'Where your business stands, what to do next, the content tools, and specialist help, screen by screen.',
   },
   pricing: {
-    eyebrow: 'The Black Friday offer',
-    title: `Business for ${money(businessOffer.firstYearPrice)} for your first year.`,
+    eyebrow: 'Black Friday pricing',
+    title: `Business for ${money(businessOffer.firstYearPrice)} for your first year, normally ${money(businessOffer.regularAnnualPrice)}.`,
     expiredTitle: 'Business plan pricing.',
     included: [`${BUSINESS_PLAN.businessesIncluded} business included`, 'Full business dashboard access', `${BUSINESS_PLAN.allowances.audits} Audits, ${BUSINESS_PLAN.allowances.keywords} Keywords, ${BUSINESS_PLAN.allowances.backlinkData} Backlink Data`, `Additional businesses at ${money(BUSINESS_PLAN.additionalBusinessMonthly)}/month each`, 'Support included'],
     afterYearOne: afterYearOne(businessOffer),
@@ -284,9 +285,9 @@ export function businessPage(showOffer: boolean): PromoPageCopy {
       ? [
           {
             id: 'what-is-it',
-            question: 'What Exactly Is The Black Friday Offer?',
+            question: 'What Exactly Is The Black Friday Special?',
             answer: [
-              `${money(businessOffer.firstYearPrice)} for your first year of the Business plan, billed annually at purchase, instead of the regular annual price of ${money(businessOffer.regularAnnualPrice)}. It also includes ${count(CREDITS.offerMonthly)} AI credits a month for your first ${CREDITS.offerMonths} months instead of the standard ${count(CREDITS.standardMonthly)}.`,
+              `For Black Friday only, the Business plan is ${money(businessOffer.firstYearPrice)} for your first year, billed annually at purchase, instead of the regular annual price of ${money(businessOffer.regularAnnualPrice)}. It also includes double the AI credits: ${count(CREDITS.offerMonthly)} a month for your first ${CREDITS.offerMonths} months instead of the standard ${count(CREDITS.standardMonthly)}.`,
             ],
           },
           ...sharedFaq(businessOffer).slice(0, 3),
@@ -306,8 +307,8 @@ export function businessPage(showOffer: boolean): PromoPageCopy {
       : regularFaq(businessOffer, 'business'),
   },
   final: {
-    title: 'Make this the year the work gets done.',
-    body: showOffer ? `One business, one clear next step every week, and ${count(CREDITS.offerMonthly)} AI credits a month to produce it. ${firstYearLine(businessOffer)}` : 'One business, one clear next step every week, and the tools to produce it.',
+    title: showOffer ? 'Black Friday only: make this the year the work gets done.' : 'Make this the year the work gets done.',
+    body: showOffer ? `${money(businessOffer.firstYearPrice)} for your first year instead of ${money(businessOffer.regularAnnualPrice)}, with ${count(CREDITS.offerMonthly)} AI credits a month to produce the work. ${DEADLINE_SENTENCE}` : 'One business, one clear next step every week, and the tools to produce it.',
   },
   }
 }
@@ -321,26 +322,26 @@ export function agencyPage(showOffer: boolean): PromoPageCopy {
   page: 'agency',
   offer: agencyOffer,
   meta: {
-    title: showOffer ? `Command Center Black Friday Offer | ${money(agencyOffer.firstYearPrice)} First Year For Agencies | Legiit` : 'Command Center For Agencies | Legiit',
+    title: showOffer ? `Black Friday Special | Command Center Agency ${money(agencyOffer.firstYearPrice)} First Year, Normally ${money(agencyOffer.regularAnnualPrice)} | Legiit` : 'Command Center For Agencies | Legiit',
     description: showOffer
-      ? `Get the Command Center Agency plan for ${money(agencyOffer.firstYearPrice)} for your first year, billed annually, for up to ${agencyOffer.businessesIncluded} businesses with ${count(CREDITS.offerMonthly)} AI credits a month for 12 months. ${DEADLINE_SENTENCE}`
+      ? `Black Friday special: the Command Center Agency plan for ${money(agencyOffer.firstYearPrice)} for your first year instead of the regular ${money(agencyOffer.regularAnnualPrice)}, for up to ${agencyOffer.businessesIncluded} businesses with double the AI credits for 12 months. ${DEADLINE_SENTENCE}`
       : `Run up to ${agencyOffer.businessesIncluded} client businesses in one Command Center, with a recommended next step for each and Legiit specialists to fulfil the work. Agency plan from $169/month.`,
   },
-  eyebrow: showOffer ? 'Black Friday offer for agencies' : 'Command Center for agencies',
-  h1Line1: `Every Client’s Next Move, Every Week.`,
-  h1Line2: showOffer ? `${money(agencyOffer.firstYearPrice)} For Your First Year.` : 'Agency Plan.',
-  subhead: `Run up to ${agencyOffer.businessesIncluded} client businesses in one Command Center: a recommended next step for each, AI tools to produce the work, and Legiit specialists to fulfil it.${showOffer ? ` Agency plan, billed annually, with ${count(CREDITS.offerMonthly)} AI credits every month for your first ${CREDITS.offerMonths} months.` : ''}`,
-  cta: { live: `Get Agency For ${money(agencyOffer.firstYearPrice)}`, liveHeader: 'Claim The Offer', fallback: 'Choose Agency', fallbackHeader: 'Choose Agency' },
+  eyebrow: showOffer ? 'Black Friday special for agencies' : 'Command Center for agencies',
+  h1Line1: showOffer ? `Black Friday Special: ${money(agencyOffer.firstYearPrice)} First Year.` : `Every Client’s Next Move, Every Week.`,
+  h1Line2: showOffer ? `Normally ${money(agencyOffer.regularAnnualPrice)}.` : 'The Agency Plan.',
+  subhead: showOffer
+    ? `Up to ${agencyOffer.businessesIncluded} client businesses in one Command Center. For Black Friday, the Agency plan is ${money(agencyOffer.firstYearPrice)} for your first year instead of ${money(agencyOffer.regularAnnualPrice)}, with ${count(CREDITS.offerMonthly)} AI credits a month for ${CREDITS.offerMonths} months instead of the usual ${count(CREDITS.standardMonthly)}.`
+    : `Run up to ${agencyOffer.businessesIncluded} client businesses in one Command Center: a recommended next step for each, AI tools to produce the work, and Legiit specialists to fulfil it.`,
+  cta: { live: `Get Agency For ${money(agencyOffer.firstYearPrice)}`, liveHeader: 'Get Black Friday Price', fallback: 'Choose Agency', fallbackHeader: 'Choose Agency' },
   heroNote: {
-    upcoming: `The ${money(agencyOffer.firstYearPrice)} first-year price opens ${OPENS}. Agency is ${money(agencyOffer.regularMonthlyPrice)}/month until then.`,
-    pending: `The ${money(agencyOffer.firstYearPrice)} first-year price is not yet available at checkout. Check back soon.`,
-    live: `${firstYearLine(agencyOffer)} ${DEADLINE_SENTENCE}`,
+    live: `${blackFridayLine(agencyOffer)} ${DEADLINE_SENTENCE}`,
     expired: `This offer ended ${OFFER_WINDOW.endsShortLabel}, 2026. ${regularTermsLine(agencyOffer)}`,
   },
   switchPlan: {
     before: 'Only running one business? ',
     linkLabel: showOffer ? 'See the Business offer' : 'See the Business plan',
-    after: showOffer ? `: ${money(businessOffer.firstYearPrice)} for the first year.` : `: one business, with a ${BUSINESS_PLAN.trialDays}-day free trial.`,
+    after: showOffer ? `: ${money(businessOffer.firstYearPrice)} for the first year instead of ${money(businessOffer.regularAnnualPrice)}.` : `: one business, with a ${BUSINESS_PLAN.trialDays}-day free trial.`,
     href: PROMO_PAGES.business,
   },
   problem: {
@@ -415,8 +416,8 @@ export function agencyPage(showOffer: boolean): PromoPageCopy {
     body: 'Where a client stands, what to do next, the content tools, and specialist help, screen by screen.',
   },
   pricing: {
-    eyebrow: 'The Black Friday offer',
-    title: `Agency for ${money(agencyOffer.firstYearPrice)} for your first year.`,
+    eyebrow: 'Black Friday pricing',
+    title: `Agency for ${money(agencyOffer.firstYearPrice)} for your first year, normally ${money(agencyOffer.regularAnnualPrice)}.`,
     expiredTitle: 'Agency plan pricing.',
     included: [`Up to ${AGENCY_PLAN.businessesIncluded} businesses included`, 'Full business dashboard access', `${AGENCY_PLAN.allowances.audits} Audits, ${AGENCY_PLAN.allowances.keywords} Keywords, ${AGENCY_PLAN.allowances.backlinkData} Backlink Data`, `Businesses beyond ${AGENCY_PLAN.businessesIncluded} at ${money(AGENCY_PLAN.additionalBusinessMonthly)}/month each`, 'Support included'],
     afterYearOne: afterYearOne(agencyOffer),
@@ -429,9 +430,9 @@ export function agencyPage(showOffer: boolean): PromoPageCopy {
       ? [
           {
             id: 'what-is-it',
-            question: 'What Exactly Is The Black Friday Offer?',
+            question: 'What Exactly Is The Black Friday Special?',
             answer: [
-              `${money(agencyOffer.firstYearPrice)} for your first year of the Agency plan, billed annually at purchase, instead of the regular annual price of ${money(agencyOffer.regularAnnualPrice)}. It also includes ${count(CREDITS.offerMonthly)} AI credits a month for your first ${CREDITS.offerMonths} months instead of the standard ${count(CREDITS.standardMonthly)}.`,
+              `For Black Friday only, the Agency plan is ${money(agencyOffer.firstYearPrice)} for your first year, billed annually at purchase, instead of the regular annual price of ${money(agencyOffer.regularAnnualPrice)}. It also includes double the AI credits: ${count(CREDITS.offerMonthly)} a month for your first ${CREDITS.offerMonths} months instead of the standard ${count(CREDITS.standardMonthly)}.`,
             ],
           },
           {
@@ -456,8 +457,8 @@ export function agencyPage(showOffer: boolean): PromoPageCopy {
       : regularFaq(agencyOffer, 'agency'),
   },
   final: {
-    title: 'Give every client a next move worth paying for.',
-    body: showOffer ? `Up to ${agencyOffer.businessesIncluded} businesses, a recommendation for each, and ${count(CREDITS.offerMonthly)} AI credits a month to produce the work. ${firstYearLine(agencyOffer)}` : `Up to ${agencyOffer.businessesIncluded} businesses, a recommendation for each, and the tools to produce the work.`,
+    title: showOffer ? 'Black Friday only: give every client a next move worth paying for.' : 'Give every client a next move worth paying for.',
+    body: showOffer ? `${money(agencyOffer.firstYearPrice)} for your first year instead of ${money(agencyOffer.regularAnnualPrice)}, for up to ${agencyOffer.businessesIncluded} businesses with ${count(CREDITS.offerMonthly)} AI credits a month. ${DEADLINE_SENTENCE}` : `Up to ${agencyOffer.businessesIncluded} businesses, a recommendation for each, and the tools to produce the work.`,
   },
   }
 }
@@ -466,9 +467,9 @@ export const PROMO_PAGES_COPY = { business: businessPage, agency: agencyPage } a
 
 /** Shared one-liners used by components. */
 export const CREDITS_SCHEDULE = {
-  eyebrow: 'AI credits, month by month',
-  title: `${count(CREDITS.offerMonthly)} credits a month for ${CREDITS.offerMonths} months. Then the standard ${count(CREDITS.standardMonthly)}.`,
-  body: `That is ${count(CREDITS.offerMonthly - CREDITS.standardMonthly)} more each month than the standard allocation, ${count(extraCreditsFirstYear())} more across the year, allocated monthly rather than delivered up front.`,
+  eyebrow: 'Black Friday bonus: double the AI credits',
+  title: `${count(CREDITS.offerMonthly)} AI credits a month for ${CREDITS.offerMonths} months, instead of the usual ${count(CREDITS.standardMonthly)}.`,
+  body: `That is ${count(CREDITS.offerMonthly - CREDITS.standardMonthly)} more each month than the standard allocation and ${count(extraCreditsFirstYear())} more across the year, allocated monthly rather than delivered up front.`,
   offerLabel: 'Months 1 to 12',
   afterLabel: 'Month 13 onward',
 } as const
@@ -483,18 +484,16 @@ const total = money(bucksTotal())
 
 export const BUCKS_PAGE = {
   meta: {
-    title: `Legiit Bucks Deposit Bonus | Deposit ${deposit}, Get ${total} To Spend | Legiit`,
-    description: `Add ${deposit} to your Legiit Bucks wallet during the offer and Legiit adds a ${bonus} bonus, for ${total} to spend on freelance services. ${DEADLINE_SENTENCE}`,
+    title: `Black Friday Legiit Bucks Bonus | Deposit ${deposit}, Get ${total} To Spend | Legiit`,
+    description: `Black Friday bonus for marketplace buyers: add ${deposit} to your Legiit Bucks wallet and Legiit adds ${bonus}, for ${total} to spend on freelance services. ${DEADLINE_SENTENCE}`,
   },
-  eyebrow: 'For marketplace buyers',
+  eyebrow: 'Black Friday bonus for marketplace buyers',
   h1Line1: `Deposit ${deposit}.`,
   h1Line2: `Spend ${total}.`,
-  subhead: `Add ${deposit} to your Legiit Bucks wallet during the offer and Legiit adds a ${bonus} bonus. You get ${total} to spend on freelance services: your ${deposit}, plus ${bonus} from Legiit.`,
-  cta: { live: `Deposit ${deposit} Now`, liveHeader: 'Deposit Now', upcoming: 'Create A Free Legiit Account', upcomingHeader: 'Create Account', expired: 'Browse Services', expiredHeader: 'Browse Services' },
+  subhead: `For Black Friday, add ${deposit} to your Legiit Bucks wallet and Legiit adds a ${bonus} bonus. You get ${total} to spend on freelance services: your ${deposit}, plus ${bonus} from Legiit.`,
+  cta: { live: `Deposit ${deposit} Now`, liveHeader: 'Deposit Now', expired: 'Browse Services', expiredHeader: 'Browse Services' },
   heroNote: {
-    upcoming: `The deposit bonus opens ${OPENS}. Create your free Legiit account now and you are ready on the day.`,
-    pending: `The ${bonus} bonus is not yet applied to deposits. Check back soon.`,
-    live: `Your ${deposit} deposit plus a ${bonus} bonus. ${DEADLINE_SENTENCE}`,
+    live: `Black Friday bonus: your ${deposit} deposit plus ${bonus} from Legiit. ${DEADLINE_SENTENCE}`,
     expired: `The deposit bonus ended ${OFFER_WINDOW.endsShortLabel}, 2026. Legiit Bucks you already hold still spend as normal at checkout.`,
   } satisfies Record<OfferStatus, string>,
   math: {
@@ -526,7 +525,7 @@ export const BUCKS_PAGE = {
     historyLink: { text: 'Legiit Bucks history', href: PROMO_ROUTES.bucksHistory },
   },
   final: {
-    title: `Fund the next job. Legiit adds ${bonus}.`,
+    title: `Black Friday only: fund the next job and Legiit adds ${bonus}.`,
     body: `Deposit ${deposit}, spend ${total} on the freelance work your business needs. ${DEADLINE_SENTENCE}`,
   },
   footerLinks: [

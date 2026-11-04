@@ -38,39 +38,38 @@ const offerCheckout = (plan) => `${SIGN_IN}${enc(`/subscription-purchase?plan=${
 const monthlyCheckout = (plan) => `${SIGN_IN}${enc(`/subscription-purchase?plan=${plan}&billing=monthly&${attribution}`)}`
 const TRIAL = `https://legiit.com/command-center/start?${attribution}`
 const DEPOSIT = `${SIGN_IN}${enc(`/earning-history?deposite_wallet=true&${attribution}`)}`
-const REGISTER = `https://legiit.com/register?${attribution}`
 const BROWSE = `https://legiit.com/categories?${attribution}`
 
 const PAGES = {
   'black-friday-business': {
-    cta: { live: offerCheckout('business_dashboard'), upcoming: TRIAL, pending: TRIAL, expired: TRIAL },
-    labels: { live: 'Get Business For $399', upcoming: 'Start My 7-Day Free Trial', pending: 'Start My 7-Day Free Trial', expired: 'Start My 7-Day Free Trial' },
-    offerText: ['$399 for your first year', '100,000', 'November 30, 2026, at 11:59 p.m. Eastern', 'renews at the regular annual price, currently $470.40'],
+    cta: { live: offerCheckout('business_dashboard'), expired: TRIAL },
+    labels: { live: 'Get Business For $399', expired: 'Start My 7-Day Free Trial' },
+    offerText: ['Black Friday Special: $399 First Year.', 'Normally $470.40.', 'instead of the regular $470.40', '100,000', 'November 30, 2026, at 11:59 p.m. Eastern', 'renews at the regular annual price, currently $470.40'],
     expiredText: ['$49/month billed monthly, or $470.40 a year billed annually'],
     switchTo: 'black-friday-agency',
     ctaCount: 4,
-    title: /Business Owners/,
+    title: /Black Friday Special.*Business/,
   },
   'black-friday-agency': {
-    cta: { live: offerCheckout('agency_dashboard'), upcoming: monthlyCheckout('agency_dashboard'), pending: monthlyCheckout('agency_dashboard'), expired: monthlyCheckout('agency_dashboard') },
-    labels: { live: 'Get Agency For $1,399', upcoming: 'Choose Agency', pending: 'Choose Agency', expired: 'Choose Agency' },
-    offerText: ['$1,399 for your first year', '100,000', 'November 30, 2026, at 11:59 p.m. Eastern', 'renews at the regular annual price, currently $1,622.40'],
+    cta: { live: offerCheckout('agency_dashboard'), expired: monthlyCheckout('agency_dashboard') },
+    labels: { live: 'Get Agency For $1,399', expired: 'Choose Agency' },
+    offerText: ['Black Friday Special: $1,399 First Year.', 'Normally $1,622.40.', 'instead of the regular $1,622.40', '100,000', 'November 30, 2026, at 11:59 p.m. Eastern', 'renews at the regular annual price, currently $1,622.40'],
     expiredText: ['$169/month billed monthly, or $1,622.40 a year billed annually'],
     switchTo: 'black-friday-business',
     ctaCount: 4,
-    title: /Agencies/,
+    title: /Black Friday Special.*Agency/,
   },
   'legiit-bucks': {
-    cta: { live: DEPOSIT, upcoming: REGISTER, pending: REGISTER, expired: BROWSE },
-    labels: { live: 'Deposit $100 Now', upcoming: 'Create A Free Legiit Account', pending: 'Create A Free Legiit Account', expired: 'Browse Services' },
-    offerText: ['Deposit $100.', 'Spend $125.', 'The bonus is $25.', 'cannot be withdrawn', 'Use your Legiit Bucks first'],
+    cta: { live: DEPOSIT, expired: BROWSE },
+    labels: { live: 'Deposit $100 Now', expired: 'Browse Services' },
+    offerText: ['Black Friday bonus', 'Deposit $100.', 'Spend $125.', 'The bonus is $25.', 'cannot be withdrawn', 'Use your Legiit Bucks first'],
     expiredText: ['The deposit bonus ended November 30, 2026'],
     switchTo: null,
     ctaCount: 3,
-    title: /Legiit Bucks Deposit Bonus/,
+    title: /Black Friday Legiit Bucks Bonus/,
   },
 }
-const STATES = ['live', 'upcoming', 'pending', 'expired']
+const STATES = ['live', 'expired']
 const SIZES = [
   [320, 640],
   [390, 664],
@@ -139,6 +138,7 @@ for (const [name, want] of Object.entries(PAGES)) {
           pricingMode: document.querySelector('[data-offer-pricing]')?.dataset.offerPricing,
           bucksMath: !!document.querySelector('[data-bucks-math]'),
           creditsChart: !!document.getElementById('credits-heading'),
+          compareTable: !!document.querySelector('[data-offer-compare]'),
         }
       })
 
@@ -169,9 +169,8 @@ for (const [name, want] of Object.entries(PAGES)) {
         else !m.bucksMath ? pass(`${tag}: deposit math is hidden`) : fail(`${tag}: deposit math still shown`)
       } else {
         want.offerText.every((t) => m.allText.includes(t)) ? pass(`${tag}: offer terms stated`) : fail(`${tag}: missing offer text ${JSON.stringify(want.offerText.filter((t) => !m.allText.includes(t)))}`)
-        if (name !== 'legiit-bucks') m.pricingMode === 'offer' && m.creditsChart ? pass(`${tag}: pricing box shows the first-year price and the credits chart`) : fail(`${tag}: pricing ${m.pricingMode}, chart ${m.creditsChart}`)
-        if (state !== 'live') /not yet available|opens November 5/.test(m.text) ? pass(`${tag}: page says the offer is not available yet`) : fail(`${tag}: no "not yet" wording`)
-        if (state === 'live') !/not yet available|opens November 5/.test(m.text) ? pass(`${tag}: no "not yet" wording while live`) : fail(`${tag}: "not yet" wording while live`)
+        if (name !== 'legiit-bucks') m.pricingMode === 'offer' && m.creditsChart && m.compareTable ? pass(`${tag}: pricing box shows the Black Friday price, the credits chart, and the regular-vs-Black-Friday table`) : fail(`${tag}: pricing ${m.pricingMode}, chart ${m.creditsChart}, table ${m.compareTable}`)
+        !/not yet available|opens November 5/.test(m.text) ? pass(`${tag}: no pre-launch wording`) : fail(`${tag}: pre-launch wording present`)
       }
       if (want.switchTo) {
         m.switchHref && m.switchHref.includes(`${want.switchTo}.html?${attribution}`) ? pass(`${tag}: link to the other plan keeps the attribution`) : fail(`${tag}: switch link ${m.switchHref}`)
@@ -230,13 +229,14 @@ for (const [name, want] of Object.entries(PAGES)) {
   await fresh.close()
 }
 
-// Without an override, today's real state applies (upcoming until November 5, 2026; no promotional price claimed as live).
+// Without an override, the real clock applies: live until November 30, 2026, 11:59 p.m. Eastern, expired after.
 {
   const context = await browser.newContext({ viewport: { width: 1440, height: 789 } })
   const page = await context.newPage()
   await page.goto(`${base}/black-friday-business.html`, { waitUntil: 'networkidle' })
   const s = await page.evaluate(() => document.querySelector('[data-offer-status]')?.dataset.offerStatus)
-  s !== 'live' ? pass(`real clock: the page is "${s}", not live, with every CHECKOUT_READY flag off`) : fail('real clock: page claims the offer is live')
+  const want = Date.now() > Date.parse('2026-11-30T23:59:59-05:00') ? 'expired' : 'live'
+  s === want ? pass(`real clock: the page is "${s}"`) : fail(`real clock: page is "${s}", expected "${want}"`)
   await context.close()
 }
 

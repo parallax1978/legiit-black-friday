@@ -1,9 +1,9 @@
 /**
  * Which destination and label each Command Center promotion button gets in
- * each offer state. Live: the plan's annual checkout, where the first-year
- * price applies. Any other state: the existing regular route (the Business
- * trial, or the Agency month-to-month checkout), so no button ever sends a
- * visitor to a price the page cannot promise.
+ * each offer state. Live: the plan's annual checkout, where the Black Friday
+ * price applies. Expired: the existing regular route (the Business trial, or
+ * the Agency month-to-month checkout), so no button ever sends a visitor to a
+ * price the page cannot promise.
  */
 import type { Attribution } from './attribution'
 import { planCheckoutUrl, trialStartUrl } from './attribution'
