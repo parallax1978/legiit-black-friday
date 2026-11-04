@@ -1,0 +1,14 @@
+{{!-- Closing band on the landing page's gradient, drawn as one more tile: the brand gradient with the blueprint grid in white. --}}
+<section aria-labelledby="cta-band-heading" class="band-wrap">
+  <div class="lib">
+    <div class="band">
+      <svg class="band-grid" aria-hidden="true" focusable="false"><use href="#art-grid" width="100%" height="100%" /></svg>
+      <h2 id="cta-band-heading" class="band-title">{{band.title}}</h2>
+      <p class="band-body">{{band.body}}</p>
+      <div class="band-actions">
+        <a href="{{band.primaryUrl}}" class="band-btn band-btn--solid btn-focus" data-cta="band-primary">{{band.primaryLabel}}<svg aria-hidden="true" focusable="false" class="ico max-[419px]:hidden"><use href="#i-arrow" /></svg></a>
+        <a href="{{band.secondaryUrl}}" class="band-btn band-btn--line btn-focus" data-cta="band-secondary">{{band.secondaryLabel}}</a>
+      </div>
+    </div>
+  </div>
+</section>

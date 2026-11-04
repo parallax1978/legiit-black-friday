@@ -1,0 +1,11 @@
+node_modules
+dist
+.DS_Store
+*.log
+qa/screenshots
+*.tsbuildinfo
+dist-pricing
+dist-pricing-preview
+blog-preview
+dist-blog
+.claude/worktrees

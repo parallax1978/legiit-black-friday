@@ -1,0 +1,15 @@
+{{!-- The last item is the current page: plain text, not a link. The matching BreadcrumbList JSON-LD is in the head. On phones a long last item is cut with an ellipsis; the full title is the H1 right below. --}}
+<nav aria-label="Breadcrumb" class="crumbs">
+  <ol class="crumbs-list">
+    {{#each breadcrumbs}}
+    <li class="crumbs-item">
+      {{#if @index}}<svg aria-hidden="true" focusable="false" class="crumbs-sep ico"><use href="#i-chev-right" /></svg>{{/if}}
+      {{#if url}}
+      <a href="{{url}}" class="crumbs-link btn-focus">{{name}}</a>
+      {{else}}
+      <span aria-current="page" class="crumbs-current">{{name}}</span>
+      {{/if}}
+    </li>
+    {{/each}}
+  </ol>
+</nav>

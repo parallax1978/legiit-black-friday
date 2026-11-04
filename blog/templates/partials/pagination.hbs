@@ -1,0 +1,31 @@
+{{!-- Numbered, crawlable pagination: every page is a real link, so search engines and readers can reach every post. --}}
+{{#if pagination}}
+<nav aria-label="Pagination" class="pager">
+  <ul class="pager-list">
+    <li>
+      {{#if pagination.prevUrl}}
+      <a href="{{pagination.prevUrl}}" rel="prev" class="pager-step btn-focus"><svg aria-hidden="true" focusable="false" class="ico pager-chev pager-chev--back"><use href="#i-chev-right" /></svg>Previous</a>
+      {{else}}
+      <span aria-disabled="true" class="pager-step pager-step--off"><svg aria-hidden="true" focusable="false" class="ico pager-chev pager-chev--back"><use href="#i-chev-right" /></svg>Previous</span>
+      {{/if}}
+    </li>
+    {{#each pagination.items}}
+    <li>
+      {{#if gap}}
+      <span aria-hidden="true" class="pager-gap">…</span>
+      {{else}}
+      <a href="{{url}}" class="pager-num btn-focus"{{#if current}} aria-current="page"{{/if}}>{{n}}</a>
+      {{/if}}
+    </li>
+    {{/each}}
+    <li>
+      {{#if pagination.nextUrl}}
+      <a href="{{pagination.nextUrl}}" rel="next" class="pager-step btn-focus">Next<svg aria-hidden="true" focusable="false" class="ico pager-chev"><use href="#i-chev-right" /></svg></a>
+      {{else}}
+      <span aria-disabled="true" class="pager-step pager-step--off">Next<svg aria-hidden="true" focusable="false" class="ico pager-chev"><use href="#i-chev-right" /></svg></span>
+      {{/if}}
+    </li>
+  </ul>
+  <p class="pager-note">Page {{pagination.current}} of {{pagination.total}}</p>
+</nav>
+{{/if}}

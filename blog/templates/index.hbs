@@ -1,0 +1,78 @@
+{{!-- The blog home as a library, like the Human Interface Guidelines index: the topic tree on the left; in the main column a large title and lead,
+     buyer's guides first, one section per goal hub, the latest posts with numbered pages, and every archive year.
+     Pages 2 and on keep only the list, the pagination and the archive. --}}
+<div class="lib">
+  <div class="lib-grid">
+    <div class="lib-main">
+      {{> browse}}
+      {{> breadcrumbs breadcrumbs=page.breadcrumbs}}
+      <header class="home-head">
+        <h1 class="h1-xl">{{index.h1}}</h1>
+        <p class="lead-xl">{{index.intro}}</p>
+      </header>
+
+      {{#if index.isFirst}}
+      <section id="buyers-guides" aria-labelledby="buyers-guides-heading" class="lib-section lib-section--first">
+        <h2 id="buyers-guides-heading" class="h2-lib">Compare Before You Hire</h2>
+        <p class="sec-desc">Shortlists and side-by-side comparisons of agencies, tools and marketplaces. Start here when you are ready to buy.</p>
+        <div class="tiles">
+          {{#each index.guides}}
+          {{> post-card}}
+          {{/each}}
+        </div>
+        {{#if index.moreGuides.length}}
+        <div class="more">
+          <h3 class="more-title">More comparisons</h3>
+          <ul class="more-list">
+            {{#each index.moreGuides}}
+            <li><a href="{{url}}" class="more-link btn-focus"><svg class="ico more-icon" aria-hidden="true" focusable="false"><use href="#i-{{art.icon}}" /></svg><span>{{title}}</span></a></li>
+            {{/each}}
+          </ul>
+        </div>
+        {{/if}}
+      </section>
+
+      <div id="topics" class="hubs">
+        {{#each index.hubs}}
+        <section id="hub-{{id}}" aria-labelledby="hub-{{id}}-heading" class="lib-section">
+          <h2 id="hub-{{id}}-heading" class="h2-lib">{{name}}</h2>
+          <p class="sec-desc">{{description}} See all in {{#each topics}}<a href="{{url}}" class="sec-link">{{name}}</a>{{andSep @index ../topics.length}}{{/each}}.</p>
+          <div class="tiles">
+            {{#each posts}}
+            {{> post-card}}
+            {{/each}}
+          </div>
+        </section>
+        {{/each}}
+      </div>
+      {{/if}}
+
+      <section id="latest" aria-labelledby="latest-heading" class="lib-section{{#unless index.isFirst}} lib-section--first{{/unless}}">
+        <h2 id="latest-heading" class="h2-lib">{{index.gridTitle}}</h2>
+        {{#if index.isFirst}}<p class="sec-desc">Every post, newest first. The numbered pages below go back to {{stats.firstYear}}.</p>{{/if}}
+        <ol class="rows rows--2">
+          {{#each index.posts}}
+          {{> post-row}}
+          {{/each}}
+        </ol>
+        {{> pagination pagination=index.pagination}}
+      </section>
+
+      <section id="archive" aria-labelledby="archive-heading" class="lib-section">
+        <h2 id="archive-heading" class="h2-lib">Archive</h2>
+        <p class="sec-desc">Every post since {{stats.firstYear}}, listed by year and month.</p>
+        <ul class="years">
+          {{#each index.years}}
+          <li><a href="{{url}}" class="year btn-focus"><span class="year-n">{{year}}</span><span class="year-c">{{count}} posts</span></a></li>
+          {{/each}}
+        </ul>
+      </section>
+    </div>
+
+    <aside class="lib-side" aria-label="Blog topics">
+      {{> sidebar mode="desktop"}}
+    </aside>
+  </div>
+</div>
+
+{{> cta-band band=index.band}}

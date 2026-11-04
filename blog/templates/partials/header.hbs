@@ -1,0 +1,58 @@
+{{!-- Two tiers, like Apple's developer pages: a thin global bar for Legiit itself, then the blog's own section bar.
+     On desktop the header sticks with the global bar scrolled away, so the section bar stays in view.
+     On phones the section links fold into a disclosure that opens in the page flow (no overlay). --}}
+<header class="site-head">
+  <div class="gbar">
+    <div class="lib gbar-row">
+      <a href="{{site.homeUrl}}" class="gbar-logo btn-focus" aria-label="Legiit home">
+        <img src="{{site.logo}}" alt="Legiit" width="57" height="26" class="h-[22px] w-auto" decoding="async" />
+      </a>
+      <nav aria-label="Legiit" class="gbar-nav">
+        <ul class="flex items-center">
+          <li><a href="{{site.pricingUrl}}" class="gbar-link btn-focus">Command Center</a></li>
+          <li><a href="{{site.marketplaceUrl}}" class="gbar-link btn-focus">Marketplace</a></li>
+          <li><a href="{{site.coursesUrl}}" class="gbar-link btn-focus">Courses</a></li>
+          <li><a href="{{site.supportUrl}}" class="gbar-link btn-focus">Support</a></li>
+        </ul>
+      </nav>
+      <div class="ml-auto flex items-center">
+        <a href="{{site.signInUrl}}" class="gbar-link btn-focus">Log In</a>
+        <a href="{{site.trialUrl}}" class="gbar-cta btn-focus" data-cta="header-trial"><span class="gbar-pill btn-brand">Start Free Trial</span></a>
+      </div>
+    </div>
+  </div>
+  <div class="sbar">
+    <div class="lib sbar-row">
+      <a href="{{url.index}}" class="wordmark btn-focus">Blog</a>
+      <nav aria-label="Blog sections" class="sbar-nav">
+        <ul class="flex items-center">
+          <li><a href="{{url.latest}}" class="sbar-link btn-focus">Latest</a></li>
+          <li><a href="{{url.topics}}" class="sbar-link btn-focus">Topics</a></li>
+          <li><a href="{{url.guides}}" class="sbar-link btn-focus">Buyer’s Guides</a></li>
+          <li><a href="{{url.archive}}" class="sbar-link btn-focus">Archive</a></li>
+        </ul>
+      </nav>
+      <form action="{{url.search}}" method="get" role="search" class="sbar-search">
+        <label class="sbar-field">
+          <svg class="sbar-field-icon ico" aria-hidden="true" focusable="false"><use href="#i-search" /></svg>
+          <span class="sr-only">Search the blog</span>
+          <input type="search" name="{{site.searchParam}}" placeholder="Search {{stats.posts}} guides" class="sbar-input btn-focus" />
+        </label>
+      </form>
+      <a href="{{url.search}}" class="sbar-icon btn-focus" aria-label="Search the blog"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-search" /></svg></a>
+    </div>
+    <details class="sbar-menu">
+      <summary class="sbar-menu-btn btn-focus" aria-label="Blog Sections"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-chev-down" /></svg></summary>
+      <nav aria-label="Blog sections" class="sbar-panel">
+        <ul class="lib">
+          <li><a href="{{url.latest}}" class="sbar-panel-link btn-focus">Latest</a></li>
+          <li><a href="{{url.topics}}" class="sbar-panel-link btn-focus">Topics</a></li>
+          <li><a href="{{url.guides}}" class="sbar-panel-link btn-focus">Buyer’s Guides</a></li>
+          <li><a href="{{url.archive}}" class="sbar-panel-link btn-focus">Archive</a></li>
+          <li><a href="{{site.pricingUrl}}" class="sbar-panel-link btn-focus">Command Center</a></li>
+          <li><a href="{{site.marketplaceUrl}}" class="sbar-panel-link btn-focus">Marketplace</a></li>
+        </ul>
+      </nav>
+    </details>
+  </div>
+</header>
