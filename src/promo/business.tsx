@@ -4,6 +4,7 @@ import PromoApp from './PromoApp'
 import { businessPage } from './content'
 import { connectDataLayer } from '../lib/dataLayer'
 import '../index.css'
+import './promo.css'
 
 // Forwards the typed events to the host page's GTM dataLayer when one exists; otherwise a no-op.
 connectDataLayer()

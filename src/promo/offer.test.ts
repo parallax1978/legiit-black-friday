@@ -118,12 +118,12 @@ describe('promotion routes', () => {
     const business = businessPage(true)
     const agency = agencyPage(true)
     const live = promoRoute(business, 'live', DEFAULT_ATTRIBUTION)
-    expect(live).toMatchObject({ plan: 'business_dashboard', billing: 'yearly', kind: 'offer', label: 'Get Business For $399' })
+    expect(live).toMatchObject({ plan: 'business_dashboard', billing: 'yearly', kind: 'offer', label: 'Get Business for $399' })
     expect(live.href).toContain('plan%3Dbusiness_dashboard%26billing%3Dyearly')
     for (const status of ['upcoming', 'pending', 'expired'] as const) {
-      expect(promoRoute(business, status, DEFAULT_ATTRIBUTION)).toMatchObject({ kind: 'regular', label: 'Start My 7-Day Free Trial', href: trialStartUrl(DEFAULT_ATTRIBUTION) })
+      expect(promoRoute(business, status, DEFAULT_ATTRIBUTION)).toMatchObject({ kind: 'regular', label: 'Start my 7-day free trial', href: trialStartUrl(DEFAULT_ATTRIBUTION) })
       expect(promoRoute(agency, status, DEFAULT_ATTRIBUTION)).toMatchObject({ kind: 'regular', billing: 'monthly', label: 'Choose Agency' })
     }
-    expect(promoRoute(agency, 'live', DEFAULT_ATTRIBUTION)).toMatchObject({ plan: 'agency_dashboard', billing: 'yearly', label: 'Get Agency For $1,399' })
+    expect(promoRoute(agency, 'live', DEFAULT_ATTRIBUTION)).toMatchObject({ plan: 'agency_dashboard', billing: 'yearly', label: 'Get Agency for $1,399' })
   })
 })

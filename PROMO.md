@@ -1,6 +1,6 @@
 # November 2026 promotion pages
 
-Three landing pages for Legiit's November promotion, built on the Command Center landing page's brand system, components, and conventions (React 18, TypeScript strict, Tailwind 3, Vite 5, the same header, footer, buttons, FAQ accordion, product sections, screenshots, and overview video).
+Three landing pages for Legiit's November promotion, built in the project's stack (React 18, TypeScript strict, Tailwind 3, Vite 5) and styled to Legiit's documentation design system (in the manner of Apple's design documentation): Inter only, the fixed type scale (H1 48/32px bold, H2 40/28px bold, H3 24/21px semibold, intro 21/19px, body 17px, meta 14px), sentence case everywhere, a 980px content width with a 692px text column, 80px between sections (48px on phones), a two-level header (Legiit navigation, then the section title and the Business, Agency and Legiit Bucks tabs), purple #8A12DC buttons and links ending in "›", off-white #F5F5F7 cards and note boxes, flat 12px-radius images, and Lucide icons. The stylesheet is `src/promo/promo.css`; the brand palette tokens are the `legiit` colours in `tailwind.config.ts`. The pages reuse the landing page's verified plan data, assets and overview video.
 
 | Page | Dev and preview route | Deployed path (`npm run build:promo`) | Code |
 |---|---|---|---|
@@ -45,7 +45,7 @@ Every price, credit figure, date, route, and readiness flag is in `src/promo/off
 | Campaign name | `legiit_60d_2026` | `CAMPAIGN_NAME` |
 | Checkout readiness | `business_dashboard`, `agency_dashboard`, `legiitBucksDeposit`, all `false` | `CHECKOUT_READY` |
 
-Wording rules enforced by `src/promo/content.test.ts` and the QA: the offer is never "30% off", nothing suggests the first-year price or doubled credits continue past year one (every page says the plan renews at the regular annual price, currently $470.40 or $1,622.40, with the standard 50,000 credits), credits are "allocated monthly, not all at once", the deposit page says "the bonus is $25, this is not $125 of free credit, and it is not part of any Command Center subscription", no countdown, no em dashes, Initial Caps on buttons and FAQ questions, two sentences per paragraph.
+Wording rules enforced by `src/promo/content.test.ts` and the QA: sentence case on every heading, button and FAQ question (proper names keep their capitals), the offer is never "30% off", nothing suggests the first-year price or doubled credits continue past year one (every page says the plan renews at the regular annual price, currently $470.40 or $1,622.40, with the standard 50,000 credits), credits are "allocated monthly, not all at once", the deposit page says "the bonus is $25, this is not $125 of free credit, and it is not part of any Command Center subscription", no countdown, no em dashes, Initial Caps on buttons and FAQ questions, two sentences per paragraph.
 
 ## Offer states
 

@@ -3,11 +3,22 @@ import { BUCKS_PAGE, CREDITS_SCHEDULE, DEADLINE_SENTENCE, afterYearOne, agencyPa
 import { FIRST_YEAR } from './offer'
 import { OFFER_STATUSES } from './status'
 
-const isInitialCaps = (label: string) =>
-  label
-    .split(/\s+/)
-    .filter((w) => /[A-Za-z]/.test(w))
-    .every((w) => /^[^A-Za-z]*[A-Z0-9]/.test(w))
+/** Proper names that keep their capitals inside a sentence-case label. */
+const PROPER = new Set(['Legiit', 'Business', 'Agency', 'Command', 'Center', 'AI', 'Lara', 'Do', 'This', 'Next', 'Black', 'Friday', 'Eastern', 'November', 'Monday', 'Bucks', 'PayPal', 'I', 'Google', 'Wallet', 'Deposit', 'Funds', 'Active', 'Subscriptions', 'The'])
+/** Sentence case: the first word capitalised, every later word lowercase unless it is a proper name, a number, or follows a sentence end. */
+const isSentenceCase = (label: string) => {
+  const words = label.split(/\s+/).filter(Boolean)
+  const first = words[0] ?? ''
+  if (!/^[^a-z]*[A-Z0-9$]/.test(first)) return false
+  let sentenceStart = false
+  for (const w of words.slice(1)) {
+    const core = w.replace(/^[^A-Za-z]+/, '')
+    const capital = /^[A-Z]/.test(core)
+    if (capital && !sentenceStart && !PROPER.has(core.replace(/[^A-Za-z]+$/, '')) && !/^[A-Z]{2,}$/.test(core)) return false
+    sentenceStart = /[.!?]$/.test(w)
+  }
+  return true
+}
 
 // "11:59 p.m. Eastern" is one sentence, so the abbreviation is folded before counting.
 const sentences = (p: string) => p.replace(/p\.m\./g, 'pm').split(/(?<=[.!?])\s+(?=[A-Z“"$0-9])/).filter(Boolean)
@@ -18,8 +29,8 @@ const expiredCopy = JSON.stringify([businessPage(false), agencyPage(false)])
 
 describe('offer wording', () => {
   it('states the terms the way the offer was announced', () => {
-    expect(businessPage(true).h1Line2).toBe('$399 For Your First Year.')
-    expect(agencyPage(true).h1Line2).toBe('$1,399 For Your First Year.')
+    expect(businessPage(true).h1Line2).toBe('$399 for your first year.')
+    expect(agencyPage(true).h1Line2).toBe('$1,399 for your first year.')
     expect(DEADLINE_SENTENCE).toBe('Offer ends November 30, 2026, at 11:59 p.m. Eastern.')
     expect(creditsNote()).toBe('100,000 AI credits are allocated at the start of each of your first 12 months, instead of the standard 50,000. They arrive month by month, not all at once.')
     expect(afterYearOne(FIRST_YEAR.business)).toBe('After the first 12 months the plan renews at the regular annual price, currently $470.40, with the standard 50,000 AI credits a month.')
@@ -37,7 +48,7 @@ describe('offer wording', () => {
     }
     expect(allOfferCopy).not.toContain('30% off')
     // "not all at once" is the one allowed use of the phrase, so it must be negated wherever it appears.
-    expect(allOfferCopy.match(/all at once/g)?.length).toBe(allOfferCopy.match(/not all at once/g)?.length)
+    expect(allOfferCopy.match(/all at once/g)?.length).toBe(allOfferCopy.match(/not all at once|delivered all at once\?/g)?.length)
   })
 
   it('keeps the deposit bonus apart from Command Center and spells out the $25', () => {
@@ -60,13 +71,17 @@ describe('offer wording', () => {
 })
 
 describe('copy rules', () => {
-  it('uses Initial Caps for the H1, every button label, and every FAQ question', () => {
+  it('uses sentence case for the H1, every H2, every button label, and every FAQ question', () => {
     for (const page of pages) {
-      for (const label of [page.h1Line1, page.h1Line2, ...Object.values(page.cta)]) expect(isInitialCaps(label), label).toBe(true)
-      for (const item of page.faq.items) expect(isInitialCaps(item.question), item.question).toBe(true)
+      const headings = [page.h1Line1, page.h1Line2, page.problem.title, page.featuresSection.title, page.demo.title, page.pricing.title, page.pricing.expiredTitle, page.faq.title, page.final.title, ...page.features.map((f) => f.title)]
+      for (const label of [...headings, ...Object.values(page.cta)]) expect(isSentenceCase(label), label).toBe(true)
+      for (const item of page.faq.items) expect(isSentenceCase(item.question), item.question).toBe(true)
       expect(new Set(page.faq.items.map((i) => i.id)).size).toBe(page.faq.items.length)
+      // Every section has a one-sentence description.
+      for (const lead of [page.problem.lead, page.featuresSection.lead, page.demo.body, page.pricing.lead, page.faq.lead]) expect(sentences(lead).length, lead).toBe(1)
     }
-    for (const label of [BUCKS_PAGE.h1Line1, BUCKS_PAGE.h1Line2, ...Object.values(BUCKS_PAGE.cta)]) expect(isInitialCaps(label), label).toBe(true)
+    for (const label of [BUCKS_PAGE.h1Line1, BUCKS_PAGE.h1Line2, BUCKS_PAGE.how.title, BUCKS_PAGE.rules.title, BUCKS_PAGE.final.title, ...Object.values(BUCKS_PAGE.cta), ...BUCKS_PAGE.how.steps.map((s) => s.title)]) expect(isSentenceCase(label), label).toBe(true)
+    expect(isSentenceCase('Start My 7-Day Free Trial')).toBe(false)
   })
 
   it('keeps every paragraph to two sentences or fewer', () => {

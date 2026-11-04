@@ -1,0 +1,199 @@
+/*
+ * Design system for the promotion pages, in the manner of Apple's design
+ * documentation with the Legiit brand: Inter only, the fixed type scale,
+ * sentence case, hierarchy from size and weight, one link style, one accent.
+ * Desktop sizes apply from 734px; the mobile scale below that.
+ */
+.promo {
+  font-family: Inter, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  color: #1d1d1f;
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+}
+.promo .p-wrap {
+  max-width: 980px;
+  margin-inline: auto;
+  padding-inline: 22px;
+}
+.promo .p-text {
+  max-width: 692px;
+}
+.promo .p-section {
+  padding-block: 48px;
+}
+.promo .p-h1 {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  color: #1d1d1f;
+}
+.promo .p-h2 {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.008em;
+  color: #1d1d1f;
+}
+.promo .p-h3 {
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #1d1d1f;
+}
+.promo .p-intro {
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.38;
+  color: #1d1d1f;
+}
+.promo .p-card-title {
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #1d1d1f;
+}
+.promo .p-body,
+.promo .p-body p,
+.promo .p-body li {
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.47;
+  color: #1d1d1f;
+}
+.promo .p-meta {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: #6e6e73;
+}
+.promo .p-link {
+  color: #8a12dc;
+  font-size: 17px;
+  line-height: 1.47;
+  text-decoration: none;
+  border-radius: 4px;
+}
+.promo .p-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.promo .p-link::after {
+  content: '\00a0\203A';
+}
+.promo .p-btn,
+.promo .p-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding-inline: 20px;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+  border-radius: 12px;
+  transition: background-color 120ms ease, filter 120ms ease;
+}
+.promo .p-btn {
+  background: #8a12dc;
+  color: #fff;
+}
+.promo .p-btn:hover {
+  filter: brightness(0.92);
+}
+.promo .p-btn.p-pill {
+  border-radius: 999px;
+  padding-inline: 18px;
+  min-height: 44px;
+  font-size: 15px;
+}
+.promo .p-btn-secondary {
+  background: #fff;
+  color: #1d1d1f;
+  border: 1px solid #d2d2d7;
+  border-radius: 8px;
+}
+.promo .p-btn-secondary:hover {
+  background: #f5f5f7;
+}
+.promo .p-card {
+  background: #f5f5f7;
+  border-radius: 18px;
+}
+.promo .p-note {
+  background: #f5f5f7;
+  border-radius: 18px;
+  padding: 20px 24px;
+}
+.promo .p-note strong {
+  font-weight: 700;
+}
+.promo .p-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  border: 1px solid #d2d2d7;
+}
+.promo .p-tab {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-inline: 2px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #1d1d1f;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+}
+.promo .p-tab[aria-current='page'] {
+  border-bottom-color: #8a12dc;
+  font-weight: 600;
+}
+.promo .p-nav-link {
+  align-items: center;
+  min-height: 44px;
+  padding-inline: 4px;
+  font-size: 15px;
+  color: #1d1d1f;
+  text-decoration: none;
+}
+.promo .p-nav-link:hover {
+  color: #8a12dc;
+}
+.promo :is(a, button, summary, input):focus-visible {
+  outline: 2px solid #8a12dc;
+  outline-offset: 2px;
+}
+.promo details > summary {
+  list-style: none;
+  cursor: pointer;
+}
+.promo details > summary::-webkit-details-marker {
+  display: none;
+}
+@media (min-width: 734px) {
+  .promo .p-section {
+    padding-block: 80px;
+  }
+  .promo .p-h1 {
+    font-size: 48px;
+  }
+  .promo .p-h2 {
+    font-size: 40px;
+  }
+  .promo .p-h3 {
+    font-size: 24px;
+  }
+  .promo .p-intro {
+    font-size: 21px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .promo .p-btn,
+  .promo .p-btn-secondary {
+    transition: none;
+  }
+}

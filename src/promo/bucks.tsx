@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import BucksApp from './BucksApp'
 import { connectDataLayer } from '../lib/dataLayer'
 import '../index.css'
+import './promo.css'
 
 connectDataLayer()
 

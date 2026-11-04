@@ -44,7 +44,7 @@ const BROWSE = `https://legiit.com/categories?${attribution}`
 const PAGES = {
   'black-friday-business': {
     cta: { live: offerCheckout('business_dashboard'), upcoming: TRIAL, pending: TRIAL, expired: TRIAL },
-    labels: { live: 'Get Business For $399', upcoming: 'Start My 7-Day Free Trial', pending: 'Start My 7-Day Free Trial', expired: 'Start My 7-Day Free Trial' },
+    labels: { live: 'Get Business for $399', upcoming: 'Start my 7-day free trial', pending: 'Start my 7-day free trial', expired: 'Start my 7-day free trial' },
     offerText: ['$399 for your first year', '100,000', 'November 30, 2026, at 11:59 p.m. Eastern', 'renews at the regular annual price, currently $470.40'],
     expiredText: ['$49/month billed monthly, or $470.40 a year billed annually'],
     switchTo: 'black-friday-agency',
@@ -53,7 +53,7 @@ const PAGES = {
   },
   'black-friday-agency': {
     cta: { live: offerCheckout('agency_dashboard'), upcoming: monthlyCheckout('agency_dashboard'), pending: monthlyCheckout('agency_dashboard'), expired: monthlyCheckout('agency_dashboard') },
-    labels: { live: 'Get Agency For $1,399', upcoming: 'Choose Agency', pending: 'Choose Agency', expired: 'Choose Agency' },
+    labels: { live: 'Get Agency for $1,399', upcoming: 'Choose Agency', pending: 'Choose Agency', expired: 'Choose Agency' },
     offerText: ['$1,399 for your first year', '100,000', 'November 30, 2026, at 11:59 p.m. Eastern', 'renews at the regular annual price, currently $1,622.40'],
     expiredText: ['$169/month billed monthly, or $1,622.40 a year billed annually'],
     switchTo: 'black-friday-business',
@@ -62,7 +62,7 @@ const PAGES = {
   },
   'legiit-bucks': {
     cta: { live: DEPOSIT, upcoming: REGISTER, pending: REGISTER, expired: BROWSE },
-    labels: { live: 'Deposit $100 Now', upcoming: 'Create A Free Legiit Account', pending: 'Create A Free Legiit Account', expired: 'Browse Services' },
+    labels: { live: 'Deposit $100 now', upcoming: 'Create a free Legiit account', pending: 'Create a free Legiit account', expired: 'Browse services' },
     offerText: ['Deposit $100.', 'Spend $125.', 'The bonus is $25.', 'cannot be withdrawn', 'Use your Legiit Bucks first'],
     expiredText: ['The deposit bonus ended November 30, 2026'],
     switchTo: null,
@@ -97,12 +97,20 @@ for (const [name, want] of Object.entries(PAGES)) {
         const rect = (el) => el.getBoundingClientRect()
         const headings = Array.from(document.querySelectorAll('h1,h2,h3')).map((h) => ({ level: Number(h.tagName[1]), text: h.textContent.trim() }))
         const ctas = Array.from(document.querySelectorAll('a[data-promo-cta]')).map((a) => ({ placement: a.dataset.promoCta, label: a.textContent.trim().replace(/\s+/g, ' '), href: a.href, status: a.dataset.offerStatus }))
-        const labels = Array.from(document.querySelectorAll('button, a[data-promo-cta]'))
-          .filter((el) => el.offsetParent !== null)
-          .map((el) => (el.innerText || el.textContent || '').trim().replace(/\s+/g, ' '))
+        // Sentence case: no heading or button label has a capitalised second word other than a proper name.
+        const PROPER = new Set(['Legiit', 'Business', 'Agency', 'Command', 'Center', 'AI', 'Lara', 'Do', 'This', 'Next', 'Black', 'Friday', 'Eastern', 'November', 'Monday', 'Bucks', 'PayPal', 'I', 'Wallet', 'Deposit', 'Funds', 'Active', 'Subscriptions', 'The'])
+        const labels = Array.from(document.querySelectorAll('h1, h2, h3, button, a[data-promo-cta], summary'))
+          .map((el) => (el.innerText || '').trim().replace(/\s+/g, ' '))
           .filter(Boolean)
-        const notCaps = labels.filter((t) => t.split(' ').filter((w) => /[A-Za-z]/.test(w)).some((w) => !/^[^A-Za-z]*[A-Z0-9]/.test(w)))
-        const small = Array.from(document.querySelectorAll('a[href], button'))
+        const notCaps = labels.filter((t) => {
+          const words = t.split(' ')
+          return words.slice(1).some((w, i) => {
+            const core = w.replace(/^[^A-Za-z]+/, '').replace(/[^A-Za-z]+$/, '')
+            const afterSentenceEnd = /[.!?:]$/.test(words[i])
+            return /^[A-Z][a-z]/.test(core) && !afterSentenceEnd && !PROPER.has(core)
+          })
+        })
+        const small = Array.from(document.querySelectorAll('a[href], button, summary'))
           .filter((el) => el.offsetParent !== null && !el.classList.contains('sr-only'))
           .map((el) => ({ t: (el.getAttribute('aria-label') || el.textContent || '').trim().slice(0, 40), h: Math.round(rect(el).height), w: Math.round(rect(el).width), inline: getComputedStyle(el).display === 'inline' }))
           .filter((x) => !x.inline && (x.h < 44 || x.w < 44))
@@ -136,6 +144,9 @@ for (const [name, want] of Object.entries(PAGES)) {
           stripStatus: document.querySelector('[role="status"][data-offer-status]')?.dataset.offerStatus,
           switchHref: document.querySelector('a[data-switch-plan]')?.href,
           skipFirst: document.querySelector('a[href="#main"]') === document.body.querySelector('a, button'),
+          tabCurrent: document.querySelector('[data-offer-tab][aria-current="page"]')?.dataset.offerTab,
+          gradientText: Array.from(document.querySelectorAll('h1, h2, h3, p, a, span')).filter((el) => getComputedStyle(el).backgroundClip === 'text').length,
+          badLinks: Array.from(document.querySelectorAll('main a:not([data-promo-cta]):not([data-switch-plan])')).filter((a) => !a.classList.contains('p-link')).map((a) => a.textContent.trim().slice(0, 30)),
           pricingMode: document.querySelector('[data-offer-pricing]')?.dataset.offerPricing,
           bucksMath: !!document.querySelector('[data-bucks-math]'),
           creditsChart: !!document.getElementById('credits-heading'),
@@ -151,11 +162,14 @@ for (const [name, want] of Object.entries(PAGES)) {
       const wrong = m.ctas.filter((c) => c.href !== want.cta[state] || c.status !== state)
       wrong.length === 0 && m.ctas.length === want.ctaCount ? pass(`${tag}: all ${m.ctas.length} buttons go to ${state === 'live' ? 'the offer route' : 'the regular route'} with attribution`) : fail(`${tag}: wrong destinations ${JSON.stringify(wrong)} (count ${m.ctas.length})`)
       m.ctas.filter((c) => c.placement !== 'header').every((c) => c.label === want.labels[state]) ? pass(`${tag}: button label "${want.labels[state]}"`) : fail(`${tag}: labels ${JSON.stringify(m.ctas.map((c) => c.label))}`)
-      m.notCaps.length === 0 ? pass(`${tag}: every button label is Initial Caps`) : fail(`${tag}: labels not Initial Caps ${JSON.stringify(m.notCaps)}`)
+      m.notCaps.length === 0 ? pass(`${tag}: headings and button labels are sentence case`) : fail(`${tag}: not sentence case ${JSON.stringify(m.notCaps)}`)
       m.small.length === 0 ? pass(`${tag}: all targets at least 44px`) : fail(`${tag}: small targets ${JSON.stringify(m.small)}`)
       m.longParagraphs.length === 0 ? pass(`${tag}: every paragraph has two sentences or fewer`) : fail(`${tag}: long paragraphs ${JSON.stringify(m.longParagraphs)}`)
       !BANNED.test(m.allText) ? pass(`${tag}: no percentage-off, forever, countdown, or free-$125 wording, no em dashes`) : fail(`${tag}: banned wording ${JSON.stringify(m.allText.match(BANNED))}`)
       m.skipFirst ? pass(`${tag}: skip link is first in tab order`) : fail(`${tag}: skip link not first`)
+      m.tabCurrent === (name === 'legiit-bucks' ? 'legiitBucks' : name.replace('black-friday-', '')) ? pass(`${tag}: current offer tab marked`) : fail(`${tag}: current tab ${m.tabCurrent}`)
+      m.gradientText === 0 ? pass(`${tag}: no gradient on text`) : fail(`${tag}: ${m.gradientText} gradient text elements`)
+      m.badLinks.length === 0 ? pass(`${tag}: every in-page link uses the one link style`) : fail(`${tag}: links off-style ${JSON.stringify(m.badLinks)}`)
       m.imgs.every((i) => i.alt && i.w > 0 && i.h > 0) ? pass(`${tag}: ${m.imgs.length} images have alt text and reserved size`) : fail(`${tag}: images ${JSON.stringify(m.imgs.filter((i) => !i.alt))}`)
       // The hero button is the first-screen action on every size except the 320px reflow width, where the header button is.
       if (width >= 360) {
@@ -196,13 +210,14 @@ for (const [name, want] of Object.entries(PAGES)) {
         const loaded = await page.evaluate(() => Array.from(document.querySelectorAll('img')).map((i) => ({ alt: i.alt.slice(0, 30), ok: i.complete && i.naturalWidth > 0 })))
         loaded.every((i) => i.ok) ? pass(`${tag}: all ${loaded.length} images load`) : fail(`${tag}: images failed ${JSON.stringify(loaded.filter((i) => !i.ok))}`)
         if (name !== 'legiit-bucks') {
-          const faq = page.locator('h3 button[aria-expanded]').first()
+          const faq = page.locator('details > summary').first()
           await faq.scrollIntoViewIfNeeded()
           await faq.click()
-          const opened = (await faq.getAttribute('aria-expanded')) === 'true'
-          await faq.press('Enter')
-          const closed = (await faq.getAttribute('aria-expanded')) === 'false'
-          opened && closed ? pass(`${tag}: FAQ opens and closes`) : fail(`${tag}: FAQ open=${opened} closed=${closed}`)
+          const opened = await faq.evaluate((el) => el.parentElement.open)
+          await faq.focus()
+          await page.keyboard.press('Enter')
+          const closed = await faq.evaluate((el) => !el.parentElement.open)
+          opened && closed ? pass(`${tag}: FAQ opens by click and closes by keyboard`) : fail(`${tag}: FAQ open=${opened} closed=${closed}`)
         }
         await page.evaluate(() => window.scrollTo(0, 0))
         await page.screenshot({ path: `${outDir}/promo-${name}-${state}-${width}-fold.png` })

@@ -1,21 +1,20 @@
 import { useEffect, useMemo } from 'react'
-import { Container } from '../components/ui/Container'
-import { Footer } from '../components/sections/Footer'
-import { Faq } from '../components/sections/Faq'
-import { ProductSection } from '../components/sections/ProductSection'
 import { track } from '../lib/analytics'
 import { loadAttribution } from './attribution'
-import { PROMO_FOOTER_LINKS, statusBanner, type PromoPageCopy } from './content'
+import type { PromoPageCopy } from './content'
 import { CHECKOUT_READY } from './offer'
 import { promoRoute } from './routes'
 import { showsOfferTerms, useOfferStatus } from './status'
 import { CreditsSchedule } from './components/CreditsSchedule'
+import { DemoSection } from './components/DemoSection'
+import { FeatureSections } from './components/FeatureSections'
 import { OfferPricing } from './components/OfferPricing'
 import { ProblemSolution } from './components/ProblemSolution'
+import { PromoFaq } from './components/PromoFaq'
 import { PromoFinal } from './components/PromoFinal'
+import { PromoFooter } from './components/PromoFooter'
 import { PromoHeader } from './components/PromoHeader'
 import { PromoHero } from './components/PromoHero'
-import { StatusStrip } from './components/StatusStrip'
 
 /**
  * One Command Center promotion page. The Business and Agency pages are this
@@ -43,27 +42,22 @@ export default function PromoApp({ copyFor, planId }: { copyFor: (showOffer: boo
   const cta = { page: copy.page, plan: route.plan, billing: route.billing, status, campaign: attribution.campaign, href: route.href, label: route.headerLabel }
 
   return (
-    <div id="top" className="promo min-h-dvh bg-canvas text-ink">
-      <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-canvas focus:px-4 focus:py-3 focus:text-ink focus:shadow-frame btn-focus">
-        Skip To Content
+    <div id="top" className="promo min-h-dvh">
+      <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-white focus:px-4 focus:py-3 focus:text-legiit-charcoal">
+        Skip to content
       </a>
-      <StatusStrip status={status} text={statusBanner(status, 'command-center')} />
-      <PromoHeader cta={cta} />
+      <PromoHeader current={copy.page} cta={cta} attribution={attribution} />
       <main id="main">
         <PromoHero copy={copy} status={status} route={route} attribution={attribution} />
+        <DemoSection copy={copy.demo} />
         <ProblemSolution copy={copy.problem} />
-        {copy.features.map((section) => (
-          <ProductSection key={section.id} section={section} />
-        ))}
+        <FeatureSections section={copy.featuresSection} features={copy.features} />
         {showOffer && <CreditsSchedule />}
         <OfferPricing copy={copy} status={status} route={route} attribution={attribution} />
-        <Faq eyebrow={copy.faq.eyebrow} title={copy.faq.title} items={copy.faq.items} headingId="promo-faq-heading" />
+        <PromoFaq title={copy.faq.title} lead={copy.faq.lead} items={copy.faq.items} />
         <PromoFinal copy={copy} status={status} route={route} attribution={attribution} />
       </main>
-      <Footer links={PROMO_FOOTER_LINKS} navLabel="Footer" />
-      <Container>
-        <p className="sr-only">Prices in US dollars.</p>
-      </Container>
+      <PromoFooter />
     </div>
   )
 }
