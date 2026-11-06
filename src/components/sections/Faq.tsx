@@ -10,6 +10,10 @@ interface FaqProps {
   items?: FaqItem[]
   /** Id of the section heading, so two FAQ sections on one page never share it. */
   headingId?: string
+  /** A line under the heading, e.g. where to ask; its `links` work like an answer's. */
+  help?: { text: string; links?: FaqItem['links'] }
+  /** Id of the item that starts open. */
+  initiallyOpen?: string
 }
 
 /** Splits a paragraph around each link text so those words render as links. */
@@ -29,9 +33,9 @@ function withLinks(paragraph: string, links: FaqItem['links']) {
 }
 
 /** Accordion FAQ. Defaults to the landing page copy; the pricing page passes its own. */
-export function Faq({ eyebrow = FAQ_COPY.eyebrow, title = FAQ_COPY.title, items = FAQ_ITEMS, headingId = 'faq-heading' }: FaqProps = {}) {
+export function Faq({ eyebrow = FAQ_COPY.eyebrow, title = FAQ_COPY.title, items = FAQ_ITEMS, headingId = 'faq-heading', help, initiallyOpen }: FaqProps = {}) {
   const baseId = useId()
-  const [openIds, setOpenIds] = useState<Set<string>>(() => new Set())
+  const [openIds, setOpenIds] = useState<Set<string>>(() => new Set(initiallyOpen ? [initiallyOpen] : []))
 
   const toggle = (id: string) => {
     const expanded = !openIds.has(id)
@@ -53,6 +57,7 @@ export function Faq({ eyebrow = FAQ_COPY.eyebrow, title = FAQ_COPY.title, items 
             <h2 id={headingId} className="h2 mt-3">
               {title}
             </h2>
+            {help && <p className="mt-4 max-w-sm text-[15px] leading-relaxed text-ink-soft">{withLinks(help.text, help.links)}</p>}
           </div>
           <div className="border-t border-line-strong">
             {items.map((item) => {

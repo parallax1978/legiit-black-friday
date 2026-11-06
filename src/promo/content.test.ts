@@ -20,15 +20,21 @@ describe('offer wording', () => {
   it('states the terms the way the offer was announced', () => {
     expect(businessPage(true).h1Line1).toBe('$399')
     expect(businessPage(true).h1Line2).toBe('for your first year.')
-    expect(businessPage(true).offerHero).toEqual({
-      banner: 'Black Friday: $399 for your first year of Command Center. Ends November 30, 11:59 p.m. Eastern.',
+    const offerPage = businessPage(true).offerPage!
+    expect(offerPage).toMatchObject({
+      banner: 'Black Friday: Business for $399 your first year, plus double AI credits. Ends November 30, 11:59 p.m. Eastern.',
       bannerLink: 'Get the deal',
       compare: { label: 'Regular price', regular: '$470.40', saving: 'Save $71.40' },
       monthly: 'That’s $33.25 a month, billed annually.',
+      bonus: 'Bonus: double your monthly AI credits for 12 months',
       demoLink: 'See it work in 42 seconds',
-      deadline: 'Offer ends Nov 30, 11:59 p.m. ET',
+      terms: { before: 'Billed annually. Offer ends November 30, 11:59 p.m. Eastern. Prefer to try first? ', linkLabel: 'Start the 7-day trial' },
     })
-    expect(businessPage(false).offerHero).toBeUndefined()
+    expect(offerPage.credits.body).toBe('That’s 600,000 more credits across the year, for drafts, briefs, and research. They arrive month by month, not all at once.')
+    expect(offerPage.plan.note).toBe('Renews after 12 months at the regular annual price, currently $470.40, with the standard 50,000 credits a month. Freelance services are purchased separately.')
+    expect(businessPage(true).cta).toMatchObject({ live: 'Get Command Center for $399', liveHeader: 'Get the $399 deal' })
+    expect(businessPage(true).final.note).toBe('Billed annually. Offer ends November 30, 2026, at 11:59 p.m. Eastern.')
+    expect(businessPage(false).offerPage).toBeUndefined()
     expect(businessPage(true).offerLine).toBe('Black Friday bonus: Double your monthly AI credits for 12 months.')
     expect(businessPage(true).heroNote.live).toBe('$399 for your first year, billed annually.')
     expect(agencyPage(true).h1Line1).toBe('Black Friday Special: $1,399 First Year.')
@@ -52,8 +58,8 @@ describe('offer wording', () => {
       expect(allOfferCopy.toLowerCase(), phrase).not.toContain(phrase.toLowerCase())
     }
     expect(allOfferCopy).not.toContain('30% off')
-    // "not all at once" is the one allowed use of the phrase, so it must be negated wherever it appears.
-    expect(allOfferCopy.match(/all at once/g)?.length).toBe(allOfferCopy.match(/not all at once/g)?.length)
+    // "not all at once" is the one allowed use of the phrase in a statement, so it must be negated wherever it appears; the FAQ asks it as a question.
+    expect(allOfferCopy.match(/all at once(?!\?)/g)?.length).toBe(allOfferCopy.match(/not all at once/g)?.length)
   })
 
   it('keeps the deposit bonus apart from Command Center and spells out the $25', () => {
@@ -78,19 +84,43 @@ describe('offer wording', () => {
 describe('copy rules', () => {
   it('uses Initial Caps for the H1, every button label, and every FAQ question', () => {
     for (const page of pages) {
-      // The Business offer hero follows its mockup, which sets the H1 and the buttons in sentence case; its labels show only with the offer.
-      const labels = page.page === 'business' ? (page.offerHero ? [] : [page.h1Line1, page.h1Line2, page.cta.fallback, page.cta.fallbackHeader]) : [page.h1Line1, page.h1Line2, ...Object.values(page.cta)]
+      // The Business offer page follows its approved design, which sets the H1, the buttons, and the questions in sentence case.
+      const labels = page.page === 'business' ? (page.offerPage ? [] : [page.h1Line1, page.h1Line2, page.cta.fallback, page.cta.fallbackHeader]) : [page.h1Line1, page.h1Line2, ...Object.values(page.cta)]
       for (const label of labels) expect(isInitialCaps(label), label).toBe(true)
-      for (const item of page.faq.items) expect(isInitialCaps(item.question), item.question).toBe(true)
+      if (!page.offerPage) for (const item of page.faq.items) expect(isInitialCaps(item.question), item.question).toBe(true)
       expect(new Set(page.faq.items.map((i) => i.id)).size).toBe(page.faq.items.length)
     }
     for (const label of [BUCKS_PAGE.h1Line1, BUCKS_PAGE.h1Line2, ...Object.values(BUCKS_PAGE.cta)]) expect(isInitialCaps(label), label).toBe(true)
+  })
+
+  it('sets the Business offer page in sentence case, with the contact answer under the FAQ heading', () => {
+    const page = businessPage(true)
+    expect(page.faq.items.map((i) => i.question)).toEqual([
+      'What exactly is the Black Friday special?',
+      'Are the credits delivered all at once?',
+      'What happens after the first year?',
+      'Can I pay monthly instead?',
+      'Is there still a free trial?',
+      'How many businesses does Business include?',
+      'Are freelance services included?',
+      'When does the offer end?',
+    ])
+    expect(page.faq.help?.text).toBe('Still unsure? Email help@legiit.com or visit the support center.')
+    expect(page.faq.openFirst).toBe(true)
+    expect(page.offerPage?.steps.map((s) => s.label)).toEqual(['Step 1 · Know your next move', 'Step 2 · Get the work started', 'Step 3 · Get expert help to finish it'])
+    for (const step of page.offerPage?.steps ?? []) {
+      expect(step.bullets).toHaveLength(3)
+      expect(sentences(step.paragraph).length, step.paragraph).toBeLessThanOrEqual(3)
+      expect(step.screens.length).toBeGreaterThan(0)
+    }
+    expect(page.offerPage?.plan.included).toContain('2% back in Legiit Bucks on completed freelancer orders')
   })
 
   it('keeps every paragraph to two sentences or fewer', () => {
     const paragraphs: string[] = []
     for (const page of pages) {
       paragraphs.push(page.subhead, ...Object.values(page.heroNote), page.problem.lead, page.demo.body, page.pricing.creditsNote, page.pricing.afterYearOne, page.final.body)
+      if (page.offerPage) paragraphs.push(page.offerPage.credits.body, page.offerPage.plan.note, page.offerPage.plan.tagline, page.final.note ?? '', page.faq.help?.text ?? '')
       for (const item of page.problem.items) paragraphs.push(item.problem, item.solution)
       for (const f of page.features) paragraphs.push(...f.paragraphs)
       for (const item of page.faq.items) paragraphs.push(...item.answer)

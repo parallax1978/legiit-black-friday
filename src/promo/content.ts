@@ -8,6 +8,7 @@
  * suggests the first-year price or the doubled credits continue past year one.
  */
 import type { FaqItem } from '../config/faq'
+import type { ScreenId } from '../config/media'
 import type { ProductSectionCopy } from '../config/copy'
 import { PRIMARY_CTA_LABEL } from '../config/site'
 import { formatCount, formatUsd } from '../pricing/price'
@@ -35,8 +36,8 @@ export interface PromoPageCopy {
   subhead: string
   /** One line directly under the headline for a bonus the offer includes (Business page only). */
   offerLine?: string
-  /** The Business offer hero's extra lines (see BusinessOfferHero); set only while the offer shows. */
-  offerHero?: { banner: string; bannerLink: string; compare: { label: string; regular: string; saving: string }; monthly: string; demoLink: string; deadline: string }
+  /** The Business offer page's own sections (see PromoApp); set only while the offer shows. */
+  offerPage?: OfferPageCopy
   /** Button labels: while the offer is live, and the regular route otherwise. */
   cta: { live: string; liveHeader: string; fallback: string; fallbackHeader: string }
   /** The line under the hero button, by offer state. */
@@ -47,8 +48,40 @@ export interface PromoPageCopy {
   features: ProductSectionCopy[]
   demo: { eyebrow: string; title: string; body: string }
   pricing: { eyebrow: string; title: string; expiredTitle: string; included: string[]; afterYearOne: string; creditsNote: string }
-  faq: { eyebrow: string; title: string; items: FaqItem[] }
-  final: { title: string; body: string }
+  faq: { eyebrow: string; title: string; items: FaqItem[]; help?: { text: string; links?: FaqItem['links'] }; openFirst?: boolean }
+  final: { title: string; body: string; note?: string }
+}
+
+/** One of the three feature steps on the Business offer page: text beside a card of product screens. */
+export interface OfferStep {
+  id: string
+  icon: 'compass' | 'pencil' | 'users'
+  label: string
+  title: string
+  paragraph: string
+  /** A product name in the paragraph set in bold, e.g. Do This Next. */
+  emphasis?: string
+  bullets: string[]
+  note?: string
+  screens: ScreenId[]
+  caption: string
+  mediaSide: 'left' | 'right'
+}
+
+/** Everything the Business offer page shows that the shared sections do not. */
+export interface OfferPageCopy {
+  banner: string
+  bannerLink: string
+  compare: { label: string; regular: string; saving: string }
+  monthly: string
+  bonus: string
+  demoLink: string
+  /** The line under the demo link: billing, the deadline, then a link to the trial. */
+  terms: { before: string; linkLabel: string }
+  steps: OfferStep[]
+  credits: { eyebrow: string; title: string; offerValue: string; offerLabel: string; standardValue: string; standardLabel: string; body: string; barsOffer: string; barsAfter: string }
+  plan: { eyebrow: string; title: string; name: string; tagline: string; included: string[]; pill: string; priceLine: string; saving: string; note: string }
+  footerLinks: { label: string; href: string }[]
 }
 
 /** The status strip at the top of every promotion page. */
@@ -172,6 +205,24 @@ const regularFaq = (offer: FirstYearOffer, page: 'business' | 'agency'): FaqItem
   CONTACT_FAQ,
 ]
 
+/** Words that keep their capital when a question is set in sentence case for the Business offer page. */
+const PROPER = new Set(['Black', 'Friday', 'Business', 'Agency', 'Legiit', 'AI', 'Lara', 'I', 'Command', 'Center', 'Bucks'])
+const sentenceCaseQuestion = (question: string) =>
+  question
+    .split(' ')
+    .map((word, i) => (i === 0 || PROPER.has(word.replace(/[^A-Za-z]/g, '')) ? word : word.toLowerCase()))
+    .join(' ')
+
+/** The Business offer page's FAQ: sentence-case questions, and the contact answer moves to the line under the heading. */
+const offerFaq = (items: FaqItem[]): FaqItem[] => items.filter((item) => item.id !== 'contact').map((item) => ({ ...item, question: sentenceCaseQuestion(item.question) }))
+const OFFER_FAQ_HELP = {
+  text: 'Still unsure? Email help@legiit.com or visit the support center.',
+  links: [
+    { text: 'help@legiit.com', href: PROMO_ROUTES.contactEmail },
+    { text: 'support center', href: PROMO_ROUTES.support },
+  ],
+}
+
 const businessOffer = FIRST_YEAR.business
 const agencyOffer = FIRST_YEAR.agency
 
@@ -193,15 +244,89 @@ export function businessPage(showOffer: boolean): PromoPageCopy {
   subhead: showOffer
     ? 'Get more customers without becoming a full-time marketer. A clear plan, AI to save you time, and specialists you can hire to do the work.'
     : 'Command Center shows you the next move for your business, helps you create the work with AI, and connects you to a Legiit specialist when you want it done for you.',
-  cta: { live: `Get the Business plan for ${money(businessOffer.firstYearPrice)}`, liveHeader: 'Get Black Friday price', fallback: 'Start My 7-Day Free Trial', fallbackHeader: 'Start Free Trial' },
-  offerHero: showOffer
+  cta: { live: `Get Command Center for ${money(businessOffer.firstYearPrice)}`, liveHeader: `Get the ${money(businessOffer.firstYearPrice)} deal`, fallback: 'Start My 7-Day Free Trial', fallbackHeader: 'Start Free Trial' },
+  offerPage: showOffer
     ? {
-        banner: `Black Friday: ${money(businessOffer.firstYearPrice)} for your first year of Command Center. Ends ${OFFER_WINDOW.endsShortLabel}, 11:59 p.m. Eastern.`,
+        banner: `Black Friday: Business for ${money(businessOffer.firstYearPrice)} your first year, plus double AI credits. Ends ${OFFER_WINDOW.endsShortLabel}, 11:59 p.m. Eastern.`,
         bannerLink: 'Get the deal',
         compare: { label: 'Regular price', regular: money(businessOffer.regularAnnualPrice), saving: `Save ${money(firstYearSaving(businessOffer))}` },
         monthly: `That’s ${money(businessOffer.firstYearPrice / 12)} a month, billed annually.`,
+        bonus: `Bonus: double your monthly AI credits for ${CREDITS.offerMonths} months`,
         demoLink: 'See it work in 42 seconds',
-        deadline: 'Offer ends Nov 30, 11:59 p.m. ET',
+        terms: { before: `Billed annually. Offer ends ${OFFER_WINDOW.endsShortLabel}, 11:59 p.m. Eastern. Prefer to try first? `, linkLabel: `Start the ${BUSINESS_PLAN.trialDays}-day trial` },
+        steps: [
+          {
+            id: 'next-move',
+            icon: 'compass',
+            label: 'Step 1 · Know your next move',
+            title: 'See where your business stands and what to do first.',
+            paragraph: 'Command Center builds your business context from your website: offers, customers, brand voice, competitors, and focus keywords. Do This Next turns it into one recommended action, with the reason and the expected impact. Do it yourself, do it with Lara, or mark it done.',
+            emphasis: 'Do This Next',
+            bullets: ['Editable business context built from your website', 'One recommended next action, with the reason', 'SEO, local search, competitor, and performance data in one place'],
+            screens: ['priorities'],
+            caption: 'Do This Next: one action, the reason, and the option to do it with Lara.',
+            mediaSide: 'right',
+          },
+          {
+            id: 'get-started',
+            icon: 'pencil',
+            label: 'Step 2 · Get the work started',
+            title: 'Turn the next step into a draft you can finish.',
+            paragraph: 'Turn a topic into an article draft, build a brief for a writer, or create social captions and images, all connected to what your business sells and how it sounds. Research the questions customers ask and see how AI assistants answer them today.',
+            bullets: ['Articles, landing-page starters, briefs, and social captions', 'Customer questions, direct answers, and AI visibility checks', `${count(CREDITS.offerMonthly)} AI credits a month for ${CREDITS.offerMonths} months on this offer`],
+            screens: ['brief-builder'],
+            caption: 'Brief Builder: from a keyword to a brief a writer can work from.',
+            mediaSide: 'left',
+          },
+          {
+            id: 'expert-help',
+            icon: 'users',
+            label: 'Step 3 · Get expert help to finish it',
+            title: 'Hand the work to a specialist when you want it done for you.',
+            paragraph: 'When a task needs a professional, Command Center points to relevant Legiit freelancers right where the need shows up. You choose who to hire, and tasks, orders, and reports stay in the same workspace, so you pick up where you left off.',
+            bullets: ['Relevant services beside the task that needs them', 'Tasks, orders, and reports in one workspace', 'Connected analytics once your accounts are linked'],
+            note: 'Freelance services are purchased separately.',
+            screens: ['specialist-help', 'services'],
+            caption: 'A recommended service, right next to the data that shows the need.',
+            mediaSide: 'right',
+          },
+        ],
+        credits: {
+          eyebrow: 'Black Friday bonus',
+          title: `Twice the AI credits for your first ${CREDITS.offerMonths} months.`,
+          offerValue: count(CREDITS.offerMonthly),
+          offerLabel: `credits a month, months 1 to ${CREDITS.offerMonths}`,
+          standardValue: count(CREDITS.standardMonthly),
+          standardLabel: 'standard monthly allocation',
+          body: `That’s ${count(extraCreditsFirstYear())} more credits across the year, for drafts, briefs, and research. They arrive month by month, not all at once.`,
+          barsOffer: `Months 1–${CREDITS.offerMonths}: ${count(CREDITS.offerMonthly)} each`,
+          barsAfter: `Month ${CREDITS.offerMonths + 1}+: ${count(CREDITS.standardMonthly)}`,
+        },
+        plan: {
+          eyebrow: 'Black Friday pricing',
+          title: 'One plan. One price for your first year.',
+          name: businessOffer.planName,
+          tagline: 'Command Center for one business, with room to add more.',
+          included: [
+            `${count(CREDITS.offerMonthly)} AI credits a month for your first ${CREDITS.offerMonths} months`,
+            `${BUSINESS_PLAN.businessesIncluded} business included; more at ${money(BUSINESS_PLAN.additionalBusinessMonthly)}/month each`,
+            'Full business dashboard access',
+            `${BUSINESS_PLAN.allowances.audits} audits, ${BUSINESS_PLAN.allowances.keywords} keywords, ${BUSINESS_PLAN.allowances.backlinkData} backlink data`,
+            'Support included',
+            `${LEGIIT_BUCKS_PERCENT}% back in Legiit Bucks on completed freelancer orders`,
+          ],
+          pill: `Ends ${OFFER_WINDOW.endsShortLabel}`,
+          priceLine: 'for your first year, billed annually',
+          saving: `You save ${money(firstYearSaving(businessOffer))}`,
+          note: `Renews after ${CREDITS.offerMonths} months at the regular annual price, currently ${money(businessOffer.regularAnnualPrice)}, with the standard ${count(CREDITS.standardMonthly)} credits a month. Freelance services are purchased separately.`,
+        },
+        footerLinks: [
+          { label: 'Privacy', href: PROMO_ROUTES.privacy },
+          { label: 'Terms', href: PROMO_ROUTES.terms },
+          { label: 'Support', href: PROMO_ROUTES.support },
+          { label: 'Contact', href: PROMO_ROUTES.contactEmail },
+          { label: 'Log in', href: PROMO_ROUTES.signIn },
+        ],
       }
     : undefined,
   heroNote: {
@@ -298,8 +423,10 @@ export function businessPage(showOffer: boolean): PromoPageCopy {
   faq: {
     eyebrow: 'Before you buy',
     title: showOffer ? 'Offer questions, answered.' : 'Questions, answered.',
+    help: showOffer ? OFFER_FAQ_HELP : undefined,
+    openFirst: showOffer,
     items: showOffer
-      ? [
+      ? offerFaq([
           {
             id: 'what-is-it',
             question: 'What Exactly Is The Black Friday Special?',
@@ -320,12 +447,13 @@ export function businessPage(showOffer: boolean): PromoPageCopy {
             links: [{ text: 'its own first-year offer', href: PROMO_PAGES.agency }],
           },
           ...sharedFaq(businessOffer).slice(3),
-        ]
+        ])
       : regularFaq(businessOffer, 'business'),
   },
   final: {
-    title: showOffer ? 'Black Friday only: make this the year the work gets done.' : 'Make this the year the work gets done.',
-    body: showOffer ? `${money(businessOffer.firstYearPrice)} for your first year instead of ${money(businessOffer.regularAnnualPrice)}, with ${count(CREDITS.offerMonthly)} AI credits a month to produce the work. ${DEADLINE_SENTENCE}` : 'One business, one clear next step every week, and the tools to produce it.',
+    title: 'Make this the year the work gets done.',
+    body: showOffer ? `${money(businessOffer.firstYearPrice)} for your first year instead of ${money(businessOffer.regularAnnualPrice)}, with ${count(CREDITS.offerMonthly)} AI credits a month to produce the work.` : 'One business, one clear next step every week, and the tools to produce it.',
+    note: showOffer ? `Billed annually. ${DEADLINE_SENTENCE}` : undefined,
   },
   }
 }

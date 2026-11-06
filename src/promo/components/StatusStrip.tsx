@@ -23,9 +23,9 @@ export function StatusStrip({ status, text, link }: { status: OfferStatus; text:
           {link && (
             <>
               {' '}
-              <a href={link.href} data-promo-cta="banner" className="inline-flex items-center gap-0.5 whitespace-nowrap rounded-sm font-semibold text-[#F27BC9] underline-offset-4 hover:underline btn-focus focus-visible:!outline-white" onClick={link.onClick}>
+              <a href={link.href} data-promo-cta="banner" data-offer-status={status} className="whitespace-nowrap rounded-sm font-semibold text-[#F27BC9] underline-offset-4 hover:underline btn-focus focus-visible:!outline-white" onClick={link.onClick}>
                 {link.label}
-                <ChevronRight size={14} />
+                <ChevronRight size={14} className="inline-block align-[-2px]" />
               </a>
             </>
           )}

@@ -13,9 +13,16 @@ const MILESTONES: Milestone[] = [25, 50, 75]
  * autoplays. If the media fails to load, the poster stays visible with an
  * honest message and the walkthrough becomes the fallback.
  */
-/** `caption` replaces the visible line under the player; `null` leaves only the walkthrough link. */
-export function ProductOverviewVideo({ className = '', caption = PRODUCT_OVERVIEW.caption }: { className?: string; caption?: string | null }) {
+const timestamp = (seconds: number) => `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`
+
+/**
+ * `caption` replaces the visible line under the player; `null` leaves only the walkthrough link.
+ * `chapters` lists the six screens with their start times under the player; each one seeks the
+ * video and plays it. The walkthrough link then appears only if the video fails to load.
+ */
+export function ProductOverviewVideo({ className = '', caption = PRODUCT_OVERVIEW.caption, chapters = false }: { className?: string; caption?: string | null; chapters?: boolean }) {
   const [failed, setFailed] = useState(false)
+  const videoRef = useRef<HTMLVideoElement>(null)
   const played = useRef(false)
   const reached = useRef<Set<Milestone>>(new Set())
 
@@ -37,6 +44,13 @@ export function ProductOverviewVideo({ className = '', caption = PRODUCT_OVERVIE
     }
   }
 
+  const seek = (at: number) => {
+    const video = videoRef.current
+    if (!video) return
+    video.currentTime = at
+    void video.play().catch(() => {})
+  }
+
   return (
     <figure className={className} id="product-overview">
       <div className="overflow-hidden rounded-2xl border border-line bg-ink shadow-frame focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-brand-purple">
@@ -47,6 +61,7 @@ export function ProductOverviewVideo({ className = '', caption = PRODUCT_OVERVIE
           </div>
         ) : (
           <video
+            ref={videoRef}
             className="block aspect-video w-full bg-ink focus-visible:outline-none"
             controls
             playsInline
@@ -75,10 +90,24 @@ export function ProductOverviewVideo({ className = '', caption = PRODUCT_OVERVIE
           </video>
         )}
       </div>
-      <figcaption className={`mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-ink-muted ${caption ? 'justify-between' : 'justify-end'}`}>
-        {caption && <span className="max-w-[36rem] py-1.5">{caption}</span>}
-        <Walkthrough label={HERO.walkthroughAction} placement={failed ? 'video-fallback' : 'hero'} />
-      </figcaption>
+      {chapters && !failed && (
+        <ol aria-label="Chapters" className="mt-4 grid gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
+          {PRODUCT_OVERVIEW.chapters.map((chapter) => (
+            <li key={chapter.at}>
+              <button type="button" onClick={() => seek(chapter.at)} className="flex min-h-[44px] w-full items-center gap-3 rounded-md px-1 text-left text-[14px] text-ink hover:text-brand-purple btn-focus">
+                <span className="w-8 shrink-0 tabular-nums text-ink-muted">{timestamp(chapter.at)}</span>
+                <span>{chapter.title}</span>
+              </button>
+            </li>
+          ))}
+        </ol>
+      )}
+      {(!chapters || failed || caption) && (
+        <figcaption className={`mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-ink-muted ${caption ? 'justify-between' : 'justify-end'}`}>
+          {caption && <span className="max-w-[36rem] py-1.5">{caption}</span>}
+          {(!chapters || failed) && <Walkthrough label={HERO.walkthroughAction} placement={failed ? 'video-fallback' : 'hero'} />}
+        </figcaption>
+      )}
     </figure>
   )
 }

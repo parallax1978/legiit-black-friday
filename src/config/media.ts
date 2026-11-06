@@ -48,6 +48,15 @@ export const PRODUCT_OVERVIEW = {
   silent: true,
   captions: [{ src: overviewVtt, srcLang: 'en', label: 'English', default: true }] as CaptionTrack[],
   title: 'Command Center product overview',
+  /** Where each screen starts, from the caption cues: six screens, seven seconds each. */
+  chapters: [
+    { at: 0, title: 'Know where your business stands' },
+    { at: 7, title: 'See your business in AI search' },
+    { at: 14, title: 'Know what to do next' },
+    { at: 21, title: 'Put your marketing tools to work' },
+    { at: 28, title: 'Get specialist help when you need it' },
+    { at: 35, title: 'Keep track of work and progress' },
+  ],
   /** Visible caption under the player. */
   caption: 'Product overview: 42 seconds, silent, with English captions. Assembled from actual Command Center screens.',
   posterAlt:

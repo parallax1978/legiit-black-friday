@@ -113,7 +113,7 @@ describe('promotion routes', () => {
     const business = businessPage(true)
     const agency = agencyPage(true)
     const live = promoRoute(business, 'live', DEFAULT_ATTRIBUTION)
-    expect(live).toMatchObject({ plan: 'business_dashboard', billing: 'yearly', kind: 'offer', label: 'Get the Business plan for $399' })
+    expect(live).toMatchObject({ plan: 'business_dashboard', billing: 'yearly', kind: 'offer', label: 'Get Command Center for $399' })
     expect(live.href).toBe('https://legiit.com/subscription-purchase?plan=business_dashboard&billing=yearly')
     expect(promoRoute(business, 'expired', DEFAULT_ATTRIBUTION)).toMatchObject({ kind: 'regular', label: 'Start My 7-Day Free Trial', href: trialStartUrl(DEFAULT_ATTRIBUTION) })
     expect(promoRoute(agency, 'expired', DEFAULT_ATTRIBUTION)).toMatchObject({ kind: 'regular', billing: 'monthly', label: 'Choose Agency' })

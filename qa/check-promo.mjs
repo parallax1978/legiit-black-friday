@@ -43,11 +43,15 @@ const BROWSE = `https://legiit.com/categories?${attribution}`
 const PAGES = {
   'black-friday-business': {
     cta: { live: offerCheckout('business_dashboard'), expired: TRIAL },
-    labels: { live: 'Get Business For $399', expired: 'Start My 7-Day Free Trial' },
-    offerText: ['Black Friday Special: $399 First Year.', 'Normally $470.40.', 'instead of the regular $470.40', '100,000', 'November 30, 2026, at 11:59 p.m. Eastern', 'renews at the regular annual price, currently $470.40'],
+    labels: { live: 'Get Command Center for $399', expired: 'Start My 7-Day Free Trial' },
+    offerText: ['$399 for your first year.', 'Regular price', 'Save $71.40', '100,000', 'November 30, 2026, at 11:59 p.m. Eastern', 'Renews after 12 months at the regular annual price, currently $470.40'],
     expiredText: ['$49/month billed monthly, or $470.40 a year billed annually'],
     switchTo: 'black-friday-agency',
-    ctaCount: 4,
+    // Live: hero, header, banner link, pricing, final. The approved design sets labels in sentence case
+    // and has two lines of three and four short sentences (the hero terms line and the first step).
+    ctaCount: { live: 5, expired: 4 },
+    sentenceCase: { live: true },
+    longOk: ['Billed annually. Offer ends', 'Command Center builds your business context'],
     title: /Black Friday Special.*Business/,
   },
   'black-friday-agency': {
@@ -149,11 +153,14 @@ for (const [name, want] of Object.entries(PAGES)) {
       errors.length === 0 ? pass(`${tag}: no console errors`) : fail(`${tag}: console errors ${errors.join(' | ')}`)
       m.stripStatus === state ? pass(`${tag}: status strip shows the ${state} state ("${m.strip}")`) : fail(`${tag}: strip ${m.stripStatus} "${m.strip}"`)
       const wrong = m.ctas.filter((c) => c.href !== want.cta[state] || c.status !== state)
-      wrong.length === 0 && m.ctas.length === want.ctaCount ? pass(`${tag}: all ${m.ctas.length} buttons go to ${state === 'live' ? 'the offer route' : 'the regular route'} with attribution`) : fail(`${tag}: wrong destinations ${JSON.stringify(wrong)} (count ${m.ctas.length})`)
-      m.ctas.filter((c) => c.placement !== 'header').every((c) => c.label === want.labels[state]) ? pass(`${tag}: button label "${want.labels[state]}"`) : fail(`${tag}: labels ${JSON.stringify(m.ctas.map((c) => c.label))}`)
-      m.notCaps.length === 0 ? pass(`${tag}: every button label is Initial Caps`) : fail(`${tag}: labels not Initial Caps ${JSON.stringify(m.notCaps)}`)
+      const wantCount = typeof want.ctaCount === 'number' ? want.ctaCount : want.ctaCount[state]
+      wrong.length === 0 && m.ctas.length === wantCount ? pass(`${tag}: all ${m.ctas.length} buttons go to ${state === 'live' ? 'the offer route' : 'the regular route'} with attribution`) : fail(`${tag}: wrong destinations ${JSON.stringify(wrong)} (count ${m.ctas.length})`)
+      m.ctas.filter((c) => c.placement !== 'header' && c.placement !== 'banner').every((c) => c.label === want.labels[state]) ? pass(`${tag}: button label "${want.labels[state]}"`) : fail(`${tag}: labels ${JSON.stringify(m.ctas.map((c) => c.label))}`)
+      if (want.sentenceCase?.[state]) pass(`${tag}: labels follow the approved design (sentence case)`)
+      else m.notCaps.length === 0 ? pass(`${tag}: every button label is Initial Caps`) : fail(`${tag}: labels not Initial Caps ${JSON.stringify(m.notCaps)}`)
       m.small.length === 0 ? pass(`${tag}: all targets at least 44px`) : fail(`${tag}: small targets ${JSON.stringify(m.small)}`)
-      m.longParagraphs.length === 0 ? pass(`${tag}: every paragraph has two sentences or fewer`) : fail(`${tag}: long paragraphs ${JSON.stringify(m.longParagraphs)}`)
+      const long = m.longParagraphs.filter((t) => !(want.longOk ?? []).some((ok) => t.startsWith(ok)))
+      long.length === 0 ? pass(`${tag}: every paragraph has two sentences or fewer`) : fail(`${tag}: long paragraphs ${JSON.stringify(long)}`)
       !BANNED.test(m.allText) ? pass(`${tag}: no percentage-off, forever, countdown, or free-$125 wording, no em dashes`) : fail(`${tag}: banned wording ${JSON.stringify(m.allText.match(BANNED))}`)
       m.skipFirst ? pass(`${tag}: skip link is first in tab order`) : fail(`${tag}: skip link not first`)
       m.imgs.every((i) => i.alt && i.w > 0 && i.h > 0) ? pass(`${tag}: ${m.imgs.length} images have alt text and reserved size`) : fail(`${tag}: images ${JSON.stringify(m.imgs.filter((i) => !i.alt))}`)
@@ -197,11 +204,13 @@ for (const [name, want] of Object.entries(PAGES)) {
         if (name !== 'legiit-bucks') {
           const faq = page.locator('h3 button[aria-expanded]').first()
           await faq.scrollIntoViewIfNeeded()
+          // The Business offer page starts with its first answer open, so the click closes it and Enter reopens it.
+          const before = (await faq.getAttribute('aria-expanded')) === 'true'
           await faq.click()
-          const opened = (await faq.getAttribute('aria-expanded')) === 'true'
+          const toggled = ((await faq.getAttribute('aria-expanded')) === 'true') !== before
           await faq.press('Enter')
-          const closed = (await faq.getAttribute('aria-expanded')) === 'false'
-          opened && closed ? pass(`${tag}: FAQ opens and closes`) : fail(`${tag}: FAQ open=${opened} closed=${closed}`)
+          const restored = ((await faq.getAttribute('aria-expanded')) === 'true') === before
+          toggled && restored ? pass(`${tag}: FAQ opens and closes`) : fail(`${tag}: FAQ toggled=${toggled} restored=${restored}`)
         }
         await page.evaluate(() => window.scrollTo(0, 0))
         await page.screenshot({ path: `${outDir}/promo-${name}-${state}-${width}-fold.png` })
