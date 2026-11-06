@@ -32,7 +32,7 @@ export function PromoHero({ copy, status, route, attribution }: PromoHeroProps) 
         <div className="mx-auto max-w-5xl text-center">
           <p className={business ? 'eyebrow text-[15.6px]' : 'eyebrow'}>{copy.eyebrow}</p>
           <h1 id="hero-heading" className="mt-4 text-[2.375rem] font-semibold leading-[1.08] tracking-[-0.025em] text-ink sm:text-[2.75rem] lg:text-[3rem] xl:text-[3.25rem]">
-            <span className={business ? 'block bg-clip-text text-[1.33em] text-transparent' : 'block'} style={business ? { backgroundImage: H1_GRADIENT } : undefined}>
+            <span className={business ? 'block bg-clip-text text-transparent' : 'block'} style={business ? { backgroundImage: H1_GRADIENT } : undefined}>
               {copy.h1Line1}
             </span>
             <span className={business ? 'block text-[0.5em]' : 'block bg-clip-text text-transparent'} style={business ? undefined : { backgroundImage: H1_GRADIENT }}>
@@ -40,6 +40,7 @@ export function PromoHero({ copy, status, route, attribution }: PromoHeroProps) 
             </span>
           </h1>
           <p className="mx-auto mt-5 max-w-3xl text-lg leading-relaxed text-ink-soft sm:text-xl sm:leading-relaxed">{copy.subhead}</p>
+          {copy.offerLine && <p className="mx-auto mt-4 max-w-2xl text-[17px] font-semibold leading-relaxed text-brand-purple">{copy.offerLine}</p>}
           <div className="mt-8 flex justify-center">
             <PromoCta
               page={copy.page}
@@ -54,10 +55,10 @@ export function PromoHero({ copy, status, route, attribution }: PromoHeroProps) 
               className="w-full sm:w-auto"
             />
           </div>
-          <p data-hero-note className={`mx-auto mt-4 max-w-2xl leading-relaxed text-ink ${business ? 'text-[7.5px] font-normal' : 'text-[15px] font-medium'}`}>
+          <p data-hero-note className="mx-auto mt-4 max-w-2xl text-[15px] font-medium leading-relaxed text-ink">
             {copy.heroNote[status]}
           </p>
-          <p className={`mx-auto mt-3 max-w-2xl leading-relaxed text-ink-soft ${business ? 'text-[7.5px]' : 'text-[15px]'}`}>
+          <p className="mx-auto mt-3 max-w-2xl text-[15px] leading-relaxed text-ink-soft">
             {copy.switchPlan.before}
             <a
               href={switchHref}
