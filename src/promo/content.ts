@@ -33,8 +33,6 @@ export interface PromoPageCopy {
   h1Line1: string
   h1Line2: string
   subhead: string
-  /** One line between the subhead and the button for a bonus the offer includes (Business page only). */
-  offerLine?: string
   /** Button labels: while the offer is live, and the regular route otherwise. */
   cta: { live: string; liveHeader: string; fallback: string; fallbackHeader: string }
   /** The line under the hero button, by offer state. */
@@ -185,15 +183,14 @@ export function businessPage(showOffer: boolean): PromoPageCopy {
       : 'Command Center shows business owners the next move, helps create the work with AI, and connects them to Legiit specialists. Business plan from $49/month.',
   },
   eyebrow: showOffer ? 'Black Friday special for business owners' : 'Command Center for business owners',
-  h1Line1: showOffer ? 'Get More Customers Without Becoming A Full-Time Marketer.' : 'Stop Guessing What To Work On.',
-  h1Line2: showOffer ? `${money(businessOffer.firstYearPrice)} For Your First Year. Normally ${money(businessOffer.regularAnnualPrice)}.` : 'The Business Plan.',
-  offerLine: showOffer ? 'Black Friday bonus: Double your monthly AI credits for your first year.' : undefined,
+  h1Line1: showOffer ? `${money(businessOffer.firstYearPrice)} First Year.` : 'Stop Guessing What To Work On.',
+  h1Line2: showOffer ? `Normally ${money(businessOffer.regularAnnualPrice)}.` : 'The Business Plan.',
   subhead: showOffer
-    ? 'Get a clear plan, AI to save you time, and specialists you can hire to do the work.'
+    ? 'Get more customers without becoming a full-time marketer. Get a clear plan, AI to save you time, and specialists you can hire to do the work.'
     : 'Command Center shows you the next move for your business, helps you create the work with AI, and connects you to a Legiit specialist when you want it done for you.',
-  cta: { live: `Get Command Center For ${money(businessOffer.firstYearPrice)}`, liveHeader: `Get Command Center For ${money(businessOffer.firstYearPrice)}`, fallback: 'Start My 7-Day Free Trial', fallbackHeader: 'Start Free Trial' },
+  cta: { live: `Get Command Center For ${money(businessOffer.firstYearPrice)}`, liveHeader: 'Get Black Friday Price', fallback: 'Start My 7-Day Free Trial', fallbackHeader: 'Start Free Trial' },
   heroNote: {
-    live: firstYearLine(businessOffer),
+    live: `${blackFridayLine(businessOffer)} ${DEADLINE_SENTENCE}`,
     expired: `This offer ended ${OFFER_WINDOW.endsShortLabel}, 2026. ${regularTermsLine(businessOffer)}`,
   },
   switchPlan: {
