@@ -188,7 +188,7 @@ export function BucksOfferPage({ status, attribution, cta, label, headerLabel }:
                 const Icon = STEP_ICONS[step.icon]
                 return (
                   <li key={step.title} className="rounded-2xl bg-canvas-sunken p-6">
-                    <Icon size={48} strokeWidth={1.5} className="text-ink" />
+                    <Icon size={48} strokeWidth={1.5} className="text-brand-purple" />
                     <p className="mt-4 text-[13px] text-ink-muted">Step {i + 1}</p>
                     <h3 className="mt-1 text-[17px] font-semibold text-ink">{step.title}</h3>
                     <p className="mt-2 text-[15px] leading-relaxed text-ink-soft">{step.body}</p>
