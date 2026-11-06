@@ -1,1 +1,0 @@
-import{b as o,c as t,j as e,R as r,d as s}from"./index-tsIvDlPH.js";import{P as a}from"./PromoApp-1TFLiFDa.js";o();t.createRoot(document.getElementById("root")).render(e.jsx(r.StrictMode,{children:e.jsx(a,{copyFor:s})}));
