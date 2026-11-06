@@ -17,7 +17,7 @@ interface FooterProps {
   links?: readonly FooterLink[]
   /** Accessible name of the link list. */
   navLabel?: string
-  /** `dark`: the Business offer page's footer, ink background with the brand line left and `note` right. */
+  /** `dark`: the offer page's footer, ink background with the brand line left and `note` right. */
   tone?: 'light' | 'dark'
   note?: string
 }

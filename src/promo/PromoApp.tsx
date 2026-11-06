@@ -9,7 +9,7 @@ import { PROMO_FOOTER_LINKS, statusBanner, type PromoPageCopy } from './content'
 import { promoRoute } from './routes'
 import { showsOfferTerms, useOfferStatus } from './status'
 import { BonusCredits } from './components/BonusCredits'
-import { BusinessOfferHero } from './components/BusinessOfferHero'
+import { OfferHero } from './components/OfferHero'
 import { CreditsSchedule } from './components/CreditsSchedule'
 import { OfferPricing } from './components/OfferPricing'
 import { PlanPricing } from './components/PlanPricing'
@@ -21,15 +21,15 @@ import { PromoHero } from './components/PromoHero'
 import { StatusStrip } from './components/StatusStrip'
 import { StepSection } from './components/StepSection'
 
-/** The Business offer page sets its section eyebrows in grey (see .eyebrow in index.css). */
+/** The offer page sets its section eyebrows in grey (see .eyebrow in index.css). */
 const OFFER_PAGE_STYLE = { '--eyebrow-color': '#5C5C6B' } as CSSProperties
 
 /**
  * One Command Center promotion page. The Business and Agency pages are this
  * component with their own copy; everything that depends on the offer state
  * (buttons, prices, notes) resolves here once and flows down. While the
- * Business offer is live the page uses its own sections (`copy.offerPage`);
- * the Agency page and the expired state use the shared ones.
+ * offer is live each page uses the offer sections (`copy.offerPage`); the
+ * expired state uses the shared ones.
  */
 export default function PromoApp({ copyFor }: { copyFor: (showOffer: boolean) => PromoPageCopy }) {
   const status = useOfferStatus()
@@ -67,7 +67,7 @@ export default function PromoApp({ copyFor }: { copyFor: (showOffer: boolean) =>
       <main id="main">
         {offerPage ? (
           <>
-            <BusinessOfferHero copy={copy} page={offerPage} status={status} route={route} attribution={attribution} />
+            <OfferHero copy={copy} page={offerPage} status={status} route={route} attribution={attribution} />
             <ProblemCards copy={copy.problem} />
             {offerPage.steps.map((step) => (
               <StepSection key={step.id} step={step} />

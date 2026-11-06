@@ -57,11 +57,13 @@ const PAGES = {
   },
   'black-friday-agency': {
     cta: { live: offerCheckout('agency_dashboard'), expired: monthlyCheckout('agency_dashboard') },
-    labels: { live: 'Get Agency For $1,399', expired: 'Choose Agency' },
-    offerText: ['Black Friday Special: $1,399 First Year.', 'Normally $1,622.40.', 'instead of the regular $1,622.40', '100,000', 'November 30, 2026, at 11:59 p.m. Eastern', 'renews at the regular annual price, currently $1,622.40'],
+    labels: { live: 'Get Command Center for $1,399', expired: 'Choose Agency' },
+    offerText: ['$1,399 for your first year.', 'Regular price', 'Save $223.40', '100,000', 'November 30, 2026, at 11:59 p.m. Eastern', 'Renews after 12 months at the regular annual price, currently $1,622.40'],
     expiredText: ['$169/month billed monthly, or $1,622.40 a year billed annually'],
     switchTo: 'black-friday-business',
-    ctaCount: 4,
+    ctaCount: { live: 5, expired: 4 },
+    sentenceCase: { live: true },
+    longOk: ['Billed annually. Offer ends', 'Only running one business'],
     title: /Black Friday Special.*Agency/,
   },
   'legiit-bucks': {
@@ -205,7 +207,7 @@ for (const [name, want] of Object.entries(PAGES)) {
         if (name !== 'legiit-bucks') {
           const faq = page.locator('h3 button[aria-expanded]').first()
           await faq.scrollIntoViewIfNeeded()
-          // The Business offer page starts with its first answer open, so the click closes it and Enter reopens it.
+          // The offer page starts with its first answer open, so the click closes it and Enter reopens it.
           const before = (await faq.getAttribute('aria-expanded')) === 'true'
           await faq.click()
           const toggled = ((await faq.getAttribute('aria-expanded')) === 'true') !== before

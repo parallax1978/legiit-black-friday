@@ -9,7 +9,7 @@ type CtaProps = Omit<ComponentProps<typeof PromoCta>, 'placement' | 'size' | 'va
 
 /**
  * The pricing page's header: lockup, Log In from 640px up, and the page's button in its header size.
- * `look="solid"` is the Business offer page's version: "Log in" and a solid purple pill with no arrow.
+ * `look="solid"` is the offer page's version: "Log in" and a solid purple pill with no arrow.
  */
 export function PromoHeader({ productName = PRODUCT_NAME, cta, look = 'gradient' }: { productName?: string; cta: CtaProps; look?: 'gradient' | 'solid' }) {
   const solid = look === 'solid'

@@ -4,7 +4,7 @@ import { CREDITS } from '../offer'
 import type { OfferPageCopy } from '../content'
 
 /**
- * The Business offer page's bonus section: the offer and standard monthly
+ * The offer page's bonus section: the offer and standard monthly
  * figures side by side, the yearly difference, and twelve solid bars at the
  * offer amount beside one at the standard amount.
  */

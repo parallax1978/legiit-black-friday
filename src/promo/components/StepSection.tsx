@@ -19,7 +19,7 @@ function withEmphasis(text: string, term?: string) {
 }
 
 /**
- * One feature step on the Business offer page: an outline icon, the step
+ * One feature step on the offer page: an outline icon, the step
  * label, the title, one paragraph, the check list, and the product screens in
  * a grey card with one caption. Desktop alternates the card left or right;
  * mobile shows the text, then the card.

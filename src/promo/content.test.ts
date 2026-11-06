@@ -28,7 +28,7 @@ describe('offer wording', () => {
       monthly: 'That’s $33.25 a month, billed annually.',
       bonus: 'Bonus: double your monthly AI credits for 12 months',
       demoLink: 'See it work in 42 seconds',
-      terms: { before: 'Billed annually. Offer ends November 30, 11:59 p.m. Eastern. Prefer to try first? ', linkLabel: 'Start the 7-day trial' },
+      terms: { before: 'Billed annually. Offer ends November 30, 11:59 p.m. Eastern. Prefer to try first? ', trialLabel: 'Start the 7-day trial' },
     })
     expect(offerPage.credits.body).toBe('That’s 600,000 more credits across the year, for drafts, briefs, and research. They arrive month by month, not all at once.')
     expect(offerPage.plan.note).toBe('Renews after 12 months at the regular annual price, currently $470.40, with the standard 50,000 credits a month. Freelance services are purchased separately.')
@@ -37,8 +37,16 @@ describe('offer wording', () => {
     expect(businessPage(false).offerPage).toBeUndefined()
     expect(businessPage(true).offerLine).toBe('Black Friday bonus: Double your monthly AI credits for 12 months.')
     expect(businessPage(true).heroNote.live).toBe('$399 for your first year, billed annually.')
-    expect(agencyPage(true).h1Line1).toBe('Black Friday Special: $1,399 First Year.')
-    expect(agencyPage(true).h1Line2).toBe('Normally $1,622.40.')
+    expect(agencyPage(true).h1Line1).toBe('$1,399')
+    expect(agencyPage(true).h1Line2).toBe('for your first year.')
+    expect(agencyPage(true).offerPage).toMatchObject({
+      banner: 'Black Friday: Agency for $1,399 your first year, plus double AI credits. Ends November 30, 11:59 p.m. Eastern.',
+      compare: { regular: '$1,622.40', saving: 'Save $223.40' },
+      monthly: 'That’s $116.58 a month, billed annually.',
+      terms: { before: 'Billed annually. Offer ends November 30, 11:59 p.m. Eastern. Prefer to try first? ', trialLabel: 'Start the 7-day Business trial' },
+    })
+    expect(agencyPage(true).offerPage?.plan.included).toContain('Up to 20 businesses included; more at $10/month each')
+    expect(agencyPage(true).cta).toMatchObject({ live: 'Get Command Center for $1,399', liveHeader: 'Get the $1,399 deal' })
     expect(DEADLINE_SENTENCE).toBe('Offer ends November 30, 2026, at 11:59 p.m. Eastern.')
     expect(creditsNote()).toBe('100,000 AI credits are allocated at the start of each of your first 12 months, instead of the standard 50,000. They arrive month by month, not all at once.')
     expect(afterYearOne(FIRST_YEAR.business)).toBe('After the first 12 months the plan renews at the regular annual price, currently $470.40, with the standard 50,000 AI credits a month.')
@@ -46,7 +54,6 @@ describe('offer wording', () => {
     for (const page of [businessPage(true), agencyPage(true)]) {
       expect(page.heroNote.live).toContain('billed annually')
       if (page.page === 'agency') expect(page.heroNote.live).toContain('instead of the regular')
-      if (page.page === 'agency') expect(page.subhead).toContain('For Black Friday')
       expect(page.pricing.title).toContain('normally')
       if (page.page === 'agency') expect(page.heroNote.live).toContain(DEADLINE_SENTENCE)
       expect(page.pricing.afterYearOne).toContain('renews at the regular annual price')
@@ -84,8 +91,8 @@ describe('offer wording', () => {
 describe('copy rules', () => {
   it('uses Initial Caps for the H1, every button label, and every FAQ question', () => {
     for (const page of pages) {
-      // The Business offer page follows its approved design, which sets the H1, the buttons, and the questions in sentence case.
-      const labels = page.page === 'business' ? (page.offerPage ? [] : [page.h1Line1, page.h1Line2, page.cta.fallback, page.cta.fallbackHeader]) : [page.h1Line1, page.h1Line2, ...Object.values(page.cta)]
+      // The offer pages follow the approved design, which sets the H1, the buttons, and the questions in sentence case; the live labels show only with the offer.
+      const labels = page.offerPage ? [] : [page.h1Line1, page.h1Line2, page.cta.fallback, page.cta.fallbackHeader]
       for (const label of labels) expect(isInitialCaps(label), label).toBe(true)
       if (!page.offerPage) for (const item of page.faq.items) expect(isInitialCaps(item.question), item.question).toBe(true)
       expect(new Set(page.faq.items.map((i) => i.id)).size).toBe(page.faq.items.length)
@@ -93,7 +100,7 @@ describe('copy rules', () => {
     for (const label of [BUCKS_PAGE.h1Line1, BUCKS_PAGE.h1Line2, ...Object.values(BUCKS_PAGE.cta)]) expect(isInitialCaps(label), label).toBe(true)
   })
 
-  it('sets the Business offer page in sentence case, with the contact answer under the FAQ heading', () => {
+  it('sets the offer page in sentence case, with the contact answer under the FAQ heading', () => {
     const page = businessPage(true)
     expect(page.faq.items.map((i) => i.question)).toEqual([
       'What exactly is the Black Friday special?',
@@ -107,6 +114,18 @@ describe('copy rules', () => {
     ])
     expect(page.faq.help?.text).toBe('Still unsure? Email help@legiit.com or visit the support center.')
     expect(page.faq.openFirst).toBe(true)
+    expect(agencyPage(true).faq.items.map((i) => i.question)).toEqual([
+      'What exactly is the Black Friday special?',
+      'What does that cost per client?',
+      'Are the credits delivered all at once?',
+      'What happens after the first year?',
+      'Can I pay monthly instead?',
+      'Can I start on Business and upgrade later?',
+      'Is there a free trial for Agency?',
+      'Are freelance services included?',
+      'When does the offer end?',
+    ])
+    for (const step of agencyPage(true).offerPage?.steps ?? []) expect(sentences(step.paragraph).length, step.paragraph).toBeLessThanOrEqual(2)
     expect(page.offerPage?.steps.map((s) => s.label)).toEqual(['Step 1 · Know your next move', 'Step 2 · Get the work started', 'Step 3 · Get expert help to finish it'])
     for (const step of page.offerPage?.steps ?? []) {
       expect(step.bullets).toHaveLength(3)
@@ -144,6 +163,6 @@ describe('copy rules', () => {
     expect(businessPage(true).switchPlan.href).toMatch(/agency/)
     expect(agencyPage(true).switchPlan.href).toMatch(/business/)
     expect(businessPage(true).switchPlan.before).toContain('$1,399')
-    expect(agencyPage(true).switchPlan.after).toContain('$399')
+    expect(agencyPage(true).switchPlan.before).toContain('$399')
   })
 })

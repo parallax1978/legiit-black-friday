@@ -7,7 +7,7 @@ import { PromoCta } from './PromoCta'
 
 /**
  * Closing call to action on the tinted band, with the state-specific offer line under the button.
- * `look="plain"` is the Business offer page's version: grey band, solid button, the copy's own note.
+ * `look="plain"` is the offer page's version: grey band, solid button, the copy's own note.
  */
 export function PromoFinal({ copy, status, route, attribution, look = 'brand' }: { copy: PromoPageCopy; status: OfferStatus; route: PromoRoute; attribution: Attribution; look?: 'brand' | 'plain' }) {
   const plain = look === 'plain'

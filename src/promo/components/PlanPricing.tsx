@@ -17,7 +17,7 @@ interface PlanPricingProps {
 }
 
 /**
- * The Business offer page's pricing: one card with what the plan includes on
+ * The offer page's pricing: one card with what the plan includes on
  * the left and the first-year price, the saving, the button, and the renewal
  * terms on the right, then the regular-against-Black-Friday table. Shown only
  * while the offer is live; the expired state uses OfferPricing.

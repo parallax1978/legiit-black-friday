@@ -1,7 +1,7 @@
 import { Container } from '../../components/ui/Container'
 import type { PromoPageCopy } from '../content'
 
-/** The Business offer page's problem section: three grey cards, the problem in the owner's words, then what changes. */
+/** The offer page's problem section: three grey cards, the problem in the owner's words, then what changes. */
 export function ProblemCards({ copy }: { copy: PromoPageCopy['problem'] }) {
   return (
     <section aria-labelledby="problem-heading" className="py-16 sm:py-20">

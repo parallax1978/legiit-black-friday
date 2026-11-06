@@ -12,7 +12,7 @@ import { PromoCta } from './PromoCta'
 
 const PRICE_GRADIENT = 'linear-gradient(95deg, #6A13CF 12%, #C71E92 98%)'
 
-interface BusinessOfferHeroProps {
+interface OfferHeroProps {
   copy: PromoPageCopy
   page: OfferPageCopy
   status: OfferStatus
@@ -21,14 +21,15 @@ interface BusinessOfferHeroProps {
 }
 
 /**
- * The Business page's hero while the Black Friday offer shows, built to the
+ * A promotion page's hero while its Black Friday offer shows, built to the
  * approved design: grey eyebrow, a one-line H1 with the price on the brand
  * gradient, the regular price struck through beside the saving, the monthly
  * equivalent, the bonus pill, the benefit paragraph, a solid purple button, a
- * link to the demo, the billing and trial line, the route to the Agency offer,
- * the company line, then the product overview with its chapters.
+ * link to the demo, the billing line (with the trial link where the page has
+ * one), the route to the other plan, the company line, then the product
+ * overview with its chapters.
  */
-export function BusinessOfferHero({ copy, page, status, route, attribution }: BusinessOfferHeroProps) {
+export function OfferHero({ copy, page, status, route, attribution }: OfferHeroProps) {
   const switchHref = withAttribution(copy.switchPlan.href, attribution)
   const trialHref = trialStartUrl(attribution)
   const linkClass = 'whitespace-nowrap rounded-sm font-medium text-brand-purple underline-offset-4 hover:underline btn-focus'
@@ -78,15 +79,17 @@ export function BusinessOfferHero({ copy, page, status, route, attribution }: Bu
           </p>
           <p className="mx-auto mt-3 max-w-3xl text-sm leading-relaxed text-ink-muted">
             {page.terms.before}
-            <a
-              href={trialHref}
-              data-trial-link
-              className={linkClass}
-              onClick={() => track('promo_cta_click', { page: copy.page, placement: 'hero-trial', plan: 'business_dashboard', billing: 'monthly', status, campaign: attribution.campaign, destination: trialHref })}
-            >
-              {page.terms.linkLabel}
-              <ChevronRight size={14} className="inline-block align-[-2px]" />
-            </a>
+            {page.terms.trialLabel && (
+              <a
+                href={trialHref}
+                data-trial-link
+                className={linkClass}
+                onClick={() => track('promo_cta_click', { page: copy.page, placement: 'hero-trial', plan: 'business_dashboard', billing: 'monthly', status, campaign: attribution.campaign, destination: trialHref })}
+              >
+                {page.terms.trialLabel}
+                <ChevronRight size={14} className="inline-block align-[-2px]" />
+              </a>
+            )}
           </p>
           <p className="mx-auto mt-2 max-w-3xl text-sm leading-relaxed text-ink-muted">
             {copy.switchPlan.before}

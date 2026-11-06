@@ -117,6 +117,6 @@ describe('promotion routes', () => {
     expect(live.href).toBe('https://legiit.com/subscription-purchase?plan=business_dashboard&billing=yearly')
     expect(promoRoute(business, 'expired', DEFAULT_ATTRIBUTION)).toMatchObject({ kind: 'regular', label: 'Start My 7-Day Free Trial', href: trialStartUrl(DEFAULT_ATTRIBUTION) })
     expect(promoRoute(agency, 'expired', DEFAULT_ATTRIBUTION)).toMatchObject({ kind: 'regular', billing: 'monthly', label: 'Choose Agency' })
-    expect(promoRoute(agency, 'live', DEFAULT_ATTRIBUTION)).toMatchObject({ plan: 'agency_dashboard', billing: 'yearly', label: 'Get Agency For $1,399' })
+    expect(promoRoute(agency, 'live', DEFAULT_ATTRIBUTION)).toMatchObject({ plan: 'agency_dashboard', billing: 'yearly', label: 'Get Command Center for $1,399' })
   })
 })
