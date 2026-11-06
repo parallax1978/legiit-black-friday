@@ -4,7 +4,7 @@ import { track, type EventMap } from '../../lib/analytics'
 import type { OfferStatus } from '../status'
 
 type Size = 'md' | 'lg' | 'hero' | 'xl'
-type Variant = 'primary' | 'inverse' | 'outline' | 'outlineInverse' | 'secondary'
+type Variant = 'primary' | 'solid' | 'inverse' | 'outline' | 'outlineInverse' | 'secondary'
 
 interface PromoCtaProps {
   page: EventMap['promo_cta_click']['page']

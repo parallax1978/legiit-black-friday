@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef, type AnchorHTMLAttributes, type ButtonHTMLAttributes, type ReactNode } from 'react'
 
-type Variant = 'primary' | 'inverse' | 'outline' | 'outlineInverse' | 'secondary' | 'ghost'
+type Variant = 'primary' | 'solid' | 'inverse' | 'outline' | 'outlineInverse' | 'secondary' | 'ghost'
 /**
  * `hero` is the standard `lg` size scaled by 25% (font, padding, gap, icon, border, radius).
  * `xl` is `lg` doubled (see .btn-xl in index.css).
@@ -17,6 +17,7 @@ const baseClass =
 
 const variantClass: Record<Variant, string> = {
   primary: 'btn-brand border-transparent',
+  solid: 'border-transparent bg-brand-purple text-white hover:bg-[#5B10B3]',
   inverse: 'border-white bg-white text-brand-purple hover:bg-[#F3EBFC] focus-visible:!outline-white',
   outline: 'border-brand-purple bg-canvas text-brand-purple hover:bg-brand-tint',
   outlineInverse: 'border-white/70 bg-transparent text-white hover:bg-white/10 focus-visible:!outline-white',

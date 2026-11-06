@@ -35,6 +35,8 @@ export interface PromoPageCopy {
   subhead: string
   /** One line directly under the headline for a bonus the offer includes (Business page only). */
   offerLine?: string
+  /** The Business offer hero's extra lines (see BusinessOfferHero); set only while the offer shows. */
+  offerHero?: { banner: string; bannerLink: string; compare: { label: string; regular: string; saving: string }; monthly: string; demoLink: string; deadline: string }
   /** Button labels: while the offer is live, and the regular route otherwise. */
   cta: { live: string; liveHeader: string; fallback: string; fallbackHeader: string }
   /** The line under the hero button, by offer state. */
@@ -185,21 +187,33 @@ export function businessPage(showOffer: boolean): PromoPageCopy {
       : 'Command Center shows business owners the next move, helps create the work with AI, and connects them to Legiit specialists. Business plan from $49/month.',
   },
   eyebrow: showOffer ? 'Black Friday special for business owners' : 'Command Center for business owners',
-  h1Line1: showOffer ? `${money(businessOffer.firstYearPrice)} First Year` : 'Stop Guessing What To Work On.',
-  h1Line2: showOffer ? `Normally ${money(businessOffer.regularAnnualPrice)}` : 'The Business Plan.',
+  h1Line1: showOffer ? money(businessOffer.firstYearPrice) : 'Stop Guessing What To Work On.',
+  h1Line2: showOffer ? 'for your first year.' : 'The Business Plan.',
   offerLine: showOffer ? `Black Friday bonus: Double your monthly AI credits for ${CREDITS.offerMonths} months.` : undefined,
   subhead: showOffer
-    ? 'Get more customers without becoming a full-time marketer. Get a clear plan, AI to save you time, and specialists you can hire to do the work.'
+    ? 'Get more customers without becoming a full-time marketer. A clear plan, AI to save you time, and specialists you can hire to do the work.'
     : 'Command Center shows you the next move for your business, helps you create the work with AI, and connects you to a Legiit specialist when you want it done for you.',
-  cta: { live: `Get Command Center For ${money(businessOffer.firstYearPrice)}`, liveHeader: `Get Command Center For ${money(businessOffer.firstYearPrice)}`, fallback: 'Start My 7-Day Free Trial', fallbackHeader: 'Start Free Trial' },
+  cta: { live: `Get the Business plan for ${money(businessOffer.firstYearPrice)}`, liveHeader: 'Get Black Friday price', fallback: 'Start My 7-Day Free Trial', fallbackHeader: 'Start Free Trial' },
+  offerHero: showOffer
+    ? {
+        banner: `Black Friday: ${money(businessOffer.firstYearPrice)} for your first year of Command Center. Ends ${OFFER_WINDOW.endsShortLabel}, 11:59 p.m. Eastern.`,
+        bannerLink: 'Get the deal',
+        compare: { label: 'Regular price', regular: money(businessOffer.regularAnnualPrice), saving: `Save ${money(firstYearSaving(businessOffer))}` },
+        monthly: `That’s ${money(businessOffer.firstYearPrice / 12)} a month, billed annually.`,
+        demoLink: 'See it work in 42 seconds',
+        deadline: 'Offer ends Nov 30, 11:59 p.m. ET',
+      }
+    : undefined,
   heroNote: {
     live: firstYearLine(businessOffer),
     expired: `This offer ended ${OFFER_WINDOW.endsShortLabel}, 2026. ${regularTermsLine(businessOffer)}`,
   },
   switchPlan: {
-    before: 'Running several businesses or client accounts? ',
+    before: showOffer
+      ? `Running several businesses or client accounts? Agency is ${money(agencyOffer.firstYearPrice)} for your first year (regular ${money(agencyOffer.regularAnnualPrice)}), up to ${agencyOffer.businessesIncluded} businesses. `
+      : 'Running several businesses or client accounts? ',
     linkLabel: showOffer ? 'See the Agency offer' : 'See the Agency plan',
-    after: showOffer ? `: ${money(agencyOffer.firstYearPrice)} for the first year instead of ${money(agencyOffer.regularAnnualPrice)}, up to ${agencyOffer.businessesIncluded} businesses.` : `: up to ${agencyOffer.businessesIncluded} businesses in one workspace.`,
+    after: showOffer ? '' : `: up to ${agencyOffer.businessesIncluded} businesses in one workspace.`,
     href: PROMO_PAGES.agency,
   },
   problem: {

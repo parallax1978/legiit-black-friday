@@ -7,8 +7,12 @@ import type { ComponentProps } from 'react'
 
 type CtaProps = Omit<ComponentProps<typeof PromoCta>, 'placement' | 'size' | 'variant' | 'className'>
 
-/** The pricing page's header: lockup, Log In from 640px up, and the page's button in its header size. */
-export function PromoHeader({ productName = PRODUCT_NAME, cta }: { productName?: string; cta: CtaProps }) {
+/**
+ * The pricing page's header: lockup, Log In from 640px up, and the page's button in its header size.
+ * `look="solid"` is the Business offer page's version: "Log in" and a solid purple pill with no arrow.
+ */
+export function PromoHeader({ productName = PRODUCT_NAME, cta, look = 'gradient' }: { productName?: string; cta: CtaProps; look?: 'gradient' | 'solid' }) {
+  const solid = look === 'solid'
   return (
     <header className="border-b border-line bg-canvas">
       <Container className="flex min-h-[64px] items-center justify-between gap-3 py-3">
@@ -19,9 +23,13 @@ export function PromoHeader({ productName = PRODUCT_NAME, cta }: { productName?:
         </a>
         <div className="flex items-center gap-1 sm:gap-3">
           <a href={PROMO_ROUTES.signIn} className="hidden min-h-[44px] items-center rounded-md px-3 text-[15px] font-medium text-ink-soft hover:text-ink btn-focus sm:inline-flex">
-            Log In
+            {solid ? 'Log in' : 'Log In'}
           </a>
-          <PromoCta {...cta} placement="header" size="md" className="shrink-0 !px-3 sm:!px-4" />
+          {solid ? (
+            <PromoCta {...cta} placement="header" size="md" variant="solid" arrow={false} className="shrink-0 !rounded-full !px-4 sm:!px-5" />
+          ) : (
+            <PromoCta {...cta} placement="header" size="md" className="shrink-0 !px-3 sm:!px-4" />
+          )}
         </div>
       </Container>
     </header>

@@ -18,8 +18,17 @@ const expiredCopy = JSON.stringify([businessPage(false), agencyPage(false)])
 
 describe('offer wording', () => {
   it('states the terms the way the offer was announced', () => {
-    expect(businessPage(true).h1Line1).toBe('$399 First Year')
-    expect(businessPage(true).h1Line2).toBe('Normally $470.40')
+    expect(businessPage(true).h1Line1).toBe('$399')
+    expect(businessPage(true).h1Line2).toBe('for your first year.')
+    expect(businessPage(true).offerHero).toEqual({
+      banner: 'Black Friday: $399 for your first year of Command Center. Ends November 30, 11:59 p.m. Eastern.',
+      bannerLink: 'Get the deal',
+      compare: { label: 'Regular price', regular: '$470.40', saving: 'Save $71.40' },
+      monthly: 'That’s $33.25 a month, billed annually.',
+      demoLink: 'See it work in 42 seconds',
+      deadline: 'Offer ends Nov 30, 11:59 p.m. ET',
+    })
+    expect(businessPage(false).offerHero).toBeUndefined()
     expect(businessPage(true).offerLine).toBe('Black Friday bonus: Double your monthly AI credits for 12 months.')
     expect(businessPage(true).heroNote.live).toBe('$399 for your first year, billed annually.')
     expect(agencyPage(true).h1Line1).toBe('Black Friday Special: $1,399 First Year.')
@@ -69,7 +78,9 @@ describe('offer wording', () => {
 describe('copy rules', () => {
   it('uses Initial Caps for the H1, every button label, and every FAQ question', () => {
     for (const page of pages) {
-      for (const label of [page.h1Line1, page.h1Line2, ...Object.values(page.cta)]) expect(isInitialCaps(label), label).toBe(true)
+      // The Business offer hero follows its mockup, which sets the H1 and the buttons in sentence case; its labels show only with the offer.
+      const labels = page.page === 'business' ? (page.offerHero ? [] : [page.h1Line1, page.h1Line2, page.cta.fallback, page.cta.fallbackHeader]) : [page.h1Line1, page.h1Line2, ...Object.values(page.cta)]
+      for (const label of labels) expect(isInitialCaps(label), label).toBe(true)
       for (const item of page.faq.items) expect(isInitialCaps(item.question), item.question).toBe(true)
       expect(new Set(page.faq.items.map((i) => i.id)).size).toBe(page.faq.items.length)
     }
@@ -102,7 +113,7 @@ describe('copy rules', () => {
   it('names the other plan on each page and links to its page', () => {
     expect(businessPage(true).switchPlan.href).toMatch(/agency/)
     expect(agencyPage(true).switchPlan.href).toMatch(/business/)
-    expect(businessPage(true).switchPlan.after).toContain('$1,399')
+    expect(businessPage(true).switchPlan.before).toContain('$1,399')
     expect(agencyPage(true).switchPlan.after).toContain('$399')
   })
 })

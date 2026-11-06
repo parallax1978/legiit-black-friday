@@ -14,6 +14,7 @@ import { ProblemSolution } from './components/ProblemSolution'
 import { PromoFinal } from './components/PromoFinal'
 import { PromoHeader } from './components/PromoHeader'
 import { PromoHero } from './components/PromoHero'
+import { BusinessOfferHero } from './components/BusinessOfferHero'
 import { StatusStrip } from './components/StatusStrip'
 
 /**
@@ -40,16 +41,26 @@ export default function PromoApp({ copyFor }: { copyFor: (showOffer: boolean) =>
   }, [])
 
   const cta = { page: copy.page, plan: route.plan, billing: route.billing, status, campaign: attribution.campaign, href: route.href, label: route.headerLabel }
+  const offerHero = showOffer ? copy.offerHero : undefined
+  const bannerLink = offerHero && {
+    label: offerHero.bannerLink,
+    href: route.href,
+    onClick: () => track('promo_cta_click', { page: copy.page, placement: 'banner', plan: route.plan, billing: route.billing, status, campaign: attribution.campaign, destination: route.href }),
+  }
 
   return (
     <div id="top" className="promo min-h-dvh bg-canvas text-ink">
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-canvas focus:px-4 focus:py-3 focus:text-ink focus:shadow-frame btn-focus">
         Skip To Content
       </a>
-      <StatusStrip status={status} text={statusBanner(status, 'command-center')} />
-      <PromoHeader cta={cta} />
+      <StatusStrip status={status} text={offerHero ? offerHero.banner : statusBanner(status, 'command-center')} link={bannerLink || undefined} />
+      <PromoHeader cta={cta} look={offerHero ? 'solid' : 'gradient'} />
       <main id="main">
-        <PromoHero copy={copy} status={status} route={route} attribution={attribution} />
+        {offerHero ? (
+          <BusinessOfferHero copy={copy} hero={offerHero} status={status} route={route} attribution={attribution} />
+        ) : (
+          <PromoHero copy={copy} status={status} route={route} attribution={attribution} />
+        )}
         <ProblemSolution copy={copy.problem} />
         {copy.features.map((section) => (
           <ProductSection key={section.id} section={section} />
