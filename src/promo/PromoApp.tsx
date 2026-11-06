@@ -1,4 +1,4 @@
-import { useEffect, useMemo, type CSSProperties } from 'react'
+import { useEffect, useMemo } from 'react'
 import { Container } from '../components/ui/Container'
 import { Footer } from '../components/sections/Footer'
 import { Faq } from '../components/sections/Faq'
@@ -20,9 +20,7 @@ import { PromoHeader } from './components/PromoHeader'
 import { PromoHero } from './components/PromoHero'
 import { StatusStrip } from './components/StatusStrip'
 import { StepSection } from './components/StepSection'
-
-/** The offer pages set their section eyebrows in grey (see .eyebrow in index.css) and use the design's purple, #8A12DC, for the brand token. */
-const OFFER_PAGE_STYLE = { '--eyebrow-color': '#5C5C6B', '--brand-purple': '#8A12DC', '--brand-purple-rgb': '138 18 220' } as CSSProperties
+import { OFFER_PAGE_STYLE } from './components/offerPageStyle'
 
 /**
  * One Command Center promotion page. The Business and Agency pages are this

@@ -7,6 +7,7 @@ import { depositUrl, loadAttribution, withAttribution } from './attribution'
 import { BUCKS_PAGE, statusBanner } from './content'
 import { PROMO_ROUTES } from './offer'
 import { useOfferStatus, type OfferStatus } from './status'
+import { BucksOfferPage } from './components/BucksOfferPage'
 import { PromoCta } from './components/PromoCta'
 import { PromoHeader } from './components/PromoHeader'
 import { StatusStrip } from './components/StatusStrip'
@@ -34,6 +35,10 @@ export default function BucksApp() {
   }, [])
 
   const cta = { page: 'legiit-bucks' as const, plan: route.plan, status, campaign: attribution.campaign, href: route.href }
+
+  if (showOffer && route.plan === 'legiit_bucks') {
+    return <BucksOfferPage status={status} attribution={attribution} cta={{ ...cta, plan: route.plan }} label={route.label} headerLabel={route.headerLabel} />
+  }
 
   return (
     <div id="top" className="promo min-h-dvh bg-canvas text-ink">

@@ -13,7 +13,7 @@ import { PromoCta } from './PromoCta'
 const PRICE_GRADIENT = 'linear-gradient(95deg, var(--brand-purple, #6A13CF) 12%, #C71E92 98%)'
 
 /** Joins the last two words with a non-breaking space so the headline never ends on a one-word line. */
-const keepLastTwoWords = (text: string) => text.replace(/ (?=\S+$)/, '\u00A0')
+export const keepLastTwoWords = (text: string) => text.replace(/ (?=\S+$)/, '\u00A0')
 
 interface OfferHeroProps {
   copy: PromoPageCopy

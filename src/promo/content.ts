@@ -685,8 +685,9 @@ export const BUCKS_PAGE = {
   eyebrow: 'Black Friday bonus for marketplace buyers',
   h1Line1: `Deposit ${deposit}.`,
   h1Line2: `Spend ${total}.`,
-  subhead: `For Black Friday, add ${deposit} to your Legiit Bucks wallet and Legiit adds a ${bonus} bonus. You get ${total} to spend on freelance services: your ${deposit}, plus ${bonus} from Legiit.`,
-  cta: { live: `Deposit ${deposit} Now`, liveHeader: 'Deposit Now', expired: 'Browse Services', expiredHeader: 'Browse Services' },
+  subhead: `Add ${deposit} to your wallet and Legiit adds ${bonus}, for ${total} to spend on freelance services. Use it at checkout on its own or with a card or PayPal.`,
+  // The live labels follow the approved design (sentence case); the expired ones are the marketplace's own.
+  cta: { live: `Deposit ${deposit} now`, liveHeader: `Get the ${bonus} bonus`, expired: 'Browse Services', expiredHeader: 'Browse Services' },
   heroNote: {
     live: `Black Friday bonus: your ${deposit} deposit plus ${bonus} from Legiit. ${DEADLINE_SENTENCE}`,
     expired: `The deposit bonus ended ${OFFER_WINDOW.endsShortLabel}, 2026. Legiit Bucks you already hold still spend as normal at checkout.`,
@@ -720,16 +721,30 @@ export const BUCKS_PAGE = {
     historyLink: { text: 'Legiit Bucks history', href: PROMO_ROUTES.bucksHistory },
   },
   final: {
-    title: `Black Friday only: fund the next job and Legiit adds ${bonus}.`,
-    body: `Deposit ${deposit}, spend ${total} on the freelance work your business needs. ${DEADLINE_SENTENCE}`,
+    title: `Fund the next job and Legiit adds ${bonus}.`,
+    body: `Deposit ${deposit}, spend ${total} on the freelance work your business needs.`,
+    note: DEADLINE_SENTENCE,
   },
   footerLinks: [
     { label: 'Privacy', href: PROMO_ROUTES.privacy },
     { label: 'Terms', href: PROMO_ROUTES.terms },
     { label: 'Support', href: PROMO_ROUTES.support },
     { label: 'Contact', href: PROMO_ROUTES.contactEmail },
-    { label: 'Log In', href: PROMO_ROUTES.signIn },
+    { label: 'Log in', href: PROMO_ROUTES.signIn },
   ],
+} as const
+
+/** The Legiit Bucks page's extra lines in the approved design, shown while the bonus is live (see BucksOfferPage). */
+export const BUCKS_OFFER_PAGE = {
+  banner: `Black Friday: deposit ${deposit} and get ${total} to spend on Legiit services. Ends ${OFFER_WINDOW.endsShortLabel}, 11:59 p.m. Eastern.`,
+  bannerLink: 'Get the deal',
+  h1Line1: total,
+  h1Line2: `in Legiit Bucks for ${deposit}.`,
+  compare: { depositLabel: 'Your deposit', deposit, bonusLabel: 'Legiit adds', bonus },
+  note: `The bonus is ${bonus}. It pays for Legiit freelance services and cannot be withdrawn as cash.`,
+  pill: `Bonus: ${bonus} for every ${deposit} you deposit`,
+  terms: { before: `Offer ends ${OFFER_WINDOW.endsShortLabel}, 11:59 p.m. Eastern. No code to enter. `, linkLabel: 'Browse services' },
+  math: { eyebrow: 'The math', title: `${BUCKS_PAGE.h1Line1} ${BUCKS_PAGE.h1Line2}` },
 } as const
 
 /** Footer links on the Command Center promotion pages, the pricing page's set. */

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { BUCKS_PAGE, CREDITS_SCHEDULE, DEADLINE_SENTENCE, afterYearOne, agencyPage, businessPage, creditsNote, statusBanner } from './content'
+import { BUCKS_OFFER_PAGE, BUCKS_PAGE, CREDITS_SCHEDULE, DEADLINE_SENTENCE, afterYearOne, agencyPage, businessPage, creditsNote, statusBanner } from './content'
 import { FIRST_YEAR } from './offer'
 import { OFFER_STATUSES } from './status'
 
@@ -13,7 +13,7 @@ const isInitialCaps = (label: string) =>
 const sentences = (p: string) => p.replace(/p\.m\./g, 'pm').split(/(?<=[.!?])\s+(?=[A-Z“"$0-9])/).filter(Boolean)
 
 const pages = [businessPage(true), businessPage(false), agencyPage(true), agencyPage(false)]
-const allOfferCopy = JSON.stringify([businessPage(true), agencyPage(true), BUCKS_PAGE, CREDITS_SCHEDULE, OFFER_STATUSES.map((s) => [statusBanner(s, 'command-center'), statusBanner(s, 'legiit-bucks')])])
+const allOfferCopy = JSON.stringify([businessPage(true), agencyPage(true), BUCKS_PAGE, BUCKS_OFFER_PAGE, CREDITS_SCHEDULE, OFFER_STATUSES.map((s) => [statusBanner(s, 'command-center'), statusBanner(s, 'legiit-bucks')])])
 const expiredCopy = JSON.stringify([businessPage(false), agencyPage(false)])
 
 describe('offer wording', () => {
@@ -72,7 +72,10 @@ describe('offer wording', () => {
   it('keeps the deposit bonus apart from Command Center and spells out the $25', () => {
     expect(BUCKS_PAGE.h1Line1 + ' ' + BUCKS_PAGE.h1Line2).toBe('Deposit $100. Spend $125.')
     expect(BUCKS_PAGE.math.clarification).toBe('The bonus is $25. This is not $125 of free credit, and it is not part of any Command Center subscription.')
-    expect(BUCKS_PAGE.subhead).toContain('your $100, plus $25 from Legiit')
+    expect(BUCKS_PAGE.subhead).toContain('for $125 to spend on freelance services')
+    expect(BUCKS_OFFER_PAGE.h1Line1 + ' ' + BUCKS_OFFER_PAGE.h1Line2).toBe('$125 in Legiit Bucks for $100.')
+    expect(BUCKS_OFFER_PAGE.pill).toBe('Bonus: $25 for every $100 you deposit')
+    expect(BUCKS_PAGE.cta).toMatchObject({ live: 'Deposit $100 now', liveHeader: 'Get the $25 bonus' })
     expect(JSON.stringify(BUCKS_PAGE)).not.toMatch(/\$399|\$1,399|AI credits/)
     expect(BUCKS_PAGE.rules.items.join(' ')).toContain('cannot be withdrawn')
   })
@@ -97,7 +100,7 @@ describe('copy rules', () => {
       if (!page.offerPage) for (const item of page.faq.items) expect(isInitialCaps(item.question), item.question).toBe(true)
       expect(new Set(page.faq.items.map((i) => i.id)).size).toBe(page.faq.items.length)
     }
-    for (const label of [BUCKS_PAGE.h1Line1, BUCKS_PAGE.h1Line2, ...Object.values(BUCKS_PAGE.cta)]) expect(isInitialCaps(label), label).toBe(true)
+    for (const label of [BUCKS_PAGE.h1Line1, BUCKS_PAGE.h1Line2, BUCKS_PAGE.cta.expired, BUCKS_PAGE.cta.expiredHeader]) expect(isInitialCaps(label), label).toBe(true)
   })
 
   it('sets the offer page in sentence case, with the contact answer under the FAQ heading', () => {
@@ -144,7 +147,7 @@ describe('copy rules', () => {
       for (const f of page.features) paragraphs.push(...f.paragraphs)
       for (const item of page.faq.items) paragraphs.push(...item.answer)
     }
-    paragraphs.push(BUCKS_PAGE.subhead, ...Object.values(BUCKS_PAGE.heroNote), BUCKS_PAGE.math.clarification, ...BUCKS_PAGE.how.steps.map((s) => s.body), ...BUCKS_PAGE.rules.items, BUCKS_PAGE.final.body, CREDITS_SCHEDULE.body)
+    paragraphs.push(BUCKS_PAGE.subhead, BUCKS_OFFER_PAGE.note, ...Object.values(BUCKS_PAGE.heroNote), BUCKS_PAGE.math.clarification, ...BUCKS_PAGE.how.steps.map((s) => s.body), ...BUCKS_PAGE.rules.items, BUCKS_PAGE.final.body, CREDITS_SCHEDULE.body)
     for (const p of paragraphs) expect(sentences(p).length, p).toBeLessThanOrEqual(2)
   })
 

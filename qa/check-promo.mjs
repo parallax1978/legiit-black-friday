@@ -68,11 +68,13 @@ const PAGES = {
   },
   'legiit-bucks': {
     cta: { live: DEPOSIT, expired: BROWSE },
-    labels: { live: 'Deposit $100 Now', expired: 'Browse Services' },
+    labels: { live: 'Deposit $100 now', expired: 'Browse Services' },
     offerText: ['Black Friday bonus', 'Deposit $100.', 'Spend $125.', 'The bonus is $25.', 'cannot be withdrawn', 'Use your Legiit Bucks first'],
     expiredText: ['The deposit bonus ended November 30, 2026'],
     switchTo: null,
-    ctaCount: 3,
+    ctaCount: { live: 4, expired: 3 },
+    sentenceCase: { live: true },
+    longOk: ['Offer ends November 30, 11:59'],
     title: /Black Friday Legiit Bucks Bonus/,
   },
 }
