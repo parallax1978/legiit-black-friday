@@ -36,13 +36,15 @@ export const OFFER_WINDOW = {
 } as const
 
 /**
- * Which entry point every Command Center button uses. Checked 2026-11-04:
- * a signed-out visit to /subscription-purchase redirects to /sign-in and
- * drops the plan, so the buttons go through sign-in with the checkout as the
- * `redirect` target (the form Legiit's own Business button builds). Switch to
- * 'direct' once Legiit's checkout keeps the plan for signed-out visitors.
+ * Which entry point every Command Center button uses. Checked 2026-11-06:
+ * a signed-out visit to /subscription-purchase redirects to /sign-in, and the
+ * sign-in form now carries the checkout URL as its destination, so the plan
+ * survives the login. A signed-in visitor opens the checkout directly. The
+ * sign-in route itself ignores its `redirect` parameter for signed-in
+ * visitors and sends them to the home page, which is why 'sign-in-redirect'
+ * is no longer used.
  */
-export const CHECKOUT_ENTRY: 'sign-in-redirect' | 'direct' = 'sign-in-redirect'
+export const CHECKOUT_ENTRY: 'sign-in-redirect' | 'direct' = 'direct'
 
 export interface FirstYearOffer {
   planId: PaidPlanId

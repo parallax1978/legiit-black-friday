@@ -115,10 +115,13 @@ export function withAttribution(url: string, attribution: Attribution): string {
   return `${path}${query ? `?${query}` : ''}${hash}`
 }
 
-/** The checkout path with plan, billing period, and attribution: the intended destination after sign-in. */
-export function checkoutPath(planId: PaidPlanId, billing: BillingPeriod, attribution: Attribution): string {
+/**
+ * The checkout path with plan and billing period only. Legiit's normal checkout applies the Black Friday
+ * price by itself while the countdown runs, on yearly billing, so the buttons use the plain URL Legiit's
+ * developers gave for each plan and carry no attribution parameters.
+ */
+export function checkoutPath(planId: PaidPlanId, billing: BillingPeriod): string {
   const params = new URLSearchParams({ plan: planId, billing })
-  for (const [key, value] of attributionParams(attribution)) params.set(key, value)
   return `/subscription-purchase?${params.toString()}`
 }
 
@@ -129,9 +132,9 @@ export function signInThen(destinationPath: string): string {
   return url.toString()
 }
 
-/** A plan checkout button's destination, through sign-in or direct, as CHECKOUT_ENTRY decides. */
-export function planCheckoutUrl(planId: PaidPlanId, billing: BillingPeriod, attribution: Attribution, entry: typeof CHECKOUT_ENTRY = CHECKOUT_ENTRY): string {
-  const path = checkoutPath(planId, billing, attribution)
+/** A plan checkout button's destination, direct or through sign-in, as CHECKOUT_ENTRY decides. The attribution is kept in the signature for callers but is not added to the checkout URL. */
+export function planCheckoutUrl(planId: PaidPlanId, billing: BillingPeriod, _attribution: Attribution, entry: typeof CHECKOUT_ENTRY = CHECKOUT_ENTRY): string {
+  const path = checkoutPath(planId, billing)
   return entry === 'direct' ? `https://legiit.com${path}` : signInThen(path)
 }
 

@@ -96,12 +96,13 @@ describe('attribution', () => {
     expect(withAttribution('https://legiit.com/a?utm_source=keep', { campaign: 'x', utm: { utm_source: 'new' } })).toBe('https://legiit.com/a?utm_source=keep&utm_campaign=x&campaign=x')
   })
 
-  it('builds the checkout destination with plan, billing, and attribution, and carries it through sign-in', () => {
-    const path = checkoutPath('business_dashboard', 'yearly', DEFAULT_ATTRIBUTION)
-    expect(path).toBe('/subscription-purchase?plan=business_dashboard&billing=yearly&utm_campaign=legiit_60d_2026&campaign=legiit_60d_2026')
+  it('builds the plain checkout destination with plan and billing, direct by default, and can still carry it through sign-in', () => {
+    const path = checkoutPath('business_dashboard', 'yearly')
+    expect(path).toBe('/subscription-purchase?plan=business_dashboard&billing=yearly')
     expect(signInThen(path)).toBe(`https://legiit.com/sign-in?redirect=${encodeURIComponent(path)}`)
-    expect(planCheckoutUrl('agency_dashboard', 'yearly', DEFAULT_ATTRIBUTION)).toBe(signInThen(checkoutPath('agency_dashboard', 'yearly', DEFAULT_ATTRIBUTION)))
-    expect(planCheckoutUrl('agency_dashboard', 'yearly', DEFAULT_ATTRIBUTION, 'direct')).toBe('https://legiit.com/subscription-purchase?plan=agency_dashboard&billing=yearly&utm_campaign=legiit_60d_2026&campaign=legiit_60d_2026')
+    expect(planCheckoutUrl('business_dashboard', 'yearly', DEFAULT_ATTRIBUTION)).toBe('https://legiit.com/subscription-purchase?plan=business_dashboard&billing=yearly')
+    expect(planCheckoutUrl('agency_dashboard', 'yearly', DEFAULT_ATTRIBUTION)).toBe('https://legiit.com/subscription-purchase?plan=agency_dashboard&billing=yearly')
+    expect(planCheckoutUrl('agency_dashboard', 'yearly', DEFAULT_ATTRIBUTION, 'sign-in-redirect')).toBe(signInThen(checkoutPath('agency_dashboard', 'yearly')))
     expect(depositUrl(DEFAULT_ATTRIBUTION)).toBe(`https://legiit.com/sign-in?redirect=${encodeURIComponent('/earning-history?deposite_wallet=true&utm_campaign=legiit_60d_2026&campaign=legiit_60d_2026')}`)
     expect(trialStartUrl(DEFAULT_ATTRIBUTION)).toBe('https://legiit.com/command-center/start?utm_campaign=legiit_60d_2026&campaign=legiit_60d_2026')
   })
@@ -113,7 +114,7 @@ describe('promotion routes', () => {
     const agency = agencyPage(true)
     const live = promoRoute(business, 'live', DEFAULT_ATTRIBUTION)
     expect(live).toMatchObject({ plan: 'business_dashboard', billing: 'yearly', kind: 'offer', label: 'Get Business For $399' })
-    expect(live.href).toContain('plan%3Dbusiness_dashboard%26billing%3Dyearly')
+    expect(live.href).toBe('https://legiit.com/subscription-purchase?plan=business_dashboard&billing=yearly')
     expect(promoRoute(business, 'expired', DEFAULT_ATTRIBUTION)).toMatchObject({ kind: 'regular', label: 'Start My 7-Day Free Trial', href: trialStartUrl(DEFAULT_ATTRIBUTION) })
     expect(promoRoute(agency, 'expired', DEFAULT_ATTRIBUTION)).toMatchObject({ kind: 'regular', billing: 'monthly', label: 'Choose Agency' })
     expect(promoRoute(agency, 'live', DEFAULT_ATTRIBUTION)).toMatchObject({ plan: 'agency_dashboard', billing: 'yearly', label: 'Get Agency For $1,399' })
