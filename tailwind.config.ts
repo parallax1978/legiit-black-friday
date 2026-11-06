@@ -7,7 +7,8 @@ export default {
     extend: {
       colors: {
         brand: {
-          purple: '#6A13CF',
+          // A page can retint the purple by setting --brand-purple-rgb on its root (the offer pages use 138 18 220, #8A12DC).
+          purple: 'rgb(var(--brand-purple-rgb, 106 19 207) / <alpha-value>)',
           magenta: '#C71E92',
           tint: '#F7F1FE',
           tintStrong: '#EEE3FB',

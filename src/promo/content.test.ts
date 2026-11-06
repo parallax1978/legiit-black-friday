@@ -26,7 +26,7 @@ describe('offer wording', () => {
       bannerLink: 'Get the deal',
       compare: { label: 'Regular price', regular: '$470.40', saving: 'Save $71.40' },
       monthly: 'That’s $33.25 a month, billed annually.',
-      bonus: 'Bonus: double your monthly AI credits for 12 months',
+      bonus: 'Bonus: 2x AI credits for 12 months',
       demoLink: 'See it work in 42 seconds',
       terms: { before: 'Billed annually. Offer ends November 30, 11:59 p.m. Eastern. Prefer to try first? ', trialLabel: 'Start the 7-day trial' },
     })

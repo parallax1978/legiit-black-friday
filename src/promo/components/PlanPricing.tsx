@@ -56,7 +56,7 @@ export function PlanPricing({ copy, plan, status, route, attribution }: PlanPric
             <p className="mt-1 text-[2.75rem] font-bold leading-none tracking-[-0.03em] text-ink">{formatUsd(offer.firstYearPrice)}</p>
             <p className="mt-2 text-[15px] text-ink">{plan.priceLine}</p>
             <p className="mt-1 text-[15px] font-semibold text-brand-purple">{plan.saving}</p>
-            <PromoCta page={copy.page} placement="offer" plan={route.plan} billing={route.billing} status={status} campaign={attribution.campaign} href={route.href} label={route.label} size="lg" variant="solid" className="mt-5 w-full !gap-2 !rounded-[10px] sm:w-auto" />
+            <PromoCta page={copy.page} placement="offer" plan={route.plan} billing={route.billing} status={status} campaign={attribution.campaign} href={route.href} label={route.label} size="lg" variant="solid" className="mt-5 w-full !min-h-[60px] !gap-2 !rounded-[14px]" />
             <p className="mt-4 max-w-sm text-[13px] leading-relaxed text-ink-muted">{plan.note}</p>
           </div>
         </div>

@@ -238,7 +238,7 @@ function offerPageCopy(offer: FirstYearOffer, page: { steps: OfferStep[]; taglin
     bannerLink: 'Get the deal',
     compare: { label: 'Regular price', regular: money(offer.regularAnnualPrice), saving: `Save ${money(firstYearSaving(offer))}` },
     monthly: `That’s ${money(offer.firstYearPrice / 12)} a month, billed annually.`,
-    bonus: `Bonus: double your monthly AI credits for ${CREDITS.offerMonths} months`,
+    bonus: `Bonus: 2x AI credits for ${CREDITS.offerMonths} months`,
     demoLink: 'See it work in 42 seconds',
     terms: { before: `Billed annually. Offer ends ${OFFER_WINDOW.endsShortLabel}, 11:59 p.m. Eastern.${page.trialLabel ? ' Prefer to try first? ' : ''}`, trialLabel: page.trialLabel },
     steps: page.steps,

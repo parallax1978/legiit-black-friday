@@ -18,8 +18,8 @@ export function PromoHeader({ productName = PRODUCT_NAME, cta, look = 'gradient'
       <Container className="flex min-h-[64px] items-center justify-between gap-3 py-3">
         <a href="#top" className="-ml-2 inline-flex min-h-[44px] min-w-0 items-center gap-2 rounded-md px-2 btn-focus sm:gap-3" aria-label={`Legiit ${productName}, back to top`}>
           <Logo height={26} className="sm:!h-7" />
-          <span aria-hidden="true" className="h-5 w-px shrink-0 bg-line-strong max-[359px]:hidden" />
-          <span className="min-w-0 truncate text-[13px] font-medium text-ink max-[359px]:hidden sm:text-[15px]">{productName}</span>
+          <span aria-hidden="true" className={`h-5 w-px shrink-0 bg-line-strong ${solid ? 'max-[479px]:hidden' : 'max-[359px]:hidden'}`} />
+          <span className={`min-w-0 truncate text-[13px] font-medium text-ink sm:text-[15px] ${solid ? 'max-[479px]:hidden' : 'max-[359px]:hidden'}`}>{productName}</span>
         </a>
         <div className="flex items-center gap-1 sm:gap-3">
           <a href={PROMO_ROUTES.signIn} className="hidden min-h-[44px] items-center rounded-md px-3 text-[15px] font-medium text-ink-soft hover:text-ink btn-focus sm:inline-flex">

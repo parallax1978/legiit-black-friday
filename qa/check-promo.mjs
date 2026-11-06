@@ -45,7 +45,7 @@ const PAGES = {
   'black-friday-business': {
     cta: { live: offerCheckout('business_dashboard'), expired: TRIAL },
     labels: { live: 'Get Command Center for $399', expired: 'Start My 7-Day Free Trial' },
-    offerText: ['$399 for your first year.', 'Regular price', 'Save $71.40', '100,000', 'November 30, 2026, at 11:59 p.m. Eastern', 'Renews after 12 months at the regular annual price, currently $470.40'],
+    offerText: ['$399 for your first\u00A0year.', 'Regular price', 'Save $71.40', '100,000', 'November 30, 2026, at 11:59 p.m. Eastern', 'Renews after 12 months at the regular annual price, currently $470.40'],
     expiredText: ['$49/month billed monthly, or $470.40 a year billed annually'],
     switchTo: 'black-friday-agency',
     // Live: hero, header, banner link, pricing, final. The approved design sets labels in sentence case
@@ -58,7 +58,7 @@ const PAGES = {
   'black-friday-agency': {
     cta: { live: offerCheckout('agency_dashboard'), expired: monthlyCheckout('agency_dashboard') },
     labels: { live: 'Get Command Center for $1,399', expired: 'Choose Agency' },
-    offerText: ['$1,399 for your first year.', 'Regular price', 'Save $223.40', '100,000', 'November 30, 2026, at 11:59 p.m. Eastern', 'Renews after 12 months at the regular annual price, currently $1,622.40'],
+    offerText: ['$1,399 for your first\u00A0year.', 'Regular price', 'Save $223.40', '100,000', 'November 30, 2026, at 11:59 p.m. Eastern', 'Renews after 12 months at the regular annual price, currently $1,622.40'],
     expiredText: ['$169/month billed monthly, or $1,622.40 a year billed annually'],
     switchTo: 'black-friday-business',
     ctaCount: { live: 5, expired: 4 },

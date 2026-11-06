@@ -16,7 +16,7 @@
     @apply bg-canvas text-ink font-sans antialiased;
   }
   :focus-visible {
-    outline: 2px solid #6a13cf;
+    outline: 2px solid var(--brand-purple, #6a13cf);
     outline-offset: 2px;
   }
   ::selection {

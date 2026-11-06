@@ -33,7 +33,7 @@ export function StepSection({ step }: { step: OfferStep }) {
       <Container>
         <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
           <div className={`max-w-[34rem] ${mediaLeft ? 'lg:col-start-2' : 'lg:col-start-1'} lg:row-start-1`}>
-            <Icon size={28} strokeWidth={1.75} className="text-ink" />
+            <Icon size={48} strokeWidth={1.5} className="text-ink" />
             <p className="eyebrow mt-5">{step.label}</p>
             <h2 id={headingId} className="h2 mt-3">
               {step.title}

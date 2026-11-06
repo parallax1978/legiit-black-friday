@@ -19,7 +19,7 @@ export function PromoFinal({ copy, status, route, attribution, look = 'brand' }:
         </h2>
         <p className="lead mx-auto mt-4 max-w-xl text-pretty">{copy.final.body}</p>
         <div className="mt-8 flex flex-col items-center gap-3">
-          <PromoCta page={copy.page} placement="final" plan={route.plan} billing={route.billing} status={status} campaign={attribution.campaign} href={route.href} label={route.label} size="lg" variant={plain ? 'solid' : 'primary'} className={plain ? 'w-full !gap-2 !rounded-[10px] sm:w-auto' : 'w-full sm:w-auto'} />
+          <PromoCta page={copy.page} placement="final" plan={route.plan} billing={route.billing} status={status} campaign={attribution.campaign} href={route.href} label={route.label} size={plain ? 'offer' : 'lg'} variant={plain ? 'solid' : 'primary'} className="w-full sm:w-auto" />
           <p className={plain ? 'max-w-xl text-[13px] text-ink-muted' : 'max-w-xl text-[15px] font-medium text-ink'}>{(plain && copy.final.note) || copy.heroNote[status]}</p>
         </div>
       </Container>

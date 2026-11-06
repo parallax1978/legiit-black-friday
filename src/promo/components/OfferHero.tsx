@@ -10,7 +10,10 @@ import type { OfferStatus } from '../status'
 import { track } from '../../lib/analytics'
 import { PromoCta } from './PromoCta'
 
-const PRICE_GRADIENT = 'linear-gradient(95deg, #6A13CF 12%, #C71E92 98%)'
+const PRICE_GRADIENT = 'linear-gradient(95deg, var(--brand-purple, #6A13CF) 12%, #C71E92 98%)'
+
+/** Joins the last two words with a non-breaking space so the headline never ends on a one-word line. */
+const keepLastTwoWords = (text: string) => text.replace(/ (?=\S+$)/, '\u00A0')
 
 interface OfferHeroProps {
   copy: PromoPageCopy
@@ -38,11 +41,11 @@ export function OfferHero({ copy, page, status, route, attribution }: OfferHeroP
       <Container>
         <div className="mx-auto max-w-5xl text-center">
           <p className="text-[15px] font-semibold tracking-[0.02em] text-ink-muted">{copy.eyebrow}</p>
-          <h1 id="hero-heading" className="mt-3 text-[2.5rem] font-bold leading-[1.1] tracking-[-0.025em] text-ink sm:text-[3rem] lg:text-[3.5rem]">
+          <h1 id="hero-heading" className="mt-3 text-[2.5rem] font-bold leading-[1.1] tracking-[-0.025em] text-ink sm:text-[3rem] lg:text-[4rem]">
             <span className="bg-clip-text text-transparent" style={{ backgroundImage: PRICE_GRADIENT }}>
               {copy.h1Line1}
             </span>{' '}
-            {copy.h1Line2}
+            {keepLastTwoWords(copy.h1Line2)}
           </h1>
           <p className="mt-4 text-[17px] leading-relaxed text-ink sm:text-lg">
             {page.compare.label} <s className="text-ink-muted">{page.compare.regular}</s> <span className="text-ink-muted">·</span>{' '}
@@ -66,13 +69,13 @@ export function OfferHero({ copy, page, status, route, attribution }: OfferHeroP
               campaign={attribution.campaign}
               href={route.href}
               label={route.label}
-              size="lg"
+              size="offer"
               variant="solid"
-              className="w-full !gap-2 !rounded-[10px] !text-[17px] !font-bold sm:w-auto"
+              className="w-full sm:w-auto"
             />
           </div>
           <p className="mt-3">
-            <a href="#demo" data-demo-link className="inline-flex min-h-[44px] items-center gap-0.5 rounded-sm px-1 text-[16px] font-semibold text-brand-purple underline-offset-4 hover:underline btn-focus">
+            <a href="#demo" data-demo-link className="inline-flex min-h-[44px] items-center gap-0.5 rounded-sm px-1 text-[17px] font-semibold text-brand-purple underline-offset-4 hover:underline btn-focus">
               {page.demoLink}
               <ChevronRight size={16} />
             </a>

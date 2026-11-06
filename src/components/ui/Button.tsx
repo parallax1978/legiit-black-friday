@@ -5,7 +5,7 @@ type Variant = 'primary' | 'solid' | 'inverse' | 'outline' | 'outlineInverse' | 
  * `hero` is the standard `lg` size scaled by 25% (font, padding, gap, icon, border, radius).
  * `xl` is `lg` doubled (see .btn-xl in index.css).
  */
-type Size = 'sm' | 'md' | 'lg' | 'hero' | 'xl'
+type Size = 'sm' | 'md' | 'lg' | 'hero' | 'xl' | 'offer'
 
 /*
  * Each CSS property is set by exactly one class per size or variant, so the
@@ -17,7 +17,7 @@ const baseClass =
 
 const variantClass: Record<Variant, string> = {
   primary: 'btn-brand border-transparent',
-  solid: 'border-transparent bg-brand-purple text-white hover:bg-[#5B10B3]',
+  solid: 'border-transparent bg-brand-purple text-white hover:brightness-95',
   inverse: 'border-white bg-white text-brand-purple hover:bg-[#F3EBFC] focus-visible:!outline-white',
   outline: 'border-brand-purple bg-canvas text-brand-purple hover:bg-brand-tint',
   outlineInverse: 'border-white/70 bg-transparent text-white hover:bg-white/10 focus-visible:!outline-white',
@@ -32,13 +32,15 @@ const sizeClass: Record<Size, string> = {
   hero:
     'min-h-[67.5px] max-w-full gap-[25px] rounded-[8.75px] border-[1.25px] px-[30px] py-[18.75px] text-[20px] font-bold leading-[1.4] max-[900px]:text-[18.75px] max-[379px]:px-5',
   xl: 'btn-xl max-w-full font-semibold',
+  /** The offer pages' hero and closing button: 72px tall, 22px semibold, 52px side padding, 14px radius from 640px up; smaller on phones so the label stays on one line. */
+  offer: 'min-h-[64px] max-w-full gap-2.5 rounded-[14px] border px-5 py-0 text-[18px] font-semibold leading-none sm:min-h-[72px] sm:px-[52px] sm:text-[22px]',
 }
 
 /** Icon size that matches each button size; the hero icon is 19px scaled by 25%. */
-export const iconSize: Record<Size, number> = { sm: 16, md: 18, lg: 19, hero: 23.75, xl: 38 }
+export const iconSize: Record<Size, number> = { sm: 16, md: 18, lg: 19, hero: 23.75, xl: 38, offer: 24 }
 
 /** Large-button icons are hidden on narrow phones so labels stay on one line without overflowing. */
-export const iconClass: Record<Size, string> = { sm: '', md: '', lg: 'max-[419px]:hidden', hero: 'max-[419px]:hidden', xl: 'max-[419px]:hidden' }
+export const iconClass: Record<Size, string> = { sm: '', md: '', lg: 'max-[419px]:hidden', hero: 'max-[419px]:hidden', xl: 'max-[419px]:hidden', offer: 'max-[419px]:hidden' }
 
 export function buttonClass(variant: Variant = 'primary', size: Size = 'md', className = '') {
   return `${baseClass} ${variantClass[variant]} ${sizeClass[size]} ${className}`

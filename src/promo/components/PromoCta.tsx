@@ -3,7 +3,7 @@ import { ArrowRight } from '../../components/ui/Icons'
 import { track, type EventMap } from '../../lib/analytics'
 import type { OfferStatus } from '../status'
 
-type Size = 'md' | 'lg' | 'hero' | 'xl'
+type Size = 'md' | 'lg' | 'hero' | 'xl' | 'offer'
 type Variant = 'primary' | 'solid' | 'inverse' | 'outline' | 'outlineInverse' | 'secondary'
 
 interface PromoCtaProps {
