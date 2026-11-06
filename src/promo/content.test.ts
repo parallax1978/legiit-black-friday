@@ -18,7 +18,7 @@ const expiredCopy = JSON.stringify([businessPage(false), agencyPage(false)])
 
 describe('offer wording', () => {
   it('states the terms the way the offer was announced', () => {
-    expect(businessPage(true).h1Line1).toBe('Black Friday Special: $399 First Year.')
+    expect(businessPage(true).h1Line1).toBe('$399 First Year.')
     expect(businessPage(true).h1Line2).toBe('Normally $470.40.')
     expect(agencyPage(true).h1Line1).toBe('Black Friday Special: $1,399 First Year.')
     expect(agencyPage(true).h1Line2).toBe('Normally $1,622.40.')
@@ -29,7 +29,7 @@ describe('offer wording', () => {
     for (const page of [businessPage(true), agencyPage(true)]) {
       expect(page.heroNote.live).toContain('billed annually')
       expect(page.heroNote.live).toContain('instead of the regular')
-      expect(page.subhead).toContain('For Black Friday')
+      if (page.page === 'agency') expect(page.subhead).toContain('For Black Friday')
       expect(page.pricing.title).toContain('normally')
       expect(page.heroNote.live).toContain(DEADLINE_SENTENCE)
       expect(page.pricing.afterYearOne).toContain('renews at the regular annual price')

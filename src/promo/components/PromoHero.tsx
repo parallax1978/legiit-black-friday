@@ -25,14 +25,17 @@ interface PromoHeroProps {
  */
 export function PromoHero({ copy, status, route, attribution }: PromoHeroProps) {
   const switchHref = withAttribution(copy.switchPlan.href, attribution)
+  const business = copy.page === 'business'
   return (
     <section aria-labelledby="hero-heading" className="pb-12 pt-10 sm:pb-16 sm:pt-14 lg:pt-16">
       <Container>
         <div className="mx-auto max-w-5xl text-center">
-          <p className="eyebrow">{copy.eyebrow}</p>
+          <p className={business ? 'eyebrow text-[15.6px]' : 'eyebrow'}>{copy.eyebrow}</p>
           <h1 id="hero-heading" className="mt-4 text-[2.375rem] font-semibold leading-[1.08] tracking-[-0.025em] text-ink sm:text-[2.75rem] lg:text-[3rem] xl:text-[3.25rem]">
-            <span className="block">{copy.h1Line1}</span>
-            <span className="block bg-clip-text text-transparent" style={{ backgroundImage: H1_GRADIENT }}>
+            <span className={business ? 'block bg-clip-text text-[1.33em] text-transparent' : 'block'} style={business ? { backgroundImage: H1_GRADIENT } : undefined}>
+              {copy.h1Line1}
+            </span>
+            <span className={business ? 'block text-[0.5em]' : 'block bg-clip-text text-transparent'} style={business ? undefined : { backgroundImage: H1_GRADIENT }}>
               {copy.h1Line2}
             </span>
           </h1>
@@ -51,15 +54,15 @@ export function PromoHero({ copy, status, route, attribution }: PromoHeroProps) 
               className="w-full sm:w-auto"
             />
           </div>
-          <p data-hero-note className="mx-auto mt-4 max-w-2xl text-[15px] font-medium leading-relaxed text-ink">
+          <p data-hero-note className={`mx-auto mt-4 max-w-2xl leading-relaxed text-ink ${business ? 'text-[7.5px] font-normal' : 'text-[15px] font-medium'}`}>
             {copy.heroNote[status]}
           </p>
-          <p className="mx-auto mt-3 max-w-2xl text-[15px] leading-relaxed text-ink-soft">
+          <p className={`mx-auto mt-3 max-w-2xl leading-relaxed text-ink-soft ${business ? 'text-[7.5px]' : 'text-[15px]'}`}>
             {copy.switchPlan.before}
             <a
               href={switchHref}
               data-switch-plan
-              className="whitespace-nowrap rounded-sm font-medium text-brand-purple underline decoration-brand-purple/40 underline-offset-4 hover:decoration-brand-purple btn-focus"
+              className={`whitespace-nowrap rounded-sm ${business ? 'font-normal' : 'font-medium'} text-brand-purple underline decoration-brand-purple/40 underline-offset-4 hover:decoration-brand-purple btn-focus`}
               onClick={() => track('promo_cta_click', { page: copy.page, placement: 'hero-switch', plan: copy.page === 'business' ? 'agency_dashboard' : 'business_dashboard', status, campaign: attribution.campaign, destination: switchHref })}
             >
               {copy.switchPlan.linkLabel}

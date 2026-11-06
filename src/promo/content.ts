@@ -183,12 +183,12 @@ export function businessPage(showOffer: boolean): PromoPageCopy {
       : 'Command Center shows business owners the next move, helps create the work with AI, and connects them to Legiit specialists. Business plan from $49/month.',
   },
   eyebrow: showOffer ? 'Black Friday special for business owners' : 'Command Center for business owners',
-  h1Line1: showOffer ? `Black Friday Special: ${money(businessOffer.firstYearPrice)} First Year.` : 'Stop Guessing What To Work On.',
+  h1Line1: showOffer ? `${money(businessOffer.firstYearPrice)} First Year.` : 'Stop Guessing What To Work On.',
   h1Line2: showOffer ? `Normally ${money(businessOffer.regularAnnualPrice)}.` : 'The Business Plan.',
   subhead: showOffer
-    ? `Know your next move, create the work with AI, and hand it to a Legiit specialist when you want it done for you. For Black Friday, the Business plan is ${money(businessOffer.firstYearPrice)} for your first year instead of ${money(businessOffer.regularAnnualPrice)}, with ${count(CREDITS.offerMonthly)} AI credits a month for ${CREDITS.offerMonths} months instead of the usual ${count(CREDITS.standardMonthly)}.`
+    ? 'Get more customers without becoming a full-time marketer. Get a clear plan, AI to save you time, and specialists you can hire to do the work.'
     : 'Command Center shows you the next move for your business, helps you create the work with AI, and connects you to a Legiit specialist when you want it done for you.',
-  cta: { live: `Get Business For ${money(businessOffer.firstYearPrice)}`, liveHeader: 'Get Black Friday Price', fallback: 'Start My 7-Day Free Trial', fallbackHeader: 'Start Free Trial' },
+  cta: { live: `Get Command Center For ${money(businessOffer.firstYearPrice)}`, liveHeader: 'Get Black Friday Price', fallback: 'Start My 7-Day Free Trial', fallbackHeader: 'Start Free Trial' },
   heroNote: {
     live: `${blackFridayLine(businessOffer)} ${DEADLINE_SENTENCE}`,
     expired: `This offer ended ${OFFER_WINDOW.endsShortLabel}, 2026. ${regularTermsLine(businessOffer)}`,
