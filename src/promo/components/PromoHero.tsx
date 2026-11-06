@@ -39,6 +39,7 @@ export function PromoHero({ copy, status, route, attribution }: PromoHeroProps) 
               {copy.h1Line2}
             </span>
           </h1>
+          {copy.offerLine && <p className="mx-auto mt-4 max-w-2xl text-[17px] font-semibold leading-relaxed text-brand-purple">{copy.offerLine}</p>}
           <p className="mx-auto mt-5 max-w-3xl text-lg leading-relaxed text-ink-soft sm:text-xl sm:leading-relaxed">{copy.subhead}</p>
           <div className="mt-8 flex justify-center">
             <PromoCta
@@ -54,10 +55,10 @@ export function PromoHero({ copy, status, route, attribution }: PromoHeroProps) 
               className="w-full sm:w-auto"
             />
           </div>
-          <p data-hero-note className={`mx-auto mt-4 max-w-2xl leading-relaxed text-ink ${business ? 'text-[7.5px] font-normal' : 'text-[15px] font-medium'}`}>
+          <p data-hero-note className="mx-auto mt-4 max-w-2xl text-[15px] font-medium leading-relaxed text-ink">
             {copy.heroNote[status]}
           </p>
-          <p className={`mx-auto mt-3 max-w-2xl leading-relaxed text-ink-soft ${business ? 'text-[7.5px]' : 'text-[15px]'}`}>
+          <p className="mx-auto mt-3 max-w-2xl text-[15px] leading-relaxed text-ink-soft">
             {copy.switchPlan.before}
             <a
               href={switchHref}
