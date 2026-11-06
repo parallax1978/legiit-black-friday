@@ -185,8 +185,8 @@ export function businessPage(showOffer: boolean): PromoPageCopy {
       : 'Command Center shows business owners the next move, helps create the work with AI, and connects them to Legiit specialists. Business plan from $49/month.',
   },
   eyebrow: showOffer ? 'Black Friday special for business owners' : 'Command Center for business owners',
-  h1Line1: showOffer ? `${money(businessOffer.firstYearPrice)} First Year.` : 'Stop Guessing What To Work On.',
-  h1Line2: showOffer ? `Normally ${money(businessOffer.regularAnnualPrice)}.` : 'The Business Plan.',
+  h1Line1: showOffer ? `${money(businessOffer.firstYearPrice)} First Year` : 'Stop Guessing What To Work On.',
+  h1Line2: showOffer ? `Normally ${money(businessOffer.regularAnnualPrice)}` : 'The Business Plan.',
   offerLine: showOffer ? `Black Friday bonus: Double your monthly AI credits for ${CREDITS.offerMonths} months.` : undefined,
   subhead: showOffer
     ? 'Get more customers without becoming a full-time marketer. Get a clear plan, AI to save you time, and specialists you can hire to do the work.'

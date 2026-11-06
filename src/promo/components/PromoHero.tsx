@@ -35,7 +35,7 @@ export function PromoHero({ copy, status, route, attribution }: PromoHeroProps) 
             <span className={business ? 'block bg-clip-text text-[1.33em] text-transparent' : 'block'} style={business ? { backgroundImage: H1_GRADIENT } : undefined}>
               {copy.h1Line1}
             </span>
-            <span className={business ? 'block text-[0.5em]' : 'block bg-clip-text text-transparent'} style={business ? undefined : { backgroundImage: H1_GRADIENT }}>
+            <span className={business ? 'mt-3 block text-[0.5em]' : 'block bg-clip-text text-transparent'} style={business ? undefined : { backgroundImage: H1_GRADIENT }}>
               {copy.h1Line2}
             </span>
           </h1>

@@ -18,8 +18,8 @@ const expiredCopy = JSON.stringify([businessPage(false), agencyPage(false)])
 
 describe('offer wording', () => {
   it('states the terms the way the offer was announced', () => {
-    expect(businessPage(true).h1Line1).toBe('$399 First Year.')
-    expect(businessPage(true).h1Line2).toBe('Normally $470.40.')
+    expect(businessPage(true).h1Line1).toBe('$399 First Year')
+    expect(businessPage(true).h1Line2).toBe('Normally $470.40')
     expect(businessPage(true).offerLine).toBe('Black Friday bonus: Double your monthly AI credits for 12 months.')
     expect(businessPage(true).heroNote.live).toBe('$399 for your first year, billed annually.')
     expect(agencyPage(true).h1Line1).toBe('Black Friday Special: $1,399 First Year.')
