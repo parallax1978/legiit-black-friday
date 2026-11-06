@@ -1,0 +1,1 @@
+import{c as o,j as e,R as t,a,b as r}from"./index-Bk0s9Egw.js";import{P as c}from"./PromoApp-DWtyCjj7.js";r();o.createRoot(document.getElementById("root")).render(e.jsx(t.StrictMode,{children:e.jsx(c,{copyFor:a})}));
