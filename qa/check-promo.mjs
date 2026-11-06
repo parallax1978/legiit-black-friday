@@ -34,8 +34,9 @@ const utmQuery = new URLSearchParams(UTM).toString()
 const attribution = `${utmQuery}&campaign=legiit_60d_2026`
 const enc = encodeURIComponent
 const SIGN_IN = 'https://legiit.com/sign-in?redirect='
-const offerCheckout = (plan) => `${SIGN_IN}${enc(`/subscription-purchase?plan=${plan}&billing=yearly&${attribution}`)}`
-const monthlyCheckout = (plan) => `${SIGN_IN}${enc(`/subscription-purchase?plan=${plan}&billing=monthly&${attribution}`)}`
+// Plan checkouts go straight to Legiit with no attribution (CHECKOUT_ENTRY in src/promo/offer.ts); signed-out visitors are sent through sign-in by Legiit itself.
+const offerCheckout = (plan) => `https://legiit.com/subscription-purchase?plan=${plan}&billing=yearly`
+const monthlyCheckout = (plan) => `https://legiit.com/subscription-purchase?plan=${plan}&billing=monthly`
 const TRIAL = `https://legiit.com/command-center/start?${attribution}`
 const DEPOSIT = `${SIGN_IN}${enc(`/earning-history?deposite_wallet=true&${attribution}`)}`
 const BROWSE = `https://legiit.com/categories?${attribution}`
@@ -51,7 +52,7 @@ const PAGES = {
     // and has two lines of three and four short sentences (the hero terms line and the first step).
     ctaCount: { live: 5, expired: 4 },
     sentenceCase: { live: true },
-    longOk: ['Billed annually. Offer ends', 'Command Center builds your business context'],
+    longOk: ['Billed annually. Offer ends', 'Command Center builds your business context', 'Running several businesses'],
     title: /Black Friday Special.*Business/,
   },
   'black-friday-agency': {
