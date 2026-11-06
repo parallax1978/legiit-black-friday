@@ -702,10 +702,10 @@ export const BUCKS_PAGE = {
     eyebrow: 'How it works',
     title: 'Four steps, no code to enter.',
     steps: [
-      { title: 'Sign in to Legiit', body: 'Or create a free marketplace account. There is no subscription to buy.' },
-      { title: `Deposit ${deposit} to your wallet`, body: `Open Deposit Funds in your account and add ${deposit}. Deposits count in ${money(BUCKS_DEPOSIT.increment)} steps.` },
-      { title: `Legiit adds ${bonus}`, body: `Your Legiit Bucks balance shows your ${deposit} plus the ${bonus} bonus, ${total} in all.` },
-      { title: 'Spend it at checkout', body: 'When you buy a service, choose Wallet and turn on “Use your Legiit Bucks first”. You can combine Legiit Bucks with a card or PayPal.' },
+      { icon: 'user', title: 'Sign in to Legiit', body: 'Or create a free marketplace account. There is no subscription to buy.' },
+      { icon: 'card', title: `Deposit ${deposit} to your wallet`, body: `Open Deposit Funds in your account and add ${deposit}. Deposits count in ${money(BUCKS_DEPOSIT.increment)} steps.` },
+      { icon: 'gift', title: `Legiit adds ${bonus}`, body: `Your Legiit Bucks balance shows your ${deposit} plus the ${bonus} bonus, ${total} in all.` },
+      { icon: 'cart', title: 'Spend it at checkout', body: 'When you buy a service, choose Wallet and turn on “Use your Legiit Bucks first”. You can combine Legiit Bucks with a card or PayPal.' },
     ],
   },
   rules: {
@@ -742,7 +742,8 @@ export const BUCKS_OFFER_PAGE = {
   h1Line2: `in Legiit Bucks for ${deposit}.`,
   compare: { depositLabel: 'Your deposit', deposit, bonusLabel: 'Legiit adds', bonus },
   note: `The bonus is ${bonus}. It pays for Legiit freelance services and cannot be withdrawn as cash.`,
-  pill: `Bonus: ${bonus} for every ${deposit} you deposit`,
+  pill: `Bonus: ${bonus} per ${deposit} deposited`,
+  howLink: 'See how it works',
   terms: { before: `Offer ends ${OFFER_WINDOW.endsShortLabel}, 11:59 p.m. Eastern. No code to enter. `, linkLabel: 'Browse services' },
   math: { eyebrow: 'The math', title: `${BUCKS_PAGE.h1Line1} ${BUCKS_PAGE.h1Line2}` },
 } as const

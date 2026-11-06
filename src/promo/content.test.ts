@@ -74,7 +74,7 @@ describe('offer wording', () => {
     expect(BUCKS_PAGE.math.clarification).toBe('The bonus is $25. This is not $125 of free credit, and it is not part of any Command Center subscription.')
     expect(BUCKS_PAGE.subhead).toContain('for $125 to spend on freelance services')
     expect(BUCKS_OFFER_PAGE.h1Line1 + ' ' + BUCKS_OFFER_PAGE.h1Line2).toBe('$125 in Legiit Bucks for $100.')
-    expect(BUCKS_OFFER_PAGE.pill).toBe('Bonus: $25 for every $100 you deposit')
+    expect(BUCKS_OFFER_PAGE.pill).toBe('Bonus: $25 per $100 deposited')
     expect(BUCKS_PAGE.cta).toMatchObject({ live: 'Deposit $100 now', liveHeader: 'Get the $25 bonus' })
     expect(JSON.stringify(BUCKS_PAGE)).not.toMatch(/\$399|\$1,399|AI credits/)
     expect(BUCKS_PAGE.rules.items.join(' ')).toContain('cannot be withdrawn')
