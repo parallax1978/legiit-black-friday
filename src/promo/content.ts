@@ -680,12 +680,12 @@ const total = money(bucksTotal())
 export const BUCKS_PAGE = {
   meta: {
     title: `Black Friday Legiit Bucks Bonus | Deposit ${deposit}, Get ${total} To Spend | Legiit`,
-    description: `Black Friday bonus for marketplace buyers: add ${deposit} to your Legiit Bucks wallet and Legiit adds ${bonus}, for ${total} to spend on freelance services. ${DEADLINE_SENTENCE}`,
+    description: `Black Friday bonus for marketplace buyers: add ${deposit} to your Legiit Bucks wallet and Legiit credits ${bonus}, for ${total} to spend on freelance services. ${DEADLINE_SENTENCE}`,
   },
   eyebrow: 'Black Friday bonus for marketplace buyers',
   h1Line1: `Deposit ${deposit}.`,
   h1Line2: `Spend ${total}.`,
-  subhead: `Add ${deposit} to your wallet and Legiit adds ${bonus}, for ${total} to spend on freelance services. Use it at checkout on its own or with a card or PayPal.`,
+  subhead: `Add ${deposit} to your wallet and Legiit credits ${bonus}, for ${total} to spend on freelance services. Use it at checkout on its own or with a card or PayPal.`,
   // The live labels follow the approved design (sentence case); the expired ones are the marketplace's own.
   cta: { live: `Deposit ${deposit} now`, liveHeader: `Get the ${bonus} bonus`, expired: 'Browse Services', expiredHeader: 'Browse Services' },
   heroNote: {
@@ -694,7 +694,7 @@ export const BUCKS_PAGE = {
   } satisfies Record<OfferStatus, string>,
   math: {
     deposit: { amount: deposit, label: 'Your deposit' },
-    bonus: { amount: bonus, label: 'Legiit adds' },
+    bonus: { amount: bonus, label: 'Legiit credits' },
     total: { amount: total, label: 'To spend on services' },
     clarification: `The bonus is ${bonus}. This is not ${total} of free credit, and it is not part of any Command Center subscription.`,
   },
@@ -704,7 +704,7 @@ export const BUCKS_PAGE = {
     steps: [
       { icon: 'user', title: 'Sign in to Legiit', body: 'Or create a free marketplace account. There is no subscription to buy.' },
       { icon: 'card', title: `Deposit ${deposit} to your wallet`, body: `Open Deposit Funds in your account and add ${deposit}. Deposits count in ${money(BUCKS_DEPOSIT.increment)} steps.` },
-      { icon: 'gift', title: `Legiit adds ${bonus}`, body: `Your Legiit Bucks balance shows your ${deposit} plus the ${bonus} bonus, ${total} in all.` },
+      { icon: 'gift', title: `Legiit credits ${bonus}`, body: `Your Legiit Bucks balance shows your ${deposit} plus the ${bonus} bonus, ${total} in all.` },
       { icon: 'cart', title: 'Spend it at checkout', body: 'When you buy a service, choose Wallet and turn on “Use your Legiit Bucks first”. You can combine Legiit Bucks with a card or PayPal.' },
     ],
   },
@@ -721,7 +721,7 @@ export const BUCKS_PAGE = {
     historyLink: { text: 'Legiit Bucks history', href: PROMO_ROUTES.bucksHistory },
   },
   final: {
-    title: `Fund the next job and Legiit adds ${bonus}.`,
+    title: `Fund the next job and Legiit credits ${bonus}.`,
     body: `Deposit ${deposit}, spend ${total} on the freelance work your business needs.`,
     note: DEADLINE_SENTENCE,
   },
@@ -740,7 +740,7 @@ export const BUCKS_OFFER_PAGE = {
   bannerLink: 'Get the deal',
   h1Line1: total,
   h1Line2: `in Legiit Bucks for ${deposit}.`,
-  compare: { depositLabel: 'Your deposit', deposit, bonusLabel: 'Legiit adds', bonus },
+  compare: { depositLabel: 'Your deposit', deposit, bonusLabel: 'Legiit credits', bonus },
   note: `The bonus is ${bonus}. It pays for Legiit freelance services and cannot be withdrawn as cash.`,
   pill: `Bonus: ${bonus} per ${deposit} deposited`,
   howLink: 'See how it works',
